@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transaction xmlns="http://www.w3schools.com" transactionName="RBVDT301" application="RBVD" version="01" country="PE" language="ES">
+	<paramsIn>
+		<dto order="1" name="product" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO" artifactId="RBVDC301">
+			<parameter order="1" name="id" mandatory="1" type="String" size="40"/>
+			<list order="2" name="plans" mandatory="1">
+				<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO" artifactId="RBVDC301">
+					<parameter order="1" name="id" mandatory="1" type="String" size="10"/>
+					<dto order="2" name="totalInstallment" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO" artifactId="RBVDC301">
+						<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+						<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+						<dto order="3" name="period" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO" artifactId="RBVDC301">
+							<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
+						</dto>
+					</dto>
+					<list order="3" name="coverages" mandatory="0">
+						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO" artifactId="RBVDC301">
+							<parameter order="1" name="id" mandatory="1" type="String" size="6"/>
+						</dto>
+					</list>
+				</dto>
+			</list>
+		</dto>
+		<dto order="2" name="insuredAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+			<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+			<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+		</dto>
+		<dto order="3" name="holder" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO" artifactId="RBVDC301">
+			<parameter order="1" name="id" mandatory="1" type="String" size="8"/>
+			<parameter order="2" name="firstName" mandatory="1" type="String" size="100"/>
+			<parameter order="3" name="lastName" mandatory="1" type="String" size="100"/>
+			<parameter order="4" name="fullName" mandatory="1" type="String" size="100"/>
+			<dto order="5" name="identityDocument" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO" artifactId="RBVDC301">
+				<dto order="1" name="documentType" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO" artifactId="RBVDC301">
+					<parameter order="1" name="id" mandatory="1" type="String" size="30"/>
+				</dto>
+				<parameter order="2" name="documentNumber" mandatory="1" type="String" size="11"/>
+			</dto>
+		</dto>
+		<parameter order="4" name="isDataTreatment" mandatory="0" type="Boolean" size="0"/>
+		<parameter order="5" name="externalSimulationId" mandatory="1" type="String" size="36"/>
+	</paramsIn>
+	<paramsOut>
+		<dto order="1" name="product" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO" artifactId="RBVDC301">
+			<parameter order="1" name="id" mandatory="1" type="String" size="40"/>
+			<parameter order="2" name="name" mandatory="0" type="String" size="60"/>
+			<list order="3" name="plans" mandatory="1">
+				<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO" artifactId="RBVDC301">
+					<parameter order="1" name="id" mandatory="1" type="String" size="10"/>
+					<parameter order="2" name="name" mandatory="0" type="String" size="200"/>
+					<parameter order="3" name="isRecommended" mandatory="0" type="Boolean" size="0"/>
+					<dto order="4" name="totalInstallment" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO" artifactId="RBVDC301">
+						<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+						<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+						<dto order="3" name="period" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO" artifactId="RBVDC301">
+							<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
+							<parameter order="2" name="name" mandatory="0" type="String" size="20"/>
+						</dto>
+					</dto>
+					<list order="5" name="installmentPlans" mandatory="0">
+						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO" artifactId="RBVDC301">
+							<parameter order="1" name="paymentsTotalNumber" mandatory="1" type="Long" size="4"/>
+							<dto order="2" name="paymentAmount" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO" artifactId="RBVDC301">
+								<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+								<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+							</dto>
+							<dto order="3" name="period" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO" artifactId="RBVDC301">
+								<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
+								<parameter order="2" name="name" mandatory="0" type="String" size="20"/>
+							</dto>
+						</dto>
+					</list>
+					<list order="6" name="coverages" mandatory="0">
+						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO" artifactId="RBVDC301">
+							<parameter order="1" name="id" mandatory="1" type="String" size="6"/>
+							<parameter order="2" name="name" mandatory="0" type="String" size="1000"/>
+							<parameter order="3" name="description" mandatory="0" type="String" size="1000"/>
+							<parameter order="4" name="isSelected" mandatory="1" type="Boolean" size="0"/>
+							<dto order="5" name="coverageType" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO" artifactId="RBVDC301">
+								<parameter order="1" name="id" mandatory="1" type="String" size="15"/>
+								<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+							</dto>
+						</dto>
+					</list>
+				</dto>
+			</list>
+		</dto>
+		<dto order="2" name="insuredAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+			<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+			<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+		</dto>
+		<dto order="3" name="holder" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO" artifactId="RBVDC301">
+			<parameter order="1" name="id" mandatory="1" type="String" size="8"/>
+			<parameter order="2" name="firstName" mandatory="1" type="String" size="100"/>
+			<parameter order="3" name="lastName" mandatory="1" type="String" size="100"/>
+			<parameter order="4" name="fullName" mandatory="1" type="String" size="100"/>
+			<dto order="5" name="identityDocument" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO" artifactId="RBVDC301">
+				<dto order="1" name="documentType" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO" artifactId="RBVDC301">
+					<parameter order="1" name="id" mandatory="1" type="String" size="30"/>
+				</dto>
+				<parameter order="2" name="documentNumber" mandatory="1" type="String" size="11"/>
+			</dto>
+		</dto>
+		<parameter order="4" name="isDataTreatment" mandatory="0" type="Boolean" size="0"/>
+		<parameter order="5" name="externalSimulationId" mandatory="1" type="String" size="36"/>
+	</paramsOut>
+	<description>Trx done for life simulation</description>
+</transaction>
