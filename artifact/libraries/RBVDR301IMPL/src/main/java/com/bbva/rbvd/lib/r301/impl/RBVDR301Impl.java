@@ -51,7 +51,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			exceptionHandler.handler(ex);
 		}
 		return response;
-		
+
 	}
 
 	private String getRequestJson(Object o) {

@@ -24,6 +24,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 	public LifeSimulationDTO executeGetSimulation(LifeSimulationDTO input) {
 		// TODO - Implementation of business logic
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
+		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 		try{
 			InsuranceLifeSimulationBO simulationBo = mapperHelper.mapInRequestRimacLife(input);
 			InsuranceLifeSimulationBO simulationBos = rbvdR301.executeSimulationRimacService(simulationBo, "");
