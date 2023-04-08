@@ -1,14 +1,22 @@
 package com.bbva.rbvd;
 
 import com.bbva.elara.domain.transaction.Context;
+import com.bbva.elara.domain.transaction.RequestHeaderParamsName;
+import com.bbva.elara.domain.transaction.Severity;
 import com.bbva.elara.domain.transaction.TransactionParameter;
 import com.bbva.elara.domain.transaction.request.TransactionRequest;
 import com.bbva.elara.domain.transaction.request.body.CommonRequestBody;
 import com.bbva.elara.domain.transaction.request.header.CommonRequestHeader;
 import com.bbva.elara.test.osgi.DummyBundleContext;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+
+import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.lib.r302.RBVDR302;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +24,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.when;
 
 /**
  * Test for transaction RBVDT30101PETransaction
@@ -29,6 +44,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 		"classpath:/META-INF/spring/RBVDT30101PETest.xml" })
 public class RBVDT30101PETransactionTest {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDT30101PETransactionTest.class);
+
+	@Resource
+	private RBVDR302 rbvdr302;
 	@Autowired
 	private RBVDT30101PETransaction transaction;
 
@@ -41,30 +60,57 @@ public class RBVDT30101PETransactionTest {
 	@Mock
 	private TransactionRequest transactionRequest;
 
+	private MockData mockData;
+
 	@Before
 	public void initializeClass() throws Exception {
-		// Initializing mocks
 		MockitoAnnotations.initMocks(this);
-		// Start BundleContext
+
 		this.transaction.start(bundleContext);
-		// Setting Context
 		this.transaction.setContext(new Context());
-		// Set Body
+
 		CommonRequestBody commonRequestBody = new CommonRequestBody();
 		commonRequestBody.setTransactionParameters(new ArrayList<>());
+
 		this.transactionRequest.setBody(commonRequestBody);
-		// Set Header Mock
+
 		this.transactionRequest.setHeader(header);
-		// Set TransactionRequest
+
+		when(header.getHeaderParameter(RequestHeaderParamsName.REQUESTID)).thenReturn("traceId");
+
 		this.transaction.getContext().setTransactionRequest(transactionRequest);
+
+		mockData = MockData.getInstance();
+	}
+
+
+	@Test
+	public void testNotNull() throws IOException {
+		LOGGER.info("RBVDT30101PETransactionTest - Executing testNotNull...");
+
+		assertNotNull(this.transaction);
+
+		LifeSimulationDTO life = mockData.getInsuranceSimulationResponse();
+
+		when(rbvdr302.executeGetSimulation(anyObject())).thenReturn(life);
+		Assert.assertNotNull(this.transaction);
+
+		this.transaction.execute();
+
+		assertEquals(Severity.OK, this.transaction.getSeverity());
 	}
 
 	@Test
-	public void testNotNull(){
-	    // Example to Mock the Header
-		// Mockito.doReturn("ES").when(header).getHeaderParameter(RequestHeaderParamsName.COUNTRYCODE);
-		Assert.assertNotNull(this.transaction);
+	public void testNull() {
+		LOGGER.info("RBVDT30101PETransactionTest - Executing testNull...");
+
+		assertNotNull(this.transaction);
+
+		when(rbvdr302.executeGetSimulation(anyObject())).thenReturn(null);
+
 		this.transaction.execute();
+
+		assertEquals(Severity.OK, this.transaction.getSeverity());
 	}
 
 	// Add Parameter to Transaction

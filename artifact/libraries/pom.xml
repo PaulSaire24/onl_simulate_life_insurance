@@ -12,5 +12,10 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>LIBRARIES-onl_simulate_life_insurance</name>
-	<modules/>
+	<modules>
+		<module>RBVDR302</module>
+		<module>RBVDR302IMPL</module>
+		<module>RBVDR301</module>
+		<module>RBVDR301IMPL</module>
+	</modules>
 </project>
