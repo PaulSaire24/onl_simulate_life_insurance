@@ -17,7 +17,6 @@ public abstract class RBVDR302Abstract extends AbstractLibrary implements RBVDR3
 
 	protected MapperHelper mapperHelper;
 
-
 	/**
 	* @param applicationConfigurationService the this.applicationConfigurationService to set
 	*/

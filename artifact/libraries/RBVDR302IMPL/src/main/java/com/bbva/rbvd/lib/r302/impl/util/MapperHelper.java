@@ -48,11 +48,7 @@ public class MapperHelper {
         simulationBo.setPayload(payload);
         return simulationBo;
     }
-/*
-    public DownloadQuotaCompativeDTO mapOutRequestDocument(ManageDocumentBO responseRimac, String externalQuotationId){
 
-        return response;
-    }*/
 
     public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;
