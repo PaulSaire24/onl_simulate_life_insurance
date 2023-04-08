@@ -23,6 +23,7 @@ public class MapperHelper {
         InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
+        
         payload.setProducto("EASYYES01");
         payload.setMoneda("PEN");
         List<Long> listPlan = new ArrayList<>();
