@@ -43,7 +43,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 	}
 
 	private void validation(InsuranceLifeSimulationBO simulationBos){
-		if(Objects.isNull(simulationBos.getPayload().getPlanes().get(0))){
+		if(Objects.isNull(simulationBos)){
 			throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
 		}
 	}

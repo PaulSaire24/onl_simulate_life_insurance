@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r302;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
@@ -92,7 +93,7 @@ public class RBVDR302Test {
 
 	@Test
 	public void executeGetGenerateTest() throws IOException {
-		LOGGER.info("RBVDR223Test - Executing executeGetGenerateTest...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest...");
 		when(this.mapperHelper.mapInRequestRimacLife(anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 
@@ -101,14 +102,15 @@ public class RBVDR302Test {
 		assertNull(validation);
 	}
 
-	@Test(expected = Exception.class)
+	@Test
 	public void executeGetGenerateTest_Exception() throws IOException {
-		LOGGER.info("RBVDR223Test - Executing executeGetGenerateTest_Exception...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest_Exception...");
 		when(this.mapperHelper.mapInRequestRimacLife(anyObject())).thenReturn(null);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
 
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(input);
 
+		assertNull(validation);
 	}
 
 }
