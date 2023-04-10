@@ -110,7 +110,7 @@ public class RBVDT30101PETransactionTest {
 
 		this.transaction.execute();
 
-		assertEquals(Severity.OK, this.transaction.getSeverity());
+		assertEquals(Severity.ENR, this.transaction.getSeverity());
 	}
 
 	// Add Parameter to Transaction
