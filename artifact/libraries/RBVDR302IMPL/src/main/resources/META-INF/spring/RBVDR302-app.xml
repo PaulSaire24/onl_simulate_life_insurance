@@ -4,6 +4,7 @@
 	<bean id="rbvdR302" class="com.bbva.rbvd.lib.r302.impl.RBVDR302Impl" parent="rbvdR302Abstract">
 		<property name="mapperHelper" ref="mapperHelper"/>
 		<property name="rbvdR301" ref="rbvdR301"/>
+		<property name="pisdR350" ref="pisdR350"/>
 	</bean>
 	<bean id="mapperHelper" class="com.bbva.rbvd.lib.r302.impl.util.MapperHelper">
 		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>

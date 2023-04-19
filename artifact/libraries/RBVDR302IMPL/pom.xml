@@ -84,6 +84,11 @@
 			<artifactId>RBVDR301</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bbva.pisd</groupId>
+			<artifactId>PISDR350</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -101,6 +106,7 @@
 						</Export-Package>
 						<Import-Package>
 							com.bbva.rbvd.lib.r301.*;version="${osgi.version.manifest}",
+							com.bbva.pisd.lib.r350.*;version="${osgi.version.manifest}",
 							com.bbva.rbvd.dto.lifeinsrc.*;version="${osgi.version.manifest}",
 							com.bbva.elara.*;version="${osgi.version.manifest}",
 							com.bbva.elara.aspect;version="${osgi.version.manifest}",

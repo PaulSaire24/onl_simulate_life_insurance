@@ -1,7 +1,7 @@
 package com.bbva.rbvd.lib.r301.impl;
 
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
-import com.bbva.rbvd.dto.lifeinsrc.bo.simulation.InsuranceLifeSimulationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;

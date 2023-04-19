@@ -31,7 +31,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setProduct(this.getProduct());
 		lifeSimulationDTO.setInsuredAmount(this.getInsuredamount());
 		lifeSimulationDTO.setExternalSimulationId(this.getExternalsimulationid());
-		lifeSimulationDTO.setDataTreatment(this.getIsdatatreatment());
+		lifeSimulationDTO.setIsDataTreatment(this.getIsdatatreatment());
 		lifeSimulationDTO.setSaleChannelId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE));
 		lifeSimulationDTO.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
@@ -44,7 +44,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 			this.setProduct(response.getProduct());
 			this.setInsuredamount(response.getInsuredAmount());
 			this.setHolder(response.getHolder());
-			this.setIsdatatreatment(response.getDataTreatment());
+			this.setIsdatatreatment(response.getIsDataTreatment());
 			this.setExternalsimulationid(response.getExternalSimulationId());
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
