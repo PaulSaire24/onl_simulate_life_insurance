@@ -94,7 +94,7 @@ public class MapperHelper {
                 filter(Objects::nonNull).
                 collect(toList());
     }
-    
+
 
     private InsurancePlanDTO createProductModalityDTO(InsuranceProductModalityDAO modalityDao, List<CotizacionBO> quotations) {
 
@@ -132,7 +132,7 @@ public class MapperHelper {
             amount.setAmount(monthlyFinancing.getCuotasFinanciamiento().get(0).getMonto());
 
             amount.setCurrency(cotizacion.getPlan().getMoneda());
-            installmentPlan.setPaymentsTotalNumber(Long.valueOf(monthlyFinancing.getNumeroCuotas()));
+            installmentPlan.setPaymentsTotalNumber(monthlyFinancing.getNumeroCuotas());
 
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
             PeriodDTO periodAnual = new PeriodDTO();
