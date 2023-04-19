@@ -94,6 +94,7 @@ public class MapperHelper {
                 filter(Objects::nonNull).
                 collect(toList());
     }
+    
 
     private InsurancePlanDTO createProductModalityDTO(InsuranceProductModalityDAO modalityDao, List<CotizacionBO> quotations) {
 
