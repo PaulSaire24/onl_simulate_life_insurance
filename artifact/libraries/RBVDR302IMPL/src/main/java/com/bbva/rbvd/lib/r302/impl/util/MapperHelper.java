@@ -131,21 +131,21 @@ public class MapperHelper {
             amount.setAmount(monthlyFinancing.getCuotasFinanciamiento().get(0).getMonto());
 
             amount.setCurrency(cotizacion.getPlan().getMoneda());
-            installmentPlan.setPaymentsTotalNumber(monthlyFinancing.getNumeroCuotas().longValue());
+            installmentPlan.setPaymentsTotalNumber(Long.valueOf(monthlyFinancing.getNumeroCuotas()));
 
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
             PeriodDTO periodAnual = new PeriodDTO();
-            String periodicityAnual = annualFinancing.getPeriodicidad();
-            periodAnual.setId(this.applicationConfigurationService.getProperty(periodicityAnual));
-            periodAnual.setName(periodicityAnual);
-            totalInstallmentPlan.setPeriod(periodAnual);
+            String periodicityAnual = "";
 
-            if (annualFinancing != null) {
+            if (Objects.nonNull(annualFinancing)) {
                 totalInstallmentPlan.setAmount(annualFinancing.getCuotasFinanciamiento().get(0).getMonto());
-                ;
+                periodicityAnual = annualFinancing.getPeriodicidad();
+                periodAnual.setId(this.applicationConfigurationService.getProperty(periodicityAnual));
+                periodAnual.setName(periodicityAnual);
             } else {
                 totalInstallmentPlan.setAmount(cotizacion.getPlan().getPrimaBruta());
             }
+            totalInstallmentPlan.setPeriod(periodAnual);
 
             totalInstallmentPlan.setCurrency(cotizacion.getPlan().getMoneda());
             List<InstallmentsDTO> installments = new ArrayList<>();
