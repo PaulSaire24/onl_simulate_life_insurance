@@ -1,8 +1,6 @@
 package com.bbva.rbvd.lib.r302.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
-import com.bbva.rbvd.dto.lifeinsrc.aso.crypto.CryptoASO;
-import com.bbva.rbvd.dto.lifeinsrc.aso.tier.TierASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;

@@ -3,7 +3,6 @@ package com.bbva.rbvd.lib.r302;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
-import javax.annotation.Resource;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
