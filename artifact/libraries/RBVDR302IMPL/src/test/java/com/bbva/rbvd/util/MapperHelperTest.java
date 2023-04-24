@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -167,7 +168,7 @@ public class MapperHelperTest {
     @Test
     public void createSimulationDAOWithAllFactorTypeTest() {
 
-        SimulationDAO validation = mapperHelper.createSimulationDAO(new BigDecimal("14"),  responseOut);
+        SimulationDAO validation = mapperHelper.createSimulationDAO(new BigDecimal("14"),  new Date(),responseOut);
 
         assertNotNull(validation.getInsuranceSimulationId());
 

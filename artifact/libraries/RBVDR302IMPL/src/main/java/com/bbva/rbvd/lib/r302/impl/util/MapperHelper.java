@@ -13,8 +13,11 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -26,8 +29,9 @@ public class MapperHelper {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    private static final String TEXT_UNIT_TYPE = "TEXT";
     private static final String AMOUNT_UNIT_TYPE = "AMOUNT";
+
+    private static final String YES_CONSTANT = "S";
 
     protected ApplicationConfigurationService applicationConfigurationService;
 
@@ -180,12 +184,34 @@ public class MapperHelper {
         CoverageDTO coverageDTO = new CoverageDTO();
 
         coverageDTO.setId(coverage.getCobertura().toString());
-        coverageDTO.setName(coverage.getDescripcionCobertura());
-        coverageDTO.setIsSelected(coverage.getPrincipal().equals("S"));
-        coverageDTO.setDescription(coverage.getObservacionCobertura());
+        coverageDTO.setName(coverage.getObservacionCobertura());
+        coverageDTO.setIsSelected(YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
+        coverageDTO.setDescription(coverage.getDetalleCobertura());
         coverageDTO.setUnit(createUnit(coverage));
+        coverageDTO.setCoverageType(coverageType(coverage));
 
         return coverageDTO;
+    }
+
+    private CoverageTypeDTO coverageType(CoberturaBO coverage){
+        CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
+        switch(coverage.getCondicion()) {
+            case "INC":
+                coverageTypeDTO.setId(RBVDProperties.ID_INCLUDED_COVERAGE.getValue());
+                coverageTypeDTO.setName(RBVDProperties.NAME_INCLUDED_COVERAGE.getValue());
+                break;
+            case "OBL":
+                coverageTypeDTO.setId(RBVDProperties.ID_MANDATORY_COVERAGE.getValue());
+                coverageTypeDTO.setName(RBVDProperties.NAME_MANDATORY_COVERAGE.getValue());
+                break;
+            case "OPC":
+                coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
+                coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
+                break;
+            default:
+                break;
+        }
+        return coverageTypeDTO;
     }
 
     private UnitDTO createUnit(CoberturaBO coverage){
@@ -197,13 +223,14 @@ public class MapperHelper {
         return unit;
     }
 
-    public SimulationDAO createSimulationDAO(BigDecimal insuranceSimulationId, LifeSimulationDTO insuranceSimulationDTO) {
+    public SimulationDAO createSimulationDAO(BigDecimal insuranceSimulationId, final Date maturityDate, LifeSimulationDTO insuranceSimulationDTO) {
         SimulationDAO simulationDAO = new SimulationDAO();
         simulationDAO.setInsuranceSimulationId(insuranceSimulationId);
         simulationDAO.setInsrncCompanySimulationId(insuranceSimulationDTO.getExternalSimulationId());
         simulationDAO.setCustomerId(insuranceSimulationDTO.getHolder().getId());
         simulationDAO.setCustomerSimulationDate(dateFormat.format(new Date()));
-
+        simulationDAO.setCustSimulationExpiredDate(dateFormat.format(maturityDate));
+        simulationDAO.setParticipantPersonalId(insuranceSimulationDTO.getHolder().getIdentityDocument().getDocumentNumber());
         return simulationDAO;
     }
 
@@ -221,7 +248,7 @@ public class MapperHelper {
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(), creationUser);
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(), userAudit);
         arguments.put(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue(), documentTypeId);
-        arguments.put(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue(), null);
+        arguments.put(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue(), simulationDAO.getParticipantPersonalId());
         arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(), null);
         arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(), null);
         arguments.put(RBVDProperties.FIELD_CUSTOMER_SEGMENT_NAME.getValue(), null);
@@ -252,7 +279,6 @@ public class MapperHelper {
 
         return arguments;
     }
-
 
     public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;

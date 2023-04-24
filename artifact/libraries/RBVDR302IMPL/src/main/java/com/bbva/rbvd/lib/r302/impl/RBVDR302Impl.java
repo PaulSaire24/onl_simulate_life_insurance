@@ -1,6 +1,8 @@
 package com.bbva.rbvd.lib.r302.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
+import com.bbva.rbvd.dto.lifeinsrc.aso.crypto.CryptoASO;
+import com.bbva.rbvd.dto.lifeinsrc.aso.tier.TierASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
@@ -11,6 +13,8 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Date;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -58,6 +63,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
 			InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
 			validation(responseRimac);
+
 			response = input;
 			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
@@ -82,7 +88,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			String creationUser = input.getCreationUser();
 			String userAudit = input.getUserAudit();
 
-			SimulationDAO simulationDAO = mapperHelper.createSimulationDAO(insuranceSimulationId, response);
+			Date maturityDate = this.generateDate(responseRimac.getPayload().getCotizaciones().get(0).getFechaFinVigencia());
+
+			SimulationDAO simulationDAO = mapperHelper.createSimulationDAO(insuranceSimulationId, maturityDate, response);
 
 			Map<String, Object> argumentsForSaveSimulation = this.mapperHelper.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
@@ -101,20 +109,19 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");
 
 			return response;
 
-		} catch(
-		BusinessException ex) {
+		} catch(BusinessException ex) {
 			LOGGER.debug("***** RBVDR302Impl - executeGetGenerate | Business exception message: {} *****", ex.getMessage());
 			this.addAdviceWithDescription(ex.getAdviceCode(), ex.getMessage());
 			return null;
 		}
 
 	}
+
 
 	private void validation(InsuranceLifeSimulationBO simulationBos){
 		if(Objects.isNull(simulationBos)){
@@ -156,4 +163,11 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		}
 		return true;
 	}
+
+	private Date generateDate(String fechaFinVigencia) {
+		DateTime dateTime = new DateTime(fechaFinVigencia);
+		dateTime.withZone(DateTimeZone.forID("America/Lima"));
+		return dateTime.toDate();
+	}
+
 }
