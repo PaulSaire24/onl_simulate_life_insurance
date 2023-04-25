@@ -149,9 +149,10 @@ public class MapperHelper {
             if (Objects.nonNull(annualFinancing)) {
                 totalInstallmentPlan.setAmount(annualFinancing.getCuotasFinanciamiento().get(0).getMonto());
                 periodicityAnual = annualFinancing.getPeriodicidad();
-                periodAnual.setId(this.applicationConfigurationService.getProperty(periodicityAnual));
+                periodAnual.setId("ANNUAL");
                 periodAnual.setName(periodicityAnual);
             } else {
+                periodAnual.setId("ANNUAL");
                 totalInstallmentPlan.setAmount(cotizacion.getPlan().getPrimaBruta());
             }
             totalInstallmentPlan.setPeriod(periodAnual);
@@ -199,22 +200,8 @@ public class MapperHelper {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
-        switch(coverage.getCondicion()) {
-            case "INC":
                 coverageTypeDTO.setId(RBVDProperties.ID_INCLUDED_COVERAGE.getValue());
                 coverageTypeDTO.setName(RBVDProperties.NAME_INCLUDED_COVERAGE.getValue());
-                break;
-            case "OBL":
-                coverageTypeDTO.setId(RBVDProperties.ID_MANDATORY_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_MANDATORY_COVERAGE.getValue());
-                break;
-            case "OPC":
-                coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
-                break;
-            default:
-                break;
-        }
         return coverageTypeDTO;
     }
 
