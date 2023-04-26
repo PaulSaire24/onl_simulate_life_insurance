@@ -1,11 +1,16 @@
 package com.bbva.rbvd.lib.r302.impl.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
@@ -36,6 +41,8 @@ public class MapperHelper {
     private static final String AMOUNT_UNIT_TYPE = "AMOUNT";
 
     private static final String YES_CONSTANT = "S";
+
+    private static final String ANNUAL = "ANNUAL";
 
     protected ApplicationConfigurationService applicationConfigurationService;
 
@@ -118,7 +125,7 @@ public class MapperHelper {
 
             plan.setId(modalityDao.getInsuranceModalityType());
             plan.setName(modalityDao.getInsuranceModalityName());
-            //plan.setIsRecommended(("S".equals(cotizacion.getPlan().getIndicadorRecomendado()) ? true : false));
+            plan.setIsRecommended("03".equalsIgnoreCase(modalityDao.getInsuranceModalityType()));
 
             InstallmentsDTO installmentPlan = new InstallmentsDTO();
 
@@ -149,10 +156,10 @@ public class MapperHelper {
             if (Objects.nonNull(annualFinancing)) {
                 totalInstallmentPlan.setAmount(annualFinancing.getCuotasFinanciamiento().get(0).getMonto());
                 periodicityAnual = annualFinancing.getPeriodicidad();
-                periodAnual.setId("ANNUAL");
+                periodAnual.setId(this.applicationConfigurationService.getProperty(periodicityAnual));
                 periodAnual.setName(periodicityAnual);
             } else {
-                periodAnual.setId("ANNUAL");
+                periodAnual.setId(ANNUAL);
                 totalInstallmentPlan.setAmount(cotizacion.getPlan().getPrimaBruta());
             }
             totalInstallmentPlan.setPeriod(periodAnual);
@@ -200,8 +207,22 @@ public class MapperHelper {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
+        switch(coverage.getCondicion()) {
+            case "INC":
                 coverageTypeDTO.setId(RBVDProperties.ID_INCLUDED_COVERAGE.getValue());
                 coverageTypeDTO.setName(RBVDProperties.NAME_INCLUDED_COVERAGE.getValue());
+                break;
+            case "OBL":
+                coverageTypeDTO.setId(RBVDProperties.ID_MANDATORY_COVERAGE.getValue());
+                coverageTypeDTO.setName(RBVDProperties.NAME_MANDATORY_COVERAGE.getValue());
+                break;
+            case "OPC":
+                coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
+                coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
+                break;
+            default:
+                break;
+        }
         return coverageTypeDTO;
     }
 
@@ -222,6 +243,7 @@ public class MapperHelper {
         simulationDAO.setCustomerSimulationDate(dateFormat.format(new Date()));
         simulationDAO.setCustSimulationExpiredDate(dateFormat.format(maturityDate));
         simulationDAO.setParticipantPersonalId(insuranceSimulationDTO.getHolder().getIdentityDocument().getDocumentNumber());
+
         return simulationDAO;
     }
 

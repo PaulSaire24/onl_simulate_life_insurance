@@ -50,7 +50,6 @@ public class MapperHelperTest {
 
         mockDTO = MockData.getInstance();
 
-
         requestInput = mockDTO.getInsuranceSimulationRequest();
         responseOut = mockDTO.getInsuranceSimulationResponse();
         responseRimac = mockDTO.getInsuranceRimacSimulationResponse();
@@ -58,6 +57,7 @@ public class MapperHelperTest {
         mapperHelper.setApplicationConfigurationService(applicationConfigurationService);
 
         simulationDAO = mock(SimulationDAO.class);
+        simulationDAO.setInsuranceModalityType("03");
 
         simulationProductDAO = mock(SimulationProductDAO.class);
 
@@ -73,8 +73,8 @@ public class MapperHelperTest {
     @Test
     public void mapProductIdOKTest() {
 
-        Map<String, Object> mapStringObject = mapperHelper.mapProductId("834");
-        assertEquals("834", mapStringObject.get(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue()));
+        Map<String, Object> mapStringObject = mapperHelper.mapProductId("840");
+        assertEquals("840", mapStringObject.get(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue()));
 
     }
 
@@ -93,6 +93,8 @@ public class MapperHelperTest {
 
         assertNotNull(validation.get(0).getName());
 
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().get(1).setPeriodicidad("");
+
         validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac);
 
         assertEquals(1, validation.size());
@@ -101,7 +103,6 @@ public class MapperHelperTest {
 
     @Test
     public void getPlansNamesAndRecommendedValuesAndInstallmentsPlansNullTest() throws IOException {
-
 
         List<InsuranceProductModalityDAO> productModalities = new ArrayList<>();
         InsuranceProductModalityDAO modality = new InsuranceProductModalityDAO();
@@ -163,6 +164,27 @@ public class MapperHelperTest {
         mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
 
         assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("INC");
+        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
+
+        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("OPC");
+        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
+
+        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("");
+        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
+
+        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("ABC");
+        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
+
+        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
+
     }
 
     @Test
@@ -220,6 +242,5 @@ public class MapperHelperTest {
         assertNotNull(responseOut.getProduct().getName());
 
     }
-
 
 }

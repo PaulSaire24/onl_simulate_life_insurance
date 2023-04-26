@@ -52,6 +52,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			input.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeId);
 
+			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_INFORMATION *****");
 			Map<String, Object> responseQueryGetProductInformation =
 					this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), this.mapperHelper.mapProductId(input.getProduct().getId()));
 
@@ -69,18 +70,19 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			Map<String, Object> filtersModalitiesInfo = this.mapperHelper.
 					createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
-			LOGGER.info("***** PISDR302Impl - insuranceProductModalityFiltersCreation | Invoking PISDR350 executeGetConsiderations *****");
+			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
 			Map<String, Object> responseQueryModalitiesInformation =
 					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
 
 			List<InsuranceProductModalityDAO> productModalitiesDAO = validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalitiesDAO, responseRimac);
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation0 ***** Response: {}", response);
+
 			response.getProduct().setPlans(plansWithNameAndRecommendedValueAndInstallmentPlan);
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation1 ***** Response: {}", response);
+
 			this.mapperHelper.putConsiderations(response.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation2 ***** Response: {}", response);
+
 			Map<String, Object> arguments = new HashMap<>();
+			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
 			Map<String, Object> responseGetInsuranceSimulationId = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),arguments);
 			BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationId.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
 
@@ -93,17 +95,14 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			Map<String, Object> argumentsForSaveSimulation = this.mapperHelper.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
+			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
+			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
-			boolean saveSimulationExecuted = validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
+			Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
+			this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(),argumentsForSaveSimulationProduct);
 
-			if (saveSimulationExecuted) {
-				LOGGER.info("***** PISDR302Impl - executeResponseSimulationValidation (saveSimulationExecuted) SUCCESSFULLY *****");
-
-				SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
-				Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
-				this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(),argumentsForSaveSimulationProduct);
-
-			}
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
@@ -120,9 +119,8 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	}
 
-
-	private void validation(InsuranceLifeSimulationBO simulationBos){
-		if(Objects.isNull(simulationBos)){
+	private void validation(InsuranceLifeSimulationBO responseRimac){
+		if(Objects.isNull(responseRimac)){
 			throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
 		}
 	}
@@ -167,5 +165,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		dateTime.withZone(DateTimeZone.forID("America/Lima"));
 		return dateTime.toDate();
 	}
+
 
 }

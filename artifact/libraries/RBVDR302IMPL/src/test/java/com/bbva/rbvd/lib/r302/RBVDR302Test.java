@@ -133,8 +133,22 @@ public class RBVDR302Test {
 	}
 
 	@Test
+	public void executeGetNoSaveSimulationTest(){
+		LOGGER.info("RBVDR302Test - Executing executeGetNoSaveSimulationTest...");
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
+		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
+		when(this.mapperHelper.mapInRequestRimacLife(anyObject())).thenReturn(requestRimac);
+		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
+		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(0);
+		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNull(validation);
+	}
+
+	@Test
 	public void executeGetGenerateModalityNullTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateModalityNullTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
@@ -150,7 +164,7 @@ public class RBVDR302Test {
 
 	@Test
 	public void executeGetGenerateProductNullTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateProductNullTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(null);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
@@ -164,7 +178,7 @@ public class RBVDR302Test {
 
 	@Test
 	public void executeGetGenerateInsertSimulationFailTest() {
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateInsertSimulationFailTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
@@ -176,9 +190,22 @@ public class RBVDR302Test {
 		assertNull(validation);
 	}
 
+	@Test
+	public void executeGetRimacNullExceptionTest() throws IOException {
+		LOGGER.info("RBVDR302Test - Executing executeGetRimacNullExceptionTest...");
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
+		when(this.mapperHelper.mapInRequestRimacLife(anyObject())).thenReturn(requestRimac);
+		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
+
+		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNull(validation);
+	}
+
 	@Test(expected = Exception.class)
-	public void executeGetGenerateTest_Exception() throws IOException {
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest_Exception...");
+	public void executeGetGenerateExceptionTest() throws IOException {
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateExceptionTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
 		when(this.mapperHelper.mapInRequestRimacLife(anyObject())).thenReturn(null);
