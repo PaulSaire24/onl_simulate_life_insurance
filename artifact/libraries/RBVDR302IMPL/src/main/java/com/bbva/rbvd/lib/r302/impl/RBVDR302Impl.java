@@ -96,12 +96,14 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			Map<String, Object> argumentsForSaveSimulation = this.mapperHelper.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
-			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			boolean saveSimulationExecuted = validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
-			SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
-			Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
-			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
-			this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(),argumentsForSaveSimulationProduct);
+			if (saveSimulationExecuted) {
+				SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
+				Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+				LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
+				this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct);
+			}
 
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
