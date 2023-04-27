@@ -126,7 +126,7 @@ public class MapperHelper {
             plan.setId(modalityDao.getInsuranceModalityType());
             plan.setName(modalityDao.getInsuranceModalityName());
             plan.setIsRecommended("03".equalsIgnoreCase(modalityDao.getInsuranceModalityType()));
-
+            plan.setIsAvailable(true);
             InstallmentsDTO installmentPlan = new InstallmentsDTO();
 
             PeriodDTO period = new PeriodDTO();

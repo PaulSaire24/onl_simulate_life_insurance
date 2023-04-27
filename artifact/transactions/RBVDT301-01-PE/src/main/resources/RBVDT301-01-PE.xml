@@ -90,6 +90,7 @@
 							</dto>
 						</dto>
 					</list>
+					<parameter order="7" name="isAvailable" mandatory="1" type="Boolean" size="0"/>
 				</dto>
 			</list>
 		</dto>
