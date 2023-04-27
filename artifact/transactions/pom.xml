@@ -12,5 +12,7 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>TRANSACTIONS-onl_simulate_life_insurance</name>
-	<modules/>
+	<modules>
+		<module>RBVDT301-01-PE</module>
+	</modules>
 </project>

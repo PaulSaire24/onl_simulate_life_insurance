@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.bbva.rbvd</groupId>
+		<artifactId>LIBRARIES-onl_simulate_life_insurance</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+	</parent>
+	<groupId>com.bbva.rbvd</groupId>
+	<artifactId>RBVDR302</artifactId>
+	<name>RBVDR302</name>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+	<description>Call to external service and internal service - onl_simulate_life_insurance</description>
+	<properties>
+		<osgi.version.manifest>0.0</osgi.version.manifest>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.bbva.rbvd.dto.lifeinsrc</groupId>
+			<artifactId>RBVDC301</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}-${project.version}</Bundle-SymbolicName>
+						<Bundle-Category>library</Bundle-Category>
+						<Import-Package>
+							com.bbva.rbvd.dto.lifeinsrc.*;version="${osgi.version.manifest}",
+							com.bbva.elara.*;version="${osgi.version.manifest}",
+							*;version="${osgi.version.manifest}"
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<copy todir="${outputDirectoryLibraries}" file="./target/${project.artifactId}.jar"/>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
