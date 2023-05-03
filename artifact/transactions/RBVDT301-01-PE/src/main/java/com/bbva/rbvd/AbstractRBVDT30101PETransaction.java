@@ -22,13 +22,6 @@ public abstract class AbstractRBVDT30101PETransaction extends AbstractTransactio
 	}
 
 	/**
-	 * Return value for input parameter insuredAmount
-	 */
-	protected InsuredAmountDTO getInsuredamount(){
-		return (InsuredAmountDTO)this.getParameter("insuredAmount");
-	}
-
-	/**
 	 * Return value for input parameter holder
 	 */
 	protected HolderDTO getHolder(){

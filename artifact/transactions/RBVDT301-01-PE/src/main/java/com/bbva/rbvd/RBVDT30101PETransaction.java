@@ -29,7 +29,6 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 
 		LifeSimulationDTO lifeSimulationDTO = new LifeSimulationDTO();
 		lifeSimulationDTO.setProduct(this.getProduct());
-		lifeSimulationDTO.setInsuredAmount(this.getInsuredamount());
 		lifeSimulationDTO.setHolder(this.getHolder());
 		lifeSimulationDTO.setExternalSimulationId(this.getExternalsimulationid());
 		lifeSimulationDTO.setIsDataTreatment(this.getIsdatatreatment());

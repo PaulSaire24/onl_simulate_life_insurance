@@ -79,6 +79,10 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			response.getProduct().setPlans(plansWithNameAndRecommendedValueAndInstallmentPlan);
 
+			response.getHolder().setFirstName("");
+			response.getHolder().setLastName("");
+			response.getHolder().setFullName("");
+
 			this.mapperHelper.putConsiderations(response.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
 
 			Map<String, Object> arguments = new HashMap<>();
