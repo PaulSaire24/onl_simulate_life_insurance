@@ -35,6 +35,10 @@
 		</dto>
 		<parameter order="3" name="isDataTreatment" mandatory="0" type="Boolean" size="0"/>
 		<parameter order="4" name="externalSimulationId" mandatory="0" type="String" size="36"/>
+		<dto order="5" name="insuredAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+			<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+			<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+		</dto>
 	</paramsIn>
 	<paramsOut>
 		<dto order="1" name="product" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO" artifactId="RBVDC301">

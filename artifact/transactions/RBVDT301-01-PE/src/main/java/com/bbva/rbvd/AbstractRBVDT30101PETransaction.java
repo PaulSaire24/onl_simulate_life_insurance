@@ -43,6 +43,13 @@ public abstract class AbstractRBVDT30101PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter insuredAmount
+	 */
+	protected InsuredAmountDTO getInsuredamount(){
+		return (InsuredAmountDTO)this.getParameter("insuredAmount");
+	}
+
+	/**
 	 * Set value for InsuranceProductDTO output parameter product
 	 */
 	protected void setProduct(final InsuranceProductDTO field){
