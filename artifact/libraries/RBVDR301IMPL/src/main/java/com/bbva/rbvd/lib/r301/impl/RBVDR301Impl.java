@@ -1,6 +1,5 @@
 package com.bbva.rbvd.lib.r301.impl;
 
-import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClientException;
+import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
 import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
