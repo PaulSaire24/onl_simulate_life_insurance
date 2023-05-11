@@ -83,7 +83,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getHolder().setLastName("");
 			response.getHolder().setFullName("");
 
-			this.mapperHelper.putConsiderations(response.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
 
 			Map<String, Object> arguments = new HashMap<>();
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
