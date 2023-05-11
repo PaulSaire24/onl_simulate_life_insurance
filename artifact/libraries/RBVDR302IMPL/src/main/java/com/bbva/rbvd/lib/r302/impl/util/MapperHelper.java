@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
 
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
 public class MapperHelper {
@@ -173,23 +174,14 @@ public class MapperHelper {
             plan.setInstallmentPlans(installments);
             plan.setTotalInstallment(totalInstallmentPlan);
 
+            List<CoverageDTO> coverages = cotizacion.getPlan().getCoberturas().stream()
+                    .map(this::createCoverageDTO).
+                    collect(toList());
+
+            plan.setCoverages(coverages);
+
         }
         return plan;
-    }
-
-    public void putConsiderations(List<InsurancePlanDTO> plans, List<CotizacionBO> cotizaciones) {
-        plans.forEach(plan -> getConsiderationsForThisPlan(plan, cotizaciones));
-    }
-
-    private void getConsiderationsForThisPlan(InsurancePlanDTO plan, List<CotizacionBO> cotizaciones) {
-
-        List<CoverageDTO> coverages = cotizaciones.get(0).getPlan()
-                .getCoberturas().stream().
-                map(this::createCoverageDTO).
-                collect(toList());
-
-        plan.setCoverages(coverages);
-
     }
 
     private CoverageDTO createCoverageDTO(final CoberturaBO coverage) {

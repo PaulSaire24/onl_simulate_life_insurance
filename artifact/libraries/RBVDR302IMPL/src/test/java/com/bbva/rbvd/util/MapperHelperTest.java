@@ -85,8 +85,8 @@ public class MapperHelperTest {
         List<InsuranceProductModalityDAO> productModalities = new ArrayList<>();
         InsuranceProductModalityDAO modality = new InsuranceProductModalityDAO();
         modality.setInsuranceCompanyModalityId("533629");
-        modality.setInsuranceModalityName("PLAN BASICO");
-        modality.setInsuranceModalityType("02");
+        modality.setInsuranceModalityName("PLAN 01 EASY YES");
+        modality.setInsuranceModalityType("01");
         productModalities.add(modality);
 
         List<InsurancePlanDTO> validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac);
@@ -156,35 +156,6 @@ public class MapperHelperTest {
         assertEquals(new BigDecimal("827"), validation.getInsuranceProductId());
         assertEquals(new BigDecimal("0"), validation.getCampaignOffer1Amount());
         assertEquals(new BigDecimal("0"), validation.getCampaignFactorPer());
-    }
-
-    @Test
-    public void putConsiderationsFullTest() throws IOException {
-
-        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-
-        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
-
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("INC");
-        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-
-        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
-
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("OPC");
-        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-
-        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
-
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("");
-        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-
-        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
-
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("ABC");
-        mapperHelper.putConsiderations(responseOut.getProduct().getPlans(), responseRimac.getPayload().getCotizaciones());
-
-        assertNotNull(responseOut.getProduct().getPlans().get(0).getCoverages());
-
     }
 
     @Test
