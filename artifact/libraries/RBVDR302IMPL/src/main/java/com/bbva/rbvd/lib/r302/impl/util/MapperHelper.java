@@ -142,7 +142,7 @@ public class MapperHelper {
             PaymentAmountDTO amount = new PaymentAmountDTO();
 
             FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(new FinanciamientoBO());
 
             List<InstallmentsDTO> installments = new ArrayList<>();
 
