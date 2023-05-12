@@ -14,6 +14,7 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.PlanBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -43,7 +44,8 @@ public class MapperHelper {
 
     private static final String YES_CONSTANT = "S";
 
-    private static final String ANNUAL = "ANNUAL";
+    private static final String ANNUAL_PERIOD_ID = "ANNUAL";
+    private static final String ANNUAL_PERIOD_NAME = "ANUAL";
 
     protected ApplicationConfigurationService applicationConfigurationService;
 
@@ -125,12 +127,14 @@ public class MapperHelper {
             plan = new InsurancePlanDTO();
 
             plan.setId(modalityDao.getInsuranceModalityType());
-            plan.setName(modalityDao.getInsuranceModalityName());
+            plan.setName(cotizacion.getPlan().getDescripcionPlan());
             plan.setIsRecommended("03".equalsIgnoreCase(modalityDao.getInsuranceModalityType()));
             plan.setIsAvailable(true);
             InstallmentsDTO installmentPlan = new InstallmentsDTO();
 
             PeriodDTO period = new PeriodDTO();
+
+            PlanBO rimacPlan = cotizacion.getPlan();
 
             FinanciamientoBO monthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
                     filter(financing -> "Mensual".equals(financing.getPeriodicidad())).findFirst().orElse(new FinanciamientoBO());
@@ -140,37 +144,40 @@ public class MapperHelper {
             FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
                     filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
 
-            String periodicity = monthlyFinancing.getPeriodicidad();
-
-            period.setId(this.applicationConfigurationService.getProperty(periodicity));
-            period.setName(periodicity);
-
-            amount.setAmount(monthlyFinancing.getCuotasFinanciamiento().get(0).getMonto());
-
-            amount.setCurrency(cotizacion.getPlan().getMoneda());
-            installmentPlan.setPaymentsTotalNumber(monthlyFinancing.getNumeroCuotas());
-
-            TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
-            PeriodDTO periodAnual = new PeriodDTO();
-            String periodicityAnual = "";
-
-            if (Objects.nonNull(annualFinancing)) {
-                totalInstallmentPlan.setAmount(annualFinancing.getCuotasFinanciamiento().get(0).getMonto());
-                periodicityAnual = annualFinancing.getPeriodicidad();
-                periodAnual.setId(this.applicationConfigurationService.getProperty(periodicityAnual));
-                periodAnual.setName(periodicityAnual);
-            } else {
-                periodAnual.setId(ANNUAL);
-                totalInstallmentPlan.setAmount(cotizacion.getPlan().getPrimaBruta());
-            }
-            totalInstallmentPlan.setPeriod(periodAnual);
-
-            totalInstallmentPlan.setCurrency(cotizacion.getPlan().getMoneda());
             List<InstallmentsDTO> installments = new ArrayList<>();
 
+            String periodicity = monthlyFinancing.getPeriodicidad();
+            period.setId(this.applicationConfigurationService.getProperty(periodicity));
+            period.setName(periodicity.toUpperCase());
+            amount.setAmount(monthlyFinancing.getCuotasFinanciamiento().get(0).getMonto());
+            amount.setCurrency(cotizacion.getPlan().getMoneda());
+            installmentPlan.setPaymentsTotalNumber(monthlyFinancing.getNumeroCuotas());
             installmentPlan.setPeriod(period);
             installmentPlan.setPaymentAmount(amount);
             installments.add(installmentPlan);
+
+
+            InstallmentsDTO installmentPlanAnnual = new InstallmentsDTO();
+            PeriodDTO periodAnnual = new PeriodDTO();
+            String periodicityAnnual = annualFinancing.getPeriodicidad();
+            periodAnnual.setId(this.applicationConfigurationService.getProperty(periodicityAnnual));
+            periodAnnual.setName(periodicityAnnual.toUpperCase());
+            PaymentAmountDTO amountAnnual = new PaymentAmountDTO();
+            amountAnnual.setAmount(annualFinancing.getCuotasFinanciamiento().get(0).getMonto());
+            amountAnnual.setCurrency(annualFinancing.getCuotasFinanciamiento().get(0).getMoneda());
+            installmentPlanAnnual.setPaymentsTotalNumber(annualFinancing.getNumeroCuotas());
+            installmentPlanAnnual.setPeriod(periodAnnual);
+            installmentPlanAnnual.setPaymentAmount(amountAnnual);
+            installments.add(installmentPlanAnnual);
+
+            TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
+            PeriodDTO periodAnual = new PeriodDTO();
+            totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
+            periodAnual.setId(ANNUAL_PERIOD_ID);
+            periodAnual.setName(ANNUAL_PERIOD_NAME);
+            totalInstallmentPlan.setPeriod(periodAnual);
+            totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
+
             plan.setInstallmentPlans(installments);
             plan.setTotalInstallment(totalInstallmentPlan);
 
