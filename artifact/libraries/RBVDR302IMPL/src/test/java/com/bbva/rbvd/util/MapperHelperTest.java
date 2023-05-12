@@ -93,7 +93,19 @@ public class MapperHelperTest {
 
         assertNotNull(validation.get(0).getName());
 
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().get(1).setPeriodicidad("");
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("INC");
+
+        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac);
+
+        assertEquals(1, validation.size());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("OPC");
+
+        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac);
+
+        assertEquals(1, validation.size());
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("");
 
         validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac);
 
