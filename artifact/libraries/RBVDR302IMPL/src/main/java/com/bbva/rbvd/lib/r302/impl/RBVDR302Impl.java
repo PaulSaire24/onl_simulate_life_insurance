@@ -2,10 +2,12 @@ package com.bbva.rbvd.lib.r302.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
+
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
@@ -16,11 +18,15 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +139,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
+
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");
 
 			return response;

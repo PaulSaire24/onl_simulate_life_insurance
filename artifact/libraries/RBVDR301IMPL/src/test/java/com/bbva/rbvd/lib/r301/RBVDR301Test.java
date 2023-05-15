@@ -9,9 +9,11 @@ import javax.annotation.Resource;
 import com.bbva.elara.utility.api.connector.APIConnector;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
+
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r014.PISDR014;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
@@ -19,7 +21,9 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryMock;
 import com.bbva.rbvd.lib.r301.impl.RBVDR301Impl;
 import com.bbva.rbvd.mock.MockBundleContext;
+
 import com.bbva.rbvd.mock.MockService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -168,6 +172,7 @@ public class RBVDR301Test {
 	@Test
 	public void executeCallListCustomerResponseWithRestClientException() {
 		LOGGER.info("RBVDR301Test - Executing executeCallListCustomerResponseWithRestClientException...");
+
 		when(internalApiConnector.getForObject(anyString(), any(), anyMap()))
 				.thenThrow(new RestClientException(MESSAGE_EXCEPTION));
 

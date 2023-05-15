@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r301.impl;
 
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
+
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
@@ -8,8 +9,10 @@ import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.utils.PISDErrors;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 import com.bbva.pisd.dto.insurance.utils.PISDValidation;
+
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;
 import org.slf4j.Logger;
@@ -24,7 +27,6 @@ import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class RBVDR301Impl extends RBVDR301Abstract {
 
@@ -164,7 +166,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService END *****");
 		return output;
 	}
-
 
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();

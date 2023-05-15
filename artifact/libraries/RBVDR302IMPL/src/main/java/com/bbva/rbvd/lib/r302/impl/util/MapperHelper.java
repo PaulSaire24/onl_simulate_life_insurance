@@ -2,10 +2,12 @@ package com.bbva.rbvd.lib.r302.impl.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.PlanASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.ProductASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.AmountASO;
+
 import com.bbva.pisd.dto.insurance.aso.gifole.InstallmentPlanASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.PeriodASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.BankASO;
@@ -15,6 +17,7 @@ import com.bbva.pisd.dto.insurance.aso.gifole.IdentityDocumentASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.HolderASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.ContactASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.ContactDetailASO;
+
 import com.bbva.pisd.dto.insurance.aso.gifole.GoodASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GoodDetailASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
@@ -22,6 +25,7 @@ import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TierDTO;
+
 import com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
@@ -394,6 +398,7 @@ public class MapperHelper {
         product.setName(productDto.getName());
 
         PlanASO plan = new PlanASO();
+
         plan.setId(planDTO.getId());
         plan.setName(planDTO.getName());
 
@@ -483,6 +488,7 @@ public class MapperHelper {
         holder.setHasCreditCard(false);
 
         gifoleInsuranceRequest.setProduct(product);
+
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
         gifoleInsuranceRequest.setHolder(holder);
@@ -514,6 +520,7 @@ public class MapperHelper {
         String docNumber = customerInfo.getDocumentNumber();
         documentType.setId(customerInfo.getDocumentType().getId());
         identityDocument.setDocumentType(documentType);
+
         identityDocument.setDocumentNumber(response.getHolder().getIdentityDocument().getDocumentNumber());
         if (Objects.isNull(response.getHolder().getIdentityDocument().getDocumentNumber())) {
             identityDocument.setDocumentNumber(docNumber);

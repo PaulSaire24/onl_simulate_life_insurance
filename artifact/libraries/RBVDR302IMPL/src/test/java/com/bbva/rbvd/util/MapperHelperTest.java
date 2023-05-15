@@ -1,27 +1,39 @@
 package com.bbva.rbvd.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
+
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
+
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierDataASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierSegmentASO;
+
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
+
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
+
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
+
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
+
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -107,7 +119,9 @@ public class MapperHelperTest {
     public void getPlansNamesAndRecommendedValuesAndInstallmentsPlansFullTest() throws IOException {
 
         InsuranceLifeSimulationBO responseRimac = mockData.getInsuranceRimacSimulationResponse();
+
         responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(1L);
+
         List<InsuranceProductModalityDAO> productModalities = new ArrayList<>();
         InsuranceProductModalityDAO modality = new InsuranceProductModalityDAO();
         modality.setInsuranceCompanyModalityId("533629");
@@ -263,6 +277,7 @@ public class MapperHelperTest {
     public void createGifoleASO_OK() throws IOException {
 
         requestCustomerListASO = mockDTO.getCustomerDataResponse();
+
         GifoleInsuranceRequestASO validation = this.mapperHelper.createGifoleASO(responseOut, requestCustomerListASO);
 
         assertNotNull(validation);
@@ -286,8 +301,8 @@ public class MapperHelperTest {
 
     @Test
     public void createGifoleASO_NULL() {
-
         responseOut.getProduct().getPlans().get(2).getInstallmentPlans().get(1).setPeriod(new PeriodDTO());
+
         GifoleInsuranceRequestASO validation = this.mapperHelper.createGifoleASO(responseOut, null);
 
         assertNotNull(validation);

@@ -9,23 +9,30 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
+
 import com.bbva.pisd.lib.r350.PISDR350;
+
 import com.bbva.rbvd.dto.lifeinsrc.commons.TierDTO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 import org.apache.felix.resolver.util.ArrayMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -125,6 +132,16 @@ public class RBVDR302Test {
 		responseQueryConsiderations = mock(Map.class);
 
 		when(this.applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
+
+		gifoleInsReqAso = new GifoleInsuranceRequestASO();
+
+		gifoleInsReqAso.setChannel("Channel");
+		gifoleInsReqAso.setOperationType("OperationType");
+		gifoleInsReqAso.setOperationDate("OperationDate");
+		gifoleInsReqAso.setPolicyNumber("PolicyNumber");
+
+		when(this.applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
+
 
 		gifoleInsReqAso = new GifoleInsuranceRequestASO();
 
