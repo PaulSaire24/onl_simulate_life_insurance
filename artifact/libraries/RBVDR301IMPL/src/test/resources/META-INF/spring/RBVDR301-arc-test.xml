@@ -8,5 +8,5 @@
 			<list value-type="java.lang.String"/>
 		</constructor-arg>
 	</bean>
-	<bean id="apiConnectorFactoryImpl" class="com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryTest"/>
+	<bean id="apiConnectorFactoryImpl" class="com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryMock"/>
 </beans>
