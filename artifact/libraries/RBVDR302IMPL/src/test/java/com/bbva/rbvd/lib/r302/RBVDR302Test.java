@@ -161,6 +161,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
+		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
 		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
 		Map<String, Object> uniqueExample = new HashMap<>();
 		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
@@ -188,6 +189,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
+		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
 		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
 		Map<String, Object> uniqueExample = new HashMap<>();
 		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");

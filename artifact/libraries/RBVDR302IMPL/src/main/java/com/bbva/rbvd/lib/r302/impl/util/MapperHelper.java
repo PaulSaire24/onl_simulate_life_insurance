@@ -378,8 +378,8 @@ public class MapperHelper {
 
         InsuranceProductDTO productDto = response.getProduct();
 
-        Optional<InsurancePlanDTO> planDTO = productDto.getPlans().stream().filter(r -> true == r.getIsRecommended()).findFirst();
-        List<InstallmentsDTO> installmentPlanDto = planDTO.get().getInstallmentPlans();
+        InsurancePlanDTO planDTO = productDto.getPlans().stream().filter(r -> true == r.getIsRecommended()).findFirst().orElse(new InsurancePlanDTO());
+        List<InstallmentsDTO> installmentPlanDto = planDTO.getInstallmentPlans();
 
         GifoleInsuranceRequestASO gifoleInsuranceRequest = new GifoleInsuranceRequestASO();
 
@@ -388,8 +388,8 @@ public class MapperHelper {
         product.setName(productDto.getName());
 
         PlanASO plan = new PlanASO();
-        plan.setId(planDTO.get().getId());
-        plan.setName(planDTO.get().getName());
+        plan.setId(planDTO.getId());
+        plan.setName(planDTO.getName());
 
         product.setPlan(plan);
 
@@ -411,8 +411,8 @@ public class MapperHelper {
 
         Optional<InstallmentsDTO> planObj = installmentPlanDto.stream().filter(p -> ANNUAL_PERIOD_ID.equals(p.getPeriod().getId())).findFirst();
         AmountASO totalPremiumAmount = new AmountASO();
-        totalPremiumAmount.setAmount(planObj.isPresent() ? planObj.get().getPaymentAmount().getAmount() : planDTO.get().getTotalInstallment().getAmount());
-        totalPremiumAmount.setCurrency(planObj.isPresent() ? planObj.get().getPaymentAmount().getCurrency() : planDTO.get().getTotalInstallment().getCurrency());
+        totalPremiumAmount.setAmount(planObj.isPresent() ? planObj.get().getPaymentAmount().getAmount() : planDTO.getTotalInstallment().getAmount());
+        totalPremiumAmount.setCurrency(planObj.isPresent() ? planObj.get().getPaymentAmount().getCurrency() : planDTO.getTotalInstallment().getCurrency());
 
         HolderASO holder = new HolderASO();
         holder.setIsBankCustomer(true);
