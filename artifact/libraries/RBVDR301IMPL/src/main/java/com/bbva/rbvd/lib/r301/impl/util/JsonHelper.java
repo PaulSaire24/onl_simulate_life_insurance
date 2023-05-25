@@ -20,5 +20,7 @@ public class JsonHelper {
 
     public String serialization(Object o) { return this.gson.toJson(o); }
 
+    public <T> T fromString(String src, Class<T> clazz) { return this.gson.fromJson(src, clazz); }
+
     public <T> T deserialization(String src, Class<T> clazz) { return this.gson.fromJson(src, clazz); }
 }

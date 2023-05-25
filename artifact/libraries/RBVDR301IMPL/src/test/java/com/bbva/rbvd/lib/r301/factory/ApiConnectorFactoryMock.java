@@ -7,7 +7,7 @@ import com.bbva.elara.utility.api.connector.APIConnector;
 import com.bbva.elara.utility.api.connector.APIConnectorBuilder;
 import com.bbva.elara.utility.api.connector.APIConnectorFactory;
 
-public class ApiConnectorFactoryTest implements APIConnectorFactory {
+public class ApiConnectorFactoryMock implements APIConnectorFactory {
 
 	@Override
 	public APIConnector getAPIConnector(BundleContext arg0) {

@@ -11,19 +11,16 @@ import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.lib.r014.PISDR014;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryTest;
+import com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryMock;
 import com.bbva.rbvd.lib.r301.impl.RBVDR301Impl;
 import com.bbva.rbvd.mock.MockBundleContext;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.Advised;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestClientException;
@@ -71,7 +68,7 @@ public class RBVDR301Test {
 		rbvdr301Impl.setApplicationConfigurationService(applicationConfigurationService);
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("uri");
 
-		ApiConnectorFactoryTest apiConnectorFactoryMock = new ApiConnectorFactoryTest();
+		ApiConnectorFactoryMock apiConnectorFactoryMock = new ApiConnectorFactoryMock();
 		externalApiConnector = apiConnectorFactoryMock.getAPIConnector(mockBundleContext);
 		rbvdr301Impl.setExternalApiConnector(externalApiConnector);
 
