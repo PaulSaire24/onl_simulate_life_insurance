@@ -5,7 +5,6 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
-import com.bbva.pisd.dto.insurance.utils.PISDErrors;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
@@ -123,17 +122,17 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
 			Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
-			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
 
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-			//SERVICIO GIFOLE!
 			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(response.getHolder().getId());
 
 			this.serviceAddGifole(response, responseListCustomers);
 
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Response: {}", response);
+			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
+			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");
 
 			return response;
