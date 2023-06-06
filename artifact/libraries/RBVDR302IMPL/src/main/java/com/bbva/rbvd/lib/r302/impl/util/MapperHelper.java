@@ -15,6 +15,8 @@ import com.bbva.pisd.dto.insurance.aso.gifole.IdentityDocumentASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.HolderASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.ContactASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.ContactDetailASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.GoodASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.GoodDetailASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
@@ -95,6 +97,8 @@ public class MapperHelper {
     private static final String PLANDOS = "02";
 
     private static final String PLANTRES = "03";
+
+    private static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
 
     public InsuranceLifeSimulationBO mapInRequestRimacLife(LifeSimulationDTO input, BigDecimal sumCumulus){
 
@@ -188,11 +192,7 @@ public class MapperHelper {
             plan.setId(modalityDao.getInsuranceModalityType());
             plan.setName(cotizacion.getPlan().getDescripcionPlan());
             plan.setIsRecommended(setValueRecommended(modalityDao, seglifePlan1, seglifePlan2, seglifePlan3));
-            if(0==cotizacion.getIndicadorBloqueo()) {
-                plan.setIsAvailable(true);
-            }else{
-                plan.setIsAvailable(false);
-            }
+            plan.setIsAvailable(indicadorBloqueo(cotizacion.getIndicadorBloqueo()));
             InstallmentsDTO installmentPlan = new InstallmentsDTO();
 
             PeriodDTO period = new PeriodDTO();
@@ -252,6 +252,12 @@ public class MapperHelper {
 
         }
         return plan;
+    }
+
+    private boolean indicadorBloqueo(Long indicadorBloqueo) {
+        boolean result = false;
+        result = (0==indicadorBloqueo);
+        return result;
     }
 
     private Boolean setValueRecommended(InsuranceProductModalityDAO modalityDao, Boolean seglifePlan1,
@@ -378,7 +384,7 @@ public class MapperHelper {
 
         InsuranceProductDTO productDto = response.getProduct();
 
-        InsurancePlanDTO planDTO = productDto.getPlans().stream().filter(r -> true == r.getIsRecommended()).findFirst().orElse(new InsurancePlanDTO());
+        InsurancePlanDTO planDTO = productDto.getPlans().stream().filter(r -> r.getIsRecommended()).findFirst().orElse(new InsurancePlanDTO());
         List<InstallmentsDTO> installmentPlanDto = planDTO.getInstallmentPlans();
 
         GifoleInsuranceRequestASO gifoleInsuranceRequest = new GifoleInsuranceRequestASO();
@@ -417,6 +423,12 @@ public class MapperHelper {
         HolderASO holder = new HolderASO();
         holder.setIsBankCustomer(true);
         holder.setIsDataTreatment(true);
+
+        GoodASO good = new GoodASO();
+
+        GoodDetailASO goodDetail = new GoodDetailASO();
+        goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
+        good.setGoodDetail(goodDetail);
 
         if(Objects.nonNull(responseListCustomers)) {
             CustomerBO customer = responseListCustomers.getData().get(0);
@@ -482,6 +494,7 @@ public class MapperHelper {
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
 
         gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
+        gifoleInsuranceRequest.setGood(good);
 
         return gifoleInsuranceRequest;
     }

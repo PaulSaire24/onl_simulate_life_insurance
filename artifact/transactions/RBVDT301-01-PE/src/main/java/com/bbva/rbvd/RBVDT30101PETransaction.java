@@ -24,7 +24,6 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 	@Override
 	public void execute() {
 		RBVDR302 rbvdR302 = this.getServiceLibrary(RBVDR302.class);
-		// TODO - Implementation of business logic
 		LOGGER.info("***** RBVDT30101PETransaction START *****");
 
 		LifeSimulationDTO lifeSimulationDTO = new LifeSimulationDTO();

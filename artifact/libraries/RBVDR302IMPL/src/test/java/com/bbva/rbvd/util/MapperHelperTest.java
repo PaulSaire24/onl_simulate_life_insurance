@@ -353,12 +353,12 @@ public class MapperHelperTest {
         String seglifePlan1 = "86300";
 
         valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
-        assertEquals(valor, true);
+        assertTrue(valor);
 
         input.setId(null);
 
         valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
-        assertEquals( valor, false);
+        assertFalse( valor);
         assertNull(input.getDescription());
     }
 
