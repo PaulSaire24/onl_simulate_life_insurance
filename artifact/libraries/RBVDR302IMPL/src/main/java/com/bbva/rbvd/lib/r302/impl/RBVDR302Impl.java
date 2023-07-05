@@ -43,6 +43,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
 
+	private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
 	/**
 	 * The execute method...
 	 */
@@ -206,7 +207,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		ProductInformationDAO productInformationDAO = new ProductInformationDAO();
 		productInformationDAO.setInsuranceProductId((BigDecimal) responseQueryGetProductInformation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
 		productInformationDAO.setInsuranceProductDescription((String) responseQueryGetProductInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()));
-		productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RBVDProperties.FIELD_INSURANCE_BUSINESS_NAME.getValue()));
+		productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RIMAC_PRODUCT_NAME));
 		return productInformationDAO;
 	}
 
