@@ -39,6 +39,20 @@
 			<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
 			<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
 		</dto>
+		<list order="6" name="refunds" mandatory="0">
+			<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO" artifactId="RBVDC301">
+				<dto order="1" name="unit" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO" artifactId="RBVDC301">
+					<parameter order="1" name="unitType" mandatory="1" type="String" size="20"/>
+					<parameter order="2" name="percentage" mandatory="0" type="Long" size="10"/>
+					<parameter order="3" name="currency" mandatory="0" type="String" size="3"/>
+					<parameter order="4" name="amount" mandatory="0" type="Double" size="18"/>
+				</dto>
+			</dto>
+		</list>
+		<dto order="7" name="term" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO" artifactId="RBVDC301">
+			<parameter order="1" name="number" mandatory="1" type="Long" size="10"/>
+			<parameter order="2" name="unit" mandatory="1" type="String" size="10"/>
+		</dto>
 	</paramsIn>
 	<paramsOut>
 		<dto order="1" name="product" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO" artifactId="RBVDC301">
@@ -112,6 +126,20 @@
 		</dto>
 		<parameter order="4" name="isDataTreatment" mandatory="0" type="Boolean" size="0"/>
 		<parameter order="5" name="externalSimulationId" mandatory="1" type="String" size="36"/>
+		<list order="6" name="refunds" mandatory="0">
+			<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO" artifactId="RBVDC301">
+				<dto order="1" name="unit" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO" artifactId="RBVDC301">
+					<parameter order="1" name="unitType" mandatory="1" type="String" size="20"/>
+					<parameter order="2" name="percentage" mandatory="0" type="Long" size="10"/>
+					<parameter order="3" name="currency" mandatory="0" type="String" size="3"/>
+					<parameter order="4" name="amount" mandatory="0" type="Double" size="18"/>
+				</dto>
+			</dto>
+		</list>
+		<dto order="7" name="term" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO" artifactId="RBVDC301">
+			<parameter order="1" name="number" mandatory="1" type="String" size="10"/>
+			<parameter order="2" name="unit" mandatory="1" type="String" size="10"/>
+		</dto>
 	</paramsOut>
 	<description>Trx done for life simulation</description>
 </transaction>
