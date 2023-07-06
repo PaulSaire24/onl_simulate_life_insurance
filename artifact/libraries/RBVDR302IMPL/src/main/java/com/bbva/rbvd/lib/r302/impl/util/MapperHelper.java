@@ -66,6 +66,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.util.CollectionUtils;
 
 import static java.util.stream.Collectors.toList;
 
@@ -149,17 +150,17 @@ public class MapperHelper {
 
         datos2.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
         datos2.setCodigo("");
-        datos2.setValor(input.getInsuredAmount().getAmount().toString());
+        datos2.setValor(input.getInsuredAmount() != null ? String.valueOf(input.getInsuredAmount().getAmount()) : "0");
         rimacRequest.getPayload().getDatosParticulares().add(datos2);
 
         datos3.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PERIODO_ANOS.getValue());
         datos3.setCodigo("");
-        datos3.setValor(input.getTerm().getNumber().toString());
+        datos3.setValor(input.getTerm() != null ? String.valueOf(input.getTerm().getNumber()) : "5");
         rimacRequest.getPayload().getDatosParticulares().add(datos3);
 
         datos4.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
         datos4.setCodigo("");
-        datos4.setValor(input.getListRefunds().get(0).getUnit().getPercentage() + "%");
+        datos4.setValor(CollectionUtils.isEmpty(input.getListRefunds()) ? "0" : String.valueOf(input.getListRefunds().get(0).getUnit().getPercentage()));
         rimacRequest.getPayload().getDatosParticulares().add(datos4);
 
         datos5.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
