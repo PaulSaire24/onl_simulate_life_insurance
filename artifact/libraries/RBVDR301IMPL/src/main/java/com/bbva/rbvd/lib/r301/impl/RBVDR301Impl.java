@@ -62,6 +62,40 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	}
 
+	@Override
+	public InsuranceLifeSimulationBO executeSimulationModificationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId) {
+
+		LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService START *****");
+
+		String requestJson = getRequestJson(payload);
+
+		LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Request body: {}", requestJson);
+
+		InsuranceLifeSimulationBO response = null;
+
+		String uri = this.applicationConfigurationService.getProperty(RBVDProperties.SIMULATION_UPDATE_LIFE_URI.getValue()).
+				replace("{idCotizacion}", quotationId);
+
+		SignatureAWS signatureAWS = this.pisdR014.executeSignatureConstruction(requestJson, org.springframework.http.HttpMethod.PATCH.toString(),
+				uri,null, traceId);
+
+		HttpEntity<String> entity = new HttpEntity<>(requestJson, createHttpHeadersAWS(signatureAWS));
+
+		try {
+
+			response = this.externalApiConnector.postForObject(RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), entity,
+					InsuranceLifeSimulationBO.class);
+			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
+
+		} catch (RestClientException ex) {
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Exception: {}", ex.getMessage());
+			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
+			exceptionHandler.handler(ex);
+		}
+
+		return response;
+	}
+
 	private String getRequestJson(Object o) {
 		return JsonHelper.getInstance().serialization(o);
 	}

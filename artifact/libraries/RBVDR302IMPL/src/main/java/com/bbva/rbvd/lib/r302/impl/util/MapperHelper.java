@@ -51,6 +51,8 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.HashMap;
 import java.util.Objects;
@@ -130,6 +132,51 @@ public class MapperHelper {
         simulationBo.setPayload(payload);
         return simulationBo;
     }
+
+
+    public void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
+
+        DatoParticularBO datos1 = new DatoParticularBO();
+        DatoParticularBO datos2 = new DatoParticularBO();
+        DatoParticularBO datos3 = new DatoParticularBO();
+        DatoParticularBO datos4 = new DatoParticularBO();
+        DatoParticularBO datos5 = new DatoParticularBO();
+
+        datos1.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
+        datos1.setCodigo("");
+        datos1.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+        rimacRequest.getPayload().getDatosParticulares().add(datos1);
+
+        datos2.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
+        datos2.setCodigo("");
+        datos2.setValor(input.getInsuredAmount().getAmount().toString());
+        rimacRequest.getPayload().getDatosParticulares().add(datos2);
+
+        datos3.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PERIODO_ANOS.getValue());
+        datos3.setCodigo("");
+        datos3.setValor(input.getTerm().getNumber().toString());
+        rimacRequest.getPayload().getDatosParticulares().add(datos3);
+
+        datos4.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
+        datos4.setCodigo("");
+        datos4.setValor(input.getListRefunds().get(0).getUnit().getPercentage() + "%");
+        rimacRequest.getPayload().getDatosParticulares().add(datos4);
+
+        datos5.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
+        datos5.setCodigo("");
+        datos5.setValor("N");
+        rimacRequest.getPayload().getDatosParticulares().add(datos5);
+    }
+
+    private String calculateYeardOldCustomer(String birthDate){
+
+        LocalDate hoy = LocalDate.now();
+        LocalDate nacimiento = LocalDate.parse(birthDate);
+        Long years = ChronoUnit.YEARS.between(nacimiento, hoy);
+
+        return years.toString();
+    }
+
 
     public Map<String, Object> mapProductId(String arguments){
 

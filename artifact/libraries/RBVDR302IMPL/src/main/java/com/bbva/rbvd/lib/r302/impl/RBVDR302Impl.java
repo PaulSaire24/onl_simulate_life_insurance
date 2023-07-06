@@ -75,9 +75,27 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			BigDecimal sumCumulus = validateQueryGetInsuranceAmount(responseQueryGetCumulus);
 
+			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
+
 			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
-			InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+
+			if(input.getProduct().getId().equals("841")){
+				this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
+			}
+
+			LOGGER.info("***** PISDR302Impl - Rimac Request: {} *****", rimacRequest);
+
+			InsuranceLifeSimulationBO responseRimac = null;
+
+			if(Objects.nonNull(input.getExternalSimulationId())){
+				responseRimac = this.rbvdR301.executeSimulationModificationRimacService(rimacRequest, input.getExternalSimulationId(), input.getTraceId());
+			} else {
+				responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+			}
+
+			LOGGER.info("***** PISDR302Impl - Response Rimac : {} *****", responseRimac);
+
 			validation(responseRimac);
 
 			response = input;
@@ -134,7 +152,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(response.getHolder().getId());
+
 
 			this.serviceAddGifole(response, responseListCustomers);
 
