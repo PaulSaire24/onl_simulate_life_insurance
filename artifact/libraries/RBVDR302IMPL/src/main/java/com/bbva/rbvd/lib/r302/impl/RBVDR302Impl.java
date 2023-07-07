@@ -164,9 +164,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-
-
-			this.serviceAddGifole(response, responseListCustomers);
+			if(!input.getProduct().getId().equals("841")){
+				this.serviceAddGifole(response, responseListCustomers);
+			}
 
 			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
