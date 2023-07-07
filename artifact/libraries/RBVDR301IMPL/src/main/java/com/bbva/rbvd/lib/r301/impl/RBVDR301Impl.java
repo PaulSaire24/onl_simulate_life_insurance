@@ -34,7 +34,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	private static final String AUTHORIZATION = "Authorization";
 
-
+	//ejecuta la simulación del servicio Rímac
 	@Override
 	public InsuranceLifeSimulationBO executeSimulationRimacService(final InsuranceLifeSimulationBO payload, String traceId) {
 
@@ -61,11 +61,12 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return response;
 
 	}
-
+	//obtiene la petición del Json
 	private String getRequestJson(Object o) {
 		return JsonHelper.getInstance().serialization(o);
 	}
 
+	//ejecuta la llamada a la respuesta de la lista de cliente
 	public CustomerListASO executeCallListCustomerResponse(String customerId) {
 		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse START *****");
 
@@ -90,7 +91,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return responseList;
 	}
 
-
+	//ejecuta el servicio de Gifole para vida
 	public Integer executeGifolelifeService(GifoleInsuranceRequestASO requestBody) {
 		LOGGER.info("***** RBVDR301Impl - executeGifolelifeService START *****");
 
@@ -118,7 +119,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGifolelifeService END *****");
 		return httpStatus;
 	}
-
+	//Ejecuta el servicio Cryto (entrada: cryptoASO)
 	public CryptoASO executeCryptoService(CryptoASO cryptoASO) {
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService START *****");
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService ***** Param: {}", cryptoASO.getStream());
@@ -140,7 +141,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return output;
 	}
 
-
+	//Ejecuta para obtener el servicio Tier
 	public TierASO executeGetTierService(String holderId) {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService START *****");
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService ***** Params: {}", holderId);
@@ -166,14 +167,14 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService END *****");
 		return output;
 	}
-
+	//Crea las cabeceras Http
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application","json", StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
 		return headers;
 	}
-
+	//Crea las cabeceras AWS de Http
 	private HttpHeaders createHttpHeadersAWS(SignatureAWS signature) {
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);

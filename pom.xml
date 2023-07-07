@@ -26,4 +26,29 @@
 		<module>artifact/libraries</module>
 		<module>artifact/transactions</module>
 	</modules>
+
+	<build>
+		<plugins>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-antrun-plugin</artifactId>
+		<version>1.8</version>
+		<executions>
+			<execution>
+				<id>test</id> <!-- has to be set -->
+				<phase>validate</phase>
+				<goals>
+					<goal>run</goal>
+				</goals>
+				<configuration>
+					<target name="test">
+						<echo message="testing 1 2 3"/>
+					</target>
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>
+		</plugins>
+	</build>
+
 </project>
