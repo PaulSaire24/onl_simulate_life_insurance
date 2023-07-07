@@ -273,4 +273,29 @@ public class RBVDR301Test {
 		assertNull(validation);
 	}
 
+	@Test
+	public void executeSimulationModificationRimacService_OK(){
+		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_OK...");
+
+		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
+				thenReturn(new InsuranceLifeSimulationBO());
+
+		InsuranceLifeSimulationBO validation = rbvdr301Impl.executeSimulationModificationRimacService(
+				new InsuranceLifeSimulationBO(),
+				"0ab2d917-a610-4939-9401-93cd716f991c",
+				"traceId");
+		assertNotNull(validation);
+	}
+
+	@Test(expected = BusinessException.class)
+	public void executeSimulationModificationRimacService_RestClientException() {
+		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_RestClientException...");
+
+		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
+				thenThrow(new RestClientException(MESSAGE_EXCEPTION));
+
+		this.rbvdr301Impl.executeSimulationModificationRimacService(
+				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");
+	}
+
 }

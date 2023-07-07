@@ -10,10 +10,11 @@ import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierDataASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierSegmentASO;
 
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
@@ -21,6 +22,9 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -28,6 +32,7 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -375,6 +380,42 @@ public class MapperHelperTest {
         valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
         assertFalse( valor);
         assertNull(input.getDescription());
+    }
+
+    @Test
+    public void testAddFieldsDatoParticulares_DynamicLife() throws IOException{
+
+        CustomerListASO customerListASO = new CustomerListASO();
+        List<CustomerBO> data = new ArrayList<>();
+        CustomerBO customerBO = new CustomerBO();
+        BirthDataBO birthDataBO = new BirthDataBO();
+        birthDataBO.setBirthDate("1995-05-26");
+        customerBO.setBirthData(birthDataBO);
+        data.add(customerBO);
+        customerListASO.setData(data);
+
+        requestInput.getProduct().setId("841");
+        requestInput.getInsuredAmount().setAmount(new BigDecimal(3485));
+        requestInput.getInsuredAmount().setCurrency("PEN");
+        List<RefundsDTO> refundsDTOS = new ArrayList<>();
+        RefundsDTO refunds = new RefundsDTO();
+        UnitDTO unitDTO = new UnitDTO();
+        unitDTO.setUnitType("PERCENTAGE");
+        unitDTO.setPercentage(new BigDecimal(100));
+        refunds.setUnit(unitDTO);
+        refundsDTOS.add(refunds);
+        requestInput.setListRefunds(refundsDTOS);
+        TermDTO termDTO = new TermDTO();
+        termDTO.setNumber(5);
+        requestInput.setTerm(termDTO);
+
+        InsuranceLifeSimulationBO rimacRequest = mockData.getInsuranceRimacSimulationRequest();
+
+        this.mapperHelper.addFieldsDatoParticulares(rimacRequest,requestInput,customerListASO);
+
+        assertNotNull(rimacRequest);
+        assertNotNull(rimacRequest.getPayload().getDatosParticulares());
+        assertEquals(6,rimacRequest.getPayload().getDatosParticulares().size());
     }
 
 }
