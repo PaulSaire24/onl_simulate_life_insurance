@@ -19,6 +19,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 
+import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -75,9 +76,38 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			BigDecimal sumCumulus = validateQueryGetInsuranceAmount(responseQueryGetCumulus);
 
+			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
+
 			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
+			InsuranceLifeSimulationBO responseRimac = null;
+
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
-			InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+
+			if(input.getProduct().getId().equals("841")){
+				this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
+
+
+				LOGGER.info("***** PISDR302Impl - Rimac Request: {} *****", rimacRequest);
+
+
+				if(this.applicationConfigurationService.getProperty("IS_MOCK_QUOTATION_DYNAMIC").equals("S")){
+					//usar mock de rimac
+					responseRimac = new MockResponse().getMockResponseRimacService();
+				}else{
+					if(Objects.nonNull(input.getExternalSimulationId())){
+						responseRimac = this.rbvdR301.executeSimulationModificationRimacService(rimacRequest, input.getExternalSimulationId(), input.getTraceId());
+					} else {
+						responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+					}
+
+				}
+
+			}else{
+				responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+			}
+
+			LOGGER.info("***** PISDR302Impl - Response Rimac : {} *****", responseRimac);
+
 			validation(responseRimac);
 
 			response = input;
@@ -134,9 +164,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(response.getHolder().getId());
-
-			this.serviceAddGifole(response, responseListCustomers);
+			if(!input.getProduct().getId().equals("841")){
+				this.serviceAddGifole(response, responseListCustomers);
+			}
 
 			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
