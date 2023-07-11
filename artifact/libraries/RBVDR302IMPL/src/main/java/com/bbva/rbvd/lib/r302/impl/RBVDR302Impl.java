@@ -30,7 +30,6 @@ import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
-import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 
@@ -67,9 +66,19 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 		Simulation simulation = null;
 		if(input.getProduct().getId().equals("840")){
-			simulation = new SimulationEasyYes(new SimulationParameter(input,this.applicationConfigurationService),new SimulationStore());
+
+			simulation = new SimulationEasyYes(
+					 new SimulationParameter(this.pisdR350, input,this.applicationConfigurationService)
+					 ,new SimulationStore()
+					);
+
 		}else if(input.getProduct().getId().equals("841")){
-			simulation = new SimulationVidaDinamico(new SimulationParameter(input,this.applicationConfigurationService), new SimulationStore());
+
+			simulation = new SimulationVidaDinamico(
+					new SimulationParameter(this.pisdR350,input,this.applicationConfigurationService),
+					new SimulationStore()
+			);
+
 		}
 
 		//inicio
@@ -90,24 +99,26 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			input.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeId);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_INFORMATION *****");
 			//llama a la R350 para ejecutar la query a la base de datos
-			IProductDAO productDAO = new ProductDAOImpl();
-			productDAO.getProductInformationById(input.getProduct().getId());
+//
+//			ProductDAO productDAO1 = new ProductDAO(this.pisdR350);
+//			Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
+//
+//			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
 
-			ProductDAO productDAO1 = new ProductDAO(this.pisdR350);
-			Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
 
-			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
-			//llama a la R350 para obtener el cúmulo de la base de datos
+			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
 			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
-			Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO((BigDecimal) responseQueryGetProductInformation
-					.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()),input.getHolder().getId());
+			Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
 
 			BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
-			//valida la cantidad asegurada
 
+			//valida la cantidad asegurada  --- Customer --- Axel.
 			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
 
+			// ParametrosInicialRimac --- Carlos
 			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
+
+
 			InsuranceLifeSimulationBO responseRimac = null;
 
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
@@ -141,10 +152,12 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			response = input;
 
+			/// Tier  -- JhonH
 			TierASO responseTierASO = validationUtil.validateTier(input);
 			this.mapperHelper.mappingTierASO(input, responseTierASO);
 
-			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
+			// Carlos
+			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");///
 			String segmentoLifePlan2 = applicationConfigurationService.getProperty("segmentoLifePlan2");
 			String segmentoLifePlan3 = applicationConfigurationService.getProperty("segmentoLifePlan3");
 
@@ -154,7 +167,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
-			//get Modalities()
+			//get Modalities() -- Axel
 			String planesLife = applicationConfigurationService.getProperty("plansLife");
 			Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
@@ -162,11 +175,18 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
 			List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 
+			// Carlos
 			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
 					(productModalitiesDAO, responseRimac, seglifePlan1, seglifePlan2, seglifePlan3);
 
 			response.getProduct().setPlans(plansWithNameAndRecommendedValueAndInstallmentPlan);
 
+
+			///////////////////------------------------------------
+			/// PostSimulation
+			// SimulationStore
+
+			// Fredy  --> CQRS .   Carlos
 			Map<String, Object> arguments = new HashMap<>();
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
 			Map<String, Object> responseGetInsuranceSimulationId = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),arguments);
@@ -184,14 +204,18 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
 			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
+
+			///  JhonH
 			SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
 			Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
 			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
 
+			//Carlos
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
+			// Axel
 			if(!input.getProduct().getId().equals("841")){
 				this.serviceAddGifole(response, responseListCustomers);
 			}

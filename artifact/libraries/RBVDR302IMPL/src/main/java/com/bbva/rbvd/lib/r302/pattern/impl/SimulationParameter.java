@@ -1,30 +1,41 @@
 package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
+import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
+import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
+import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.util.ConfigConsola;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 
+
 public class SimulationParameter implements PreSimulation {
 
+	private PISDR350 pisdR350;
 	private LifeSimulationDTO input;
 	private ApplicationConfigurationService applicationConfigurationService;
-	private String payloadConfig;
+	private PayloadConfig payloadConfig;
 
-	public SimulationParameter(LifeSimulationDTO input, ApplicationConfigurationService applicationConfigurationService) {
+	public SimulationParameter(PISDR350 pisdR350, LifeSimulationDTO input, ApplicationConfigurationService applicationConfigurationService) {
 		this.input = input;
 		this.applicationConfigurationService = applicationConfigurationService;
+		this.pisdR350 = pisdR350;
 	}
 
 	@Override
-	public void getConfig() {
+	public PayloadConfig getConfig() {
 		this.getProperties();
-		ProductInformationDAO productInformationDAO = this.getProduct("841");
+		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 		this.getCumulos();
 		this.getCustomer();
 		this.getTier();
-		
+
+
+		payloadConfig.setProductInformation(productInformation);
+
+		return payloadConfig;
 	}
 	
 	
@@ -36,10 +47,14 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	//@Override
-	public ProductInformationDAO getProduct(String idProduct) {
-		// TODO Auto-generated method stub
-		System.out.println(" get Products >>> ....");
-		return null;
+	public ProductInformationDAO getProduct(String productId) {
+
+
+		IProductDAO  productDAO = new ProductDAOImpl(pisdR350);
+		ProductInformationDAO product= productDAO.getProductInformationById(input.getProduct().getId());
+
+
+		return product;
 	}
 
 	//@Override
