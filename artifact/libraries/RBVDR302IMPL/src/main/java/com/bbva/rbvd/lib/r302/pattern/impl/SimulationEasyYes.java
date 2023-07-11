@@ -15,7 +15,7 @@ public class SimulationEasyYes extends SimulationDecorator{
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		this.getPreSimulation().Config();
+		this.getPreSimulation().getConfig();
 		
 		System.err.println("Call Rimac Service");
 		System.err.println("Call Gifole");

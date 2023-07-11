@@ -51,6 +51,8 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.HashMap;
 import java.util.Objects;
@@ -64,12 +66,13 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.util.CollectionUtils;
 
 import static java.util.stream.Collectors.toList;
 
 public class MapperHelper {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 
     private static final String AMOUNT_UNIT_TYPE = "AMOUNT";
 
@@ -131,22 +134,50 @@ public class MapperHelper {
         return simulationBo;
     }
 
-    public Map<String, Object> mapProductId(String arguments){
 
-        Map<String, Object> mapStringObject = new HashMap<>();
-        mapStringObject.put(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue(), arguments);
+    public void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
 
-        return mapStringObject;
+        DatoParticularBO datos1 = new DatoParticularBO();
+        DatoParticularBO datos2 = new DatoParticularBO();
+        DatoParticularBO datos3 = new DatoParticularBO();
+        DatoParticularBO datos4 = new DatoParticularBO();
+        DatoParticularBO datos5 = new DatoParticularBO();
+
+        datos1.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
+        datos1.setCodigo("");
+        datos1.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+        rimacRequest.getPayload().getDatosParticulares().add(datos1);
+
+        datos2.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
+        datos2.setCodigo("");
+        datos2.setValor(input.getInsuredAmount() != null ? String.valueOf(input.getInsuredAmount().getAmount()) : "0");
+        rimacRequest.getPayload().getDatosParticulares().add(datos2);
+
+        datos3.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PERIODO_ANOS.getValue());
+        datos3.setCodigo("");
+        datos3.setValor(input.getTerm() != null ? String.valueOf(input.getTerm().getNumber()) : "5");
+        rimacRequest.getPayload().getDatosParticulares().add(datos3);
+
+        datos4.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
+        datos4.setCodigo("");
+        datos4.setValor(CollectionUtils.isEmpty(input.getListRefunds()) ? "0" : String.valueOf(input.getListRefunds().get(0).getUnit().getPercentage()));
+        rimacRequest.getPayload().getDatosParticulares().add(datos4);
+
+        datos5.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
+        datos5.setCodigo("");
+        datos5.setValor("N");
+        rimacRequest.getPayload().getDatosParticulares().add(datos5);
     }
 
-    public Map<String, Object> mapInsuranceAmount(BigDecimal idProduct, String idHolder){
+    private String calculateYeardOldCustomer(String birthDate){
 
-        Map<String, Object> mapStringObject = new HashMap<>();
-        mapStringObject.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), idProduct);
-        mapStringObject.put(RBVDProperties.FIELD_CUSTOMER_ID.getValue(), idHolder);
+        LocalDate hoy = LocalDate.now();
+        LocalDate nacimiento = LocalDate.parse(birthDate);
+        Long years = ChronoUnit.YEARS.between(nacimiento, hoy);
 
-        return mapStringObject;
+        return years.toString();
     }
+
 
     public void mapOutRequestRimacLife(InsuranceLifeSimulationBO responseRimac, LifeSimulationDTO response){
 
@@ -155,17 +186,6 @@ public class MapperHelper {
 
     }
 
-    public Map<String, Object> createModalitiesInformationFilters(String plansPT, BigDecimal insuranceProductId, String saleChannel) {
-        Map<String, Object> filters = new HashMap<>();
-
-        String[] plansPTArray = plansPT.split(",");
-        List<String> planes = Arrays.stream(plansPTArray).collect(toList());
-
-        filters.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), insuranceProductId);
-        filters.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), planes);
-        filters.put(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue(), saleChannel);
-        return filters;
-    }
 
     public List<InsurancePlanDTO> getPlansNamesAndRecommendedValuesAndInstallmentsPlans(List<InsuranceProductModalityDAO> productModalities,
                                                                                         InsuranceLifeSimulationBO responseRimac,
@@ -326,63 +346,6 @@ public class MapperHelper {
         return unit;
     }
 
-    public SimulationDAO createSimulationDAO(BigDecimal insuranceSimulationId, final Date maturityDate, LifeSimulationDTO insuranceSimulationDTO) {
-        SimulationDAO simulationDAO = new SimulationDAO();
-        simulationDAO.setInsuranceSimulationId(insuranceSimulationId);
-        simulationDAO.setInsrncCompanySimulationId(insuranceSimulationDTO.getExternalSimulationId());
-        simulationDAO.setCustomerId(insuranceSimulationDTO.getHolder().getId());
-        simulationDAO.setCustomerSimulationDate(dateFormat.format(new Date()));
-        simulationDAO.setCustSimulationExpiredDate(dateFormat.format(maturityDate));
-        simulationDAO.setParticipantPersonalId(insuranceSimulationDTO.getHolder().getIdentityDocument().getDocumentNumber());
-
-        return simulationDAO;
-    }
-
-    public Map<String, Object> createArgumentsForSaveSimulation(SimulationDAO simulationDAO, String creationUser, String userAudit, String documentTypeId) {
-        Map<String, Object> arguments = new HashMap<>();
-        arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), simulationDAO.getInsuranceSimulationId());
-        arguments.put(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue(), simulationDAO.getInsrncCompanySimulationId());
-        arguments.put(RBVDProperties.FIELD_CUSTOMER_ID.getValue(), simulationDAO.getCustomerId());
-        arguments.put(RBVDProperties.FIELD_CUSTOMER_SIMULATION_DATE.getValue(), simulationDAO.getCustomerSimulationDate());
-        arguments.put(RBVDProperties.FIELD_CUST_SIMULATION_EXPIRED_DATE.getValue(), simulationDAO.getCustSimulationExpiredDate());
-        arguments.put(RBVDProperties.FIELD_BANK_FACTOR_TYPE.getValue(), simulationDAO.getBankFactorType());
-        arguments.put(RBVDProperties.FIELD_BANK_FACTOR_AMOUNT.getValue(), simulationDAO.getBankFactorAmount());
-        arguments.put(RBVDProperties.FIELD_BANK_FACTOR_PER.getValue(), simulationDAO.getBankFactorPer());
-        arguments.put(RBVDProperties.FIELD_SOURCE_BRANCH_ID.getValue(), simulationDAO.getSourceBranchId());
-        arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(), creationUser);
-        arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(), userAudit);
-        arguments.put(RBVDProperties.FIELD_PERSONAL_DOC_TYPE.getValue(), documentTypeId);
-        arguments.put(RBVDProperties.FIELD_PARTICIPANT_PERSONAL_ID.getValue(), simulationDAO.getParticipantPersonalId());
-        arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(), null);
-        arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(), null);
-        arguments.put(RBVDProperties.FIELD_CUSTOMER_SEGMENT_NAME.getValue(), null);
-        return arguments;
-    }
-
-    public SimulationProductDAO createSimulationProductDAO(BigDecimal insuranceSimulationId, BigDecimal productId, String creationUser, String userAudit, LifeSimulationDTO insuranceSimulationDto) {
-        SimulationProductDAO simulationProductDAO = new SimulationProductDAO();
-        simulationProductDAO.setInsuranceSimulationId(insuranceSimulationId);
-        simulationProductDAO.setInsuranceProductId(productId);
-        simulationProductDAO.setSaleChannelId(insuranceSimulationDto.getSaleChannelId());
-        simulationProductDAO.setCreationUser(creationUser);
-        simulationProductDAO.setUserAudit(userAudit);
-        return simulationProductDAO;
-    }
-
-    public Map<String, Object> createArgumentsForSaveSimulationProduct(SimulationProductDAO simulationProductDAO) {
-        Map<String, Object> arguments = new HashMap<>();
-        arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(), simulationProductDAO.getInsuranceSimulationId());
-        arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), simulationProductDAO.getInsuranceProductId());
-        arguments.put(RBVDProperties.FIELD_CAMPAIGN_FACTOR_TYPE.getValue(), simulationProductDAO.getCampaignFactorType());
-        arguments.put(RBVDProperties.FIELD_CAMPAIGN_OFFER_1_AMOUNT.getValue(), simulationProductDAO.getCampaignOffer1Amount());
-        arguments.put(RBVDProperties.FIELD_CAMPAIGN_FACTOR_PER.getValue(), simulationProductDAO.getCampaignFactorPer());
-        arguments.put(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue(), simulationProductDAO.getSaleChannelId());
-        arguments.put(RBVDProperties.FIELD_SOURCE_BRANCH_ID.getValue(), simulationProductDAO.getSourceBranchId());
-        arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(), simulationProductDAO.getCreationUser());
-        arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(), simulationProductDAO.getUserAudit());
-
-        return arguments;
-    }
 
     public GifoleInsuranceRequestASO createGifoleASO(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 

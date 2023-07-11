@@ -13,6 +13,8 @@ public interface RBVDR301 {
 
 	InsuranceLifeSimulationBO executeSimulationRimacService(final InsuranceLifeSimulationBO payload, String traceId);
 
+	InsuranceLifeSimulationBO executeSimulationModificationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId);
+
 	CustomerListASO executeCallListCustomerResponse(String customerId);
 
 	Integer executeGifolelifeService(GifoleInsuranceRequestASO requestBody);

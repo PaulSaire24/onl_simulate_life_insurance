@@ -3,10 +3,8 @@ package com.bbva.rbvd.lib.r302.impl;
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 
-import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
-import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
@@ -17,12 +15,24 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 
+import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
+import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAO;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
+import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
+import com.bbva.rbvd.lib.r302.business.util.ConvertUtil;
+import com.bbva.rbvd.lib.r302.business.util.ValidationUtil;
+import com.bbva.rbvd.lib.r302.pattern.Simulation;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
 import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +45,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Date;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 
@@ -45,17 +54,32 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
 
-	private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
+
 	/**
 	 * The execute method...
 	 */
 	//Ejecuta cómo obtener la simulación
 	@Override
 	public LifeSimulationDTO executeGetSimulation(LifeSimulationDTO input) {
+
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
+		Simulation simulation = null;
+		if(input.getProduct().getId().equals("840")){
+			simulation = new SimulationEasyYes(new SimulationParameter(input,this.applicationConfigurationService),new SimulationStore());
+		}else if(input.getProduct().getId().equals("841")){
+			simulation = new SimulationVidaDinamico(new SimulationParameter(input,this.applicationConfigurationService), new SimulationStore());
+		}
+
+		//inicio
+		simulation.start();
+
+		//////////////////////////////////////////////////////------------
+
+
 		LifeSimulationDTO response = new LifeSimulationDTO();
+		ValidationUtil validationUtil = new ValidationUtil(this.rbvdR301);
 
 		try{
 
@@ -69,26 +93,55 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			IProductDAO productDAO = new ProductDAOImpl();
 			productDAO.getProductInformationById(input.getProduct().getId());
 
-			Map<String, Object> responseQueryGetProductInformation =
-					this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), this.mapperHelper.mapProductId(input.getProduct().getId()));
+			ProductDAO productDAO1 = new ProductDAO(this.pisdR350);
+			Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
 
-			ProductInformationDAO productInformationDAO = validateQueryGetProductInformation(responseQueryGetProductInformation);
+			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
 			//llama a la R350 para obtener el cúmulo de la base de datos
-			Map<String, Object> responseQueryGetCumulus =
-					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), this.mapperHelper.mapInsuranceAmount(
-							((BigDecimal) responseQueryGetProductInformation
-									.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue())), input.getHolder().getId()));
+			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
+			Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO((BigDecimal) responseQueryGetProductInformation
+					.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()),input.getHolder().getId());
 
-			BigDecimal sumCumulus = validateQueryGetInsuranceAmount(responseQueryGetCumulus);
+			BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
 			//valida la cantidad asegurada
+
+			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
+
 			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
+			InsuranceLifeSimulationBO responseRimac = null;
+
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
-			InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
-			validation(responseRimac);
+
+			if(input.getProduct().getId().equals("841")){
+				this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
+
+
+				LOGGER.info("***** PISDR302Impl - Rimac Request: {} *****", rimacRequest);
+
+
+				if(this.applicationConfigurationService.getProperty("IS_MOCK_QUOTATION_DYNAMIC").equals("S")){
+					//usar mock de rimac
+					responseRimac = new MockResponse().getMockResponseRimacService();
+				}else{
+					if(Objects.nonNull(input.getExternalSimulationId())){
+						responseRimac = this.rbvdR301.executeSimulationModificationRimacService(rimacRequest, input.getExternalSimulationId(), input.getTraceId());
+					} else {
+						responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+					}
+
+				}
+
+			}else{
+				responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+			}
+
+			LOGGER.info("***** PISDR302Impl - Response Rimac : {} *****", responseRimac);
+
+			validationUtil.validation(responseRimac);
 
 			response = input;
 
-			TierASO responseTierASO = validateTier(input);
+			TierASO responseTierASO = validationUtil.validateTier(input);
 			this.mapperHelper.mappingTierASO(input, responseTierASO);
 
 			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
@@ -103,12 +156,11 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			//get Modalities()
 			String planesLife = applicationConfigurationService.getProperty("plansLife");
-			Map<String, Object> filtersModalitiesInfo = this.mapperHelper.
-					createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
+			Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
 			Map<String, Object> responseQueryModalitiesInformation =
 					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
-			List<InsuranceProductModalityDAO> productModalitiesDAO = validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
+			List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 
 			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
 					(productModalitiesDAO, responseRimac, seglifePlan1, seglifePlan2, seglifePlan3);
@@ -123,26 +175,26 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			String creationUser = input.getCreationUser();
 			String userAudit = input.getUserAudit();
 
-			Date maturityDate = this.generateDate(responseRimac.getPayload().getCotizaciones().get(0).getFechaFinVigencia());
+			Date maturityDate = ConvertUtil.generateDate(responseRimac.getPayload().getCotizaciones().get(0).getFechaFinVigencia());
 
-			SimulationDAO simulationDAO = mapperHelper.createSimulationDAO(insuranceSimulationId, maturityDate, response);
+			SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, response);
 
-			Map<String, Object> argumentsForSaveSimulation = this.mapperHelper.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
+			Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
-			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
-			SimulationProductDAO simulationProductDAO = this.mapperHelper.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
-			Map<String, Object> argumentsForSaveSimulationProduct = this.mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+			SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
+			Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
-			validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
+			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
 
 			response.getProduct().setId(inputProductId);
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
-			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(response.getHolder().getId());
-
-			this.serviceAddGifole(response, responseListCustomers);
+			if(!input.getProduct().getId().equals("841")){
+				this.serviceAddGifole(response, responseListCustomers);
+			}
 
 			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
@@ -158,23 +210,8 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		}
 
 	}
-	//valida la cantidad asegurada
-	private  BigDecimal validateQueryGetInsuranceAmount(Map<String, Object>  responseQueryGetCumulus){
 
-		List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryGetCumulus.get(PISDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
-		BigDecimal sum = BigDecimal.ZERO;
-		if(!isEmpty(rows) && rows.size()!=0) {
-			List<BigDecimal> listCumulus = rows.stream().map(this::createListCumulus).collect(toList());
-			for (BigDecimal amt : listCumulus) {
-				sum = sum.add(amt);
-			}
-		}
-		return sum;
-	}
-	//crea la lista de cúmulos
-	private BigDecimal createListCumulus(Map < String, Object > mapElement){
-		return (BigDecimal) mapElement.get(PISDProperties.FIELD_INSURED_AMOUNT.getValue());
-	}
+
 	//Agrega el servicio Gifole (información de clientes)
 	private void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
@@ -199,65 +236,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
 		}
 	}
-	//realiza una validación
-	private void validation(InsuranceLifeSimulationBO responseRimac){
-		if(Objects.isNull(responseRimac)){
-			throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
-		}
-	}
-	//Valida la información del producto
-	private ProductInformationDAO validateQueryGetProductInformation(Map<String, Object> responseQueryGetProductInformation) {
-		if(isEmpty(responseQueryGetProductInformation)) {
-			throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);
-		}
-		ProductInformationDAO productInformationDAO = new ProductInformationDAO();
-		productInformationDAO.setInsuranceProductId((BigDecimal) responseQueryGetProductInformation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
-		productInformationDAO.setInsuranceProductDescription((String) responseQueryGetProductInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()));
-		productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RIMAC_PRODUCT_NAME));
-		return productInformationDAO;
-	}
-	//valida la modalidad del producto asegurado
-	private List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
-		List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
-		if (isEmpty(rows)) {
-			throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
-		}
-		return rows.stream().map(this::createInsuranceProductModalityDAO).collect(toList());
-	}
-	//Crea la modalidad del producto asegurado
-	private InsuranceProductModalityDAO createInsuranceProductModalityDAO(Map<String, Object> mapElement) {
-		return new InsuranceProductModalityDAO((String) mapElement.get(RBVDProperties.FIELD_INSURANCE_COMPANY_MODALITY_ID.getValue()),
-				(String) mapElement.get(RBVDProperties.FIELD_INSURANCE_MODALITY_NAME.getValue()),
-				(String) mapElement.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue()),
-				(String) mapElement.get(RBVDProperties.FIELD_SUGGESTED_MODALITY_IND_TYPE.getValue()),
-				(BigDecimal) mapElement.get(RBVDProperties.FIELD_PUBLICATION_ORDER_NUMBER.getValue()));
-	}
-	//valida la inserción de filas
-	private void validateInsertion(int insertedRows, RBVDErrors error) {
-		LOGGER.info("***** VALOR inSERrow {} ", insertedRows);
-		if(insertedRows != 1) {
-			throw RBVDValidation.build(error);
-		}
-	}
-	//Genera la fecha a partir de la fecha de fin de vigencia
-	private Date generateDate(String fechaFinVigencia) {
-		DateTime dateTime = new DateTime(fechaFinVigencia);
-		dateTime.withZone(DateTimeZone.forID("America/Lima"));
-		return dateTime.toDate();
-	}
-	//Valida el Tier recibe input
-	private TierASO validateTier (LifeSimulationDTO input){
-		LOGGER.info("***** RBVDR302Impl - validateTier START *****");
-		TierASO responseTierASO = null;
-		if (Objects.isNull(input.getTier())) {
-			LOGGER.info("Invoking Service ASO Tier");
-			CryptoASO crypto = rbvdR301.executeCryptoService(new CryptoASO(input.getHolder().getId()));
-			responseTierASO = rbvdR301.executeGetTierService(crypto.getData().getDocument());
-		}
-		LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
-		LOGGER.info("***** RBVDR302Impl - validateTier END *****");
-		return responseTierASO;
-	}
+
 
 
 }

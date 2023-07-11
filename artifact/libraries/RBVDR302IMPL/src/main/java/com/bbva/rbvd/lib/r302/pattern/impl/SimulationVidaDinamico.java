@@ -13,7 +13,7 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 
 	@Override
 	public void start() {
-		this.getPreSimulation().Config();
+		this.getPreSimulation().getConfig();
 		System.out.println("Call Rimac");
 		this.getPostSimulation().end(Arrays.asList("Data to DB"));
 	}

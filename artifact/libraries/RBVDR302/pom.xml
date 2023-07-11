@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_simulate_life_insurance</artifactId>
-		<version>0.7.0-SNAPSHOT</version>
+		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR302</artifactId>
 	<name>RBVDR302</name>
-	<version>0.7.0-SNAPSHOT</version>
+	<version>0.8.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<description>Call to external service and internal service - onl_simulate_life_insurance</description>
 	<properties>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd.dto.lifeinsrc</groupId>
 			<artifactId>RBVDC301</artifactId>
-			<version>0.4.4</version>
+			<version>0.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bbva.pisd.dto.insurance</groupId>

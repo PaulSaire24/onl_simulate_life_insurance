@@ -10,10 +10,11 @@ import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierDataASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierSegmentASO;
 
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
@@ -26,8 +27,13 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
+import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
+import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -103,14 +109,14 @@ public class MapperHelperTest {
 
     @Test
     public void mapProductIdOKTest() {
-        Map<String, Object> mapStringObject = this.mapperHelper.mapProductId("840");
+        Map<String, Object> mapStringObject = ProductMap.mapProductId("840");
         assertEquals("840", mapStringObject.get(RBVDProperties.FILTER_INSURANCE_PRODUCT_TYPE.getValue()));
 
     }
 
     @Test
     public void mapInsuranceAmountOKTest() {
-        Map<String, Object> mapStringObject = this.mapperHelper.mapInsuranceAmount(new BigDecimal(8), "0000000");
+        Map<String, Object> mapStringObject = ProductMap.mapInsuranceAmount(new BigDecimal(8), "0000000");
         assertEquals(new BigDecimal(8), mapStringObject.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
 
     }
@@ -185,7 +191,7 @@ public class MapperHelperTest {
         when(simulationDAO.getBankFactorPer()).thenReturn(new BigDecimal(0.15));
         when(simulationDAO.getSourceBranchId()).thenReturn("0814");
 
-        Map<String, Object> validation = mapperHelper.createArgumentsForSaveSimulation(simulationDAO, "user01", "user02", "DNI");
+        Map<String, Object> validation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, "user01", "user02", "DNI");
 
         assertNotNull(validation.get(RBVDProperties.FIELD_INSRNC_COMPANY_SIMULATION_ID.getValue()));
         assertNotNull(validation.get(RBVDProperties.FIELD_CUSTOMER_ID.getValue()));
@@ -202,7 +208,7 @@ public class MapperHelperTest {
     @Test
     public void createSimulationProductDAO_OKTest() {
 
-        SimulationProductDAO validation = mapperHelper.createSimulationProductDAO(new BigDecimal("1"), new BigDecimal("827"), "user01", "user02", responseOut);
+        SimulationProductDAO validation = SimulationProductBean.createSimulationProductDAO(new BigDecimal("1"), new BigDecimal("827"), "user01", "user02", responseOut);
 
         assertNotNull(validation.getInsuranceSimulationId());
         assertNotNull(validation.getInsuranceProductId());
@@ -220,7 +226,7 @@ public class MapperHelperTest {
     @Test
     public void createSimulationDAOWithAllFactorTypeTest() {
 
-        SimulationDAO validation = mapperHelper.createSimulationDAO(new BigDecimal("14"),  new Date(),responseOut);
+        SimulationDAO validation = SimulationBean.createSimulationDAO(new BigDecimal("14"),  new Date(),responseOut);
 
         assertNotNull(validation.getInsuranceSimulationId());
 
@@ -237,7 +243,7 @@ public class MapperHelperTest {
         when(simulationProductDAO.getCreationUser()).thenReturn("user01");
         when(simulationProductDAO.getUserAudit()).thenReturn("user02");
 
-        Map<String, Object> validation = mapperHelper.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+        Map<String, Object> validation = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
         assertNotNull(validation.get(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue()));
         assertNotNull(validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
         assertNull(validation.get(RBVDProperties.FIELD_CAMPAIGN_FACTOR_TYPE.getValue()));
@@ -255,7 +261,7 @@ public class MapperHelperTest {
         BigDecimal productId = new BigDecimal("8");
         String saleChannel = "PC";
 
-        Map<String, Object> validation = mapperHelper.createModalitiesInformationFilters("1234,567", productId, saleChannel);
+        Map<String, Object> validation = ProductMap.createModalitiesInformationFilters("1234,567", productId, saleChannel);
         List<String> modalityTypes = (List<String>) validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue());
         assertNotNull(validation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
         assertNotNull(modalityTypes);
@@ -375,6 +381,42 @@ public class MapperHelperTest {
         valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
         assertFalse( valor);
         assertNull(input.getDescription());
+    }
+
+    @Test
+    public void testAddFieldsDatoParticulares_DynamicLife() throws IOException{
+
+        CustomerListASO customerListASO = new CustomerListASO();
+        List<CustomerBO> data = new ArrayList<>();
+        CustomerBO customerBO = new CustomerBO();
+        BirthDataBO birthDataBO = new BirthDataBO();
+        birthDataBO.setBirthDate("1995-05-26");
+        customerBO.setBirthData(birthDataBO);
+        data.add(customerBO);
+        customerListASO.setData(data);
+
+        requestInput.getProduct().setId("841");
+        requestInput.getInsuredAmount().setAmount(new BigDecimal(3485));
+        requestInput.getInsuredAmount().setCurrency("PEN");
+        List<RefundsDTO> refundsDTOS = new ArrayList<>();
+        RefundsDTO refunds = new RefundsDTO();
+        UnitDTO unitDTO = new UnitDTO();
+        unitDTO.setUnitType("PERCENTAGE");
+        unitDTO.setPercentage(new BigDecimal(100));
+        refunds.setUnit(unitDTO);
+        refundsDTOS.add(refunds);
+        requestInput.setListRefunds(refundsDTOS);
+        TermDTO termDTO = new TermDTO();
+        termDTO.setNumber(5);
+        requestInput.setTerm(termDTO);
+
+        InsuranceLifeSimulationBO rimacRequest = mockData.getInsuranceRimacSimulationRequest();
+
+        this.mapperHelper.addFieldsDatoParticulares(rimacRequest,requestInput,customerListASO);
+
+        assertNotNull(rimacRequest);
+        assertNotNull(rimacRequest.getPayload().getDatosParticulares());
+        assertEquals(6,rimacRequest.getPayload().getDatosParticulares().size());
     }
 
 }
