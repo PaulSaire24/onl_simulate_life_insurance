@@ -11,6 +11,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.service.api.ConsumerInternalService;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 
 import java.math.BigDecimal;
@@ -27,8 +28,14 @@ public class ValidationUtil {
 
     private RBVDR301 rbvdR301;
 
+    private ConsumerInternalService consumerInternalService;
+
+
+
     public ValidationUtil(RBVDR301 rbvdR301) {
         this.rbvdR301 = rbvdR301;
+        this.consumerInternalService = new ConsumerInternalService(rbvdR301);
+
     }
 
     //valida la cantidad asegurada
@@ -91,8 +98,8 @@ public class ValidationUtil {
         TierASO responseTierASO = null;
         if (Objects.isNull(input.getTier())) {
             //LOGGER.info("Invoking Service ASO Tier");
-            CryptoASO crypto = rbvdR301.executeCryptoService(new CryptoASO(input.getHolder().getId()));
-            responseTierASO = rbvdR301.executeGetTierService(crypto.getData().getDocument());
+            CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
+            responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
         }
         //LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
         //LOGGER.info("***** RBVDR302Impl - validateTier END *****");
