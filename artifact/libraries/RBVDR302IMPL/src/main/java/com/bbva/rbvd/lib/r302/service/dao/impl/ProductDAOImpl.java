@@ -1,6 +1,6 @@
-package com.bbva.rbvd.lib.r302.dao.impl;
+package com.bbva.rbvd.lib.r302.service.dao.impl;
 
-import com.bbva.rbvd.lib.r302.dao.IProductDAO;
+import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 
 import java.util.Map;
 

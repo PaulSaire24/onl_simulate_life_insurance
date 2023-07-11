@@ -19,8 +19,8 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 
-import com.bbva.rbvd.lib.r302.dao.IProductDAO;
-import com.bbva.rbvd.lib.r302.dao.impl.ProductDAOImpl;
+import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
+import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -101,8 +101,8 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
+			//get Modalities()
 			String planesLife = applicationConfigurationService.getProperty("plansLife");
-
 			Map<String, Object> filtersModalitiesInfo = this.mapperHelper.
 					createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");

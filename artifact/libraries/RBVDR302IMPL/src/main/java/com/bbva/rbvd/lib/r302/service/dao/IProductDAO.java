@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.dao;
+package com.bbva.rbvd.lib.r302.service.dao;
 
 import java.util.Map;
 
