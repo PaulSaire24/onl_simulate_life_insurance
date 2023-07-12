@@ -49,10 +49,8 @@ public class SimulationParameter implements PreSimulation {
 	//@Override
 	public ProductInformationDAO getProduct(String productId) {
 
-
 		IProductDAO  productDAO = new ProductDAOImpl(pisdR350);
 		ProductInformationDAO product= productDAO.getProductInformationById(input.getProduct().getId());
-
 
 		return product;
 	}
