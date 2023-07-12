@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -29,7 +30,7 @@ public class SimulationParameter implements PreSimulation {
 		this.getProperties();
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 		this.getCumulos();
-		this.getCustomer();
+		CustomerListASO customer = this.getCustomer(input.getHolder().getId());
 		this.getTier();
 
 
@@ -65,10 +66,9 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	//@Override
-	public void getCustomer() {
-		// TODO Auto-generated method stub
-		System.out.println(" get Customer :D  ....");
+	public CustomerListASO getCustomer(String customerId) {
 
+		return null;
 	}
 
 	//@Override
