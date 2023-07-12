@@ -107,11 +107,11 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 
 			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
-			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
+			//ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
 			//Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
 
 			//BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 			//valida la cantidad asegurada  --- Customer --- Axel.
 			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
 

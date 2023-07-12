@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.business.util;
+package com.bbva.rbvd.lib.r302.util;
 
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
