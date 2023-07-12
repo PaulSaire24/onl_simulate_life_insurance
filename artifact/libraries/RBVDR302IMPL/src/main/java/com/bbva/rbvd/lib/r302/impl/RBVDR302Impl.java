@@ -68,14 +68,14 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		if(input.getProduct().getId().equals("840")){
 
 			simulation = new SimulationEasyYes(
-					 new SimulationParameter(this.pisdR350, input,this.applicationConfigurationService)
+					 new SimulationParameter(this.pisdR350,this.rbvdR301, input,this.applicationConfigurationService)
 					 ,new SimulationStore()
 					);
 
 		}else if(input.getProduct().getId().equals("841")){
 
 			simulation = new SimulationVidaDinamico(
-					new SimulationParameter(this.pisdR350,input,this.applicationConfigurationService),
+					new SimulationParameter(this.pisdR350,this.rbvdR301,input,this.applicationConfigurationService),
 					new SimulationStore()
 			);
 
@@ -105,7 +105,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 //
 //			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------
+
 			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
 			//ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
 			//Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
@@ -153,8 +153,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response = input;
 
 			/// Tier  -- JhonH
-			TierASO responseTierASO = validationUtil.validateTier(input);
-			this.mapperHelper.mappingTierASO(input, responseTierASO);
+			//TierASO responseTierASO = validationUtil.validateTier(input);
+			//this.mapperHelper.mappingTierASO(input, responseTierASO);
+			//getTier(input, responseTierASO);
 
 			// Carlos
 			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");///
