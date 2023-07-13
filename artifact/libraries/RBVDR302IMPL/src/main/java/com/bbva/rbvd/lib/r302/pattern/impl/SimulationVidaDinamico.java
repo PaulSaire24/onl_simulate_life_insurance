@@ -15,7 +15,7 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 	public void start() {
 		this.getPreSimulation().getConfig();
 		System.out.println("Call Rimac");
-		this.getPostSimulation().end(Arrays.asList("Data to DB"));
+		this.getPostSimulation().end(null);
 	}
 
 }

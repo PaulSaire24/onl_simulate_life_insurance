@@ -203,11 +203,13 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
-			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation),
+																					RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
 
 			///  JhonH
-			SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
+			SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(),
+																											creationUser, userAudit, response);
 			Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
 			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
