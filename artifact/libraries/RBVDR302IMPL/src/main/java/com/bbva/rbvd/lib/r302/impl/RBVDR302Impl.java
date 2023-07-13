@@ -68,14 +68,14 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		if(input.getProduct().getId().equals("840")){
 
 			simulation = new SimulationEasyYes(
-					 new SimulationParameter(this.pisdR350, input,this.applicationConfigurationService)
+					 new SimulationParameter(this.pisdR350,this.rbvdR301, input,this.applicationConfigurationService)
 					 ,new SimulationStore()
 					);
 
 		}else if(input.getProduct().getId().equals("841")){
 
 			simulation = new SimulationVidaDinamico(
-					new SimulationParameter(this.pisdR350,input,this.applicationConfigurationService),
+					new SimulationParameter(this.pisdR350,this.rbvdR301,input,this.applicationConfigurationService),
 					new SimulationStore()
 			);
 
@@ -108,12 +108,12 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
 			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
-			Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
+			//Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
 
-			BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
+			//BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
 
 			//valida la cantidad asegurada  --- Customer --- Axel.
-			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
+			//CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
 
 			// ParametrosInicialRimac --- Carlos
 			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
@@ -153,8 +153,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response = input;
 
 			/// Tier  -- JhonH
-			TierASO responseTierASO = validationUtil.validateTier(input);
-			this.mapperHelper.mappingTierASO(input, responseTierASO);
+			//TierASO responseTierASO = validationUtil.validateTier(input);
+			//this.mapperHelper.mappingTierASO(input, responseTierASO);
+			//getTier(input, responseTierASO);
 
 			// Carlos
 			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");///
@@ -168,12 +169,12 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
 			//get Modalities() -- Axel
-			String planesLife = applicationConfigurationService.getProperty("plansLife");
-			Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
-			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
-			Map<String, Object> responseQueryModalitiesInformation =
-					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
-			List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
+			//String planesLife = applicationConfigurationService.getProperty("plansLife");
+			//Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
+			//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
+			//Map<String, Object> responseQueryModalitiesInformation =
+					//this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
+			//List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 
 			// Carlos
 			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
