@@ -22,15 +22,6 @@ public class ProductMap {
         return mapStringObject;
     }
 
-    public static Map<String, Object> mapInsuranceAmount(BigDecimal idProduct, String idHolder){
-
-        Map<String, Object> mapStringObject = new HashMap<>();
-        mapStringObject.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), idProduct);
-        mapStringObject.put(RBVDProperties.FIELD_CUSTOMER_ID.getValue(), idHolder);
-
-        return mapStringObject;
-    }
-
     public static Map<String, Object> createModalitiesInformationFilters(String plansPT, BigDecimal insuranceProductId, String saleChannel) {
         Map<String, Object> filters = new HashMap<>();
 

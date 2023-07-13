@@ -6,8 +6,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
-import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
+import com.bbva.rbvd.lib.r302.transform.map.ContractMap;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,21 +24,22 @@ public class ContractDAOImpl implements IContractDAO {
         this.pisdR350 = pisdR350;
     }
 
-    public BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId,String productId,String customerId){
+    public BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId,String productId,String customerId) {
 
         Map<String, Object> responseQueryGetCumulus =
-                this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), ProductMap.mapInsuranceAmount(insuranceProductId, customerId));
+                this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), ContractMap.mapInsuranceAmount(
+                        insuranceProductId, customerId));
 
-        if(isEmpty(responseQueryGetCumulus)) {
+        if (isEmpty(responseQueryGetCumulus)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);
         }
 
-        BigDecimal sumCumulus = this.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
+        BigDecimal sumCumulus = this.getCumuls(responseQueryGetCumulus);
         return sumCumulus;
     }
 
     //valida la cantidad asegurada
-    private BigDecimal validateQueryGetInsuranceAmount(Map<String, Object> responseQueryGetCumulus){
+    private BigDecimal getCumuls(Map<String, Object> responseQueryGetCumulus){
 
         List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryGetCumulus.get(PISDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
         BigDecimal sum = BigDecimal.ZERO;

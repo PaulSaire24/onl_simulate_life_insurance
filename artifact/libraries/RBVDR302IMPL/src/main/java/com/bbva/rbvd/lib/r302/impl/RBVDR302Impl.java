@@ -158,7 +158,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			//getTier(input, responseTierASO);
 
 			// Carlos
-			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");///
+			String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
 			String segmentoLifePlan2 = applicationConfigurationService.getProperty("segmentoLifePlan2");
 			String segmentoLifePlan3 = applicationConfigurationService.getProperty("segmentoLifePlan3");
 
