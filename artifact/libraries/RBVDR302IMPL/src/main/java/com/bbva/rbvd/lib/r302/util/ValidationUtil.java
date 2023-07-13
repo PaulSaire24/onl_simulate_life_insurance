@@ -38,24 +38,7 @@ public class ValidationUtil {
 
     }
 
-    //valida la cantidad asegurada
-    public BigDecimal validateQueryGetInsuranceAmount(Map<String, Object> responseQueryGetCumulus){
 
-        List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryGetCumulus.get(PISDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
-        BigDecimal sum = BigDecimal.ZERO;
-        if(!isEmpty(rows) && rows.size()!=0) {
-            List<BigDecimal> listCumulus = rows.stream().map(this::createListCumulus).collect(toList());
-            for (BigDecimal amt : listCumulus) {
-                sum = sum.add(amt);
-            }
-        }
-        return sum;
-    }
-
-    //crea la lista de cúmulos
-    private BigDecimal createListCumulus(Map < String, Object > mapElement){
-        return (BigDecimal) mapElement.get(PISDProperties.FIELD_INSURED_AMOUNT.getValue());
-    }
 
     //realiza una validación
     public void validation(InsuranceLifeSimulationBO responseRimac){

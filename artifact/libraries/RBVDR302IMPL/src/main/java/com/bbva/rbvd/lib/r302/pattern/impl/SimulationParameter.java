@@ -80,7 +80,10 @@ public class SimulationParameter implements PreSimulation {
 	//@Override
 	public BigDecimal getCumulos(String productId, String customerId) {
 		IContractDAO contractDAO = new ContractDAOImpl(pisdR350);
-		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(input.getProduct().getId(),input.getHolder().getId());
+		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(
+				payloadConfig.getProductInformation().getInsuranceProductId(),
+				input.getProduct().getId(),
+				input.getHolder().getId());
 
 		return cumulos;
 	}
