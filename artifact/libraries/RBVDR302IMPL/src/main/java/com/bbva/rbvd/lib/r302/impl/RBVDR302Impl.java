@@ -100,18 +100,18 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_INFORMATION *****");
 			//llama a la R350 para ejecutar la query a la base de datos
 //
-//			ProductDAO productDAO1 = new ProductDAO(this.pisdR350);
-//			Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
-//
-//			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
+			//ProductDAO productDAO1 = new ProductDAO(this.pisdR350);
+			//Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
+
+			//ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
 
 
 			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
-			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
+			//ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
 			//Map<String, Object> responseQueryGetCumulus = contractDAO.getInsuranceAmountDAO(productInformationDAO.getInsuranceProductId(),input.getHolder().getId());
 
 			//BigDecimal sumCumulus = validationUtil.validateQueryGetInsuranceAmount(responseQueryGetCumulus);
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 			//valida la cantidad asegurada  --- Customer --- Axel.
 			//CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
 

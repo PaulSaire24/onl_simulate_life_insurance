@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.business.util;
+package com.bbva.rbvd.lib.r302.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

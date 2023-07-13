@@ -34,6 +34,7 @@ import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
+import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -100,10 +101,10 @@ public class MapperHelperTest {
     @Test
     public void  mapInRequestDocument_OKTest(){
         when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-        InsuranceLifeSimulationBO request = this.mapperHelper.mapInRequestRimacLife(requestInput, sumCumulus);
+        InsuranceLifeSimulationBO request = QuotationRimac.mapInRequestRimacLife(requestInput, sumCumulus);
         assertNotNull(request);
 
-        request = this.mapperHelper.mapInRequestRimacLife(requestInput, null);
+        request = QuotationRimac.mapInRequestRimacLife(requestInput, null);
         assertNotNull(request);
     }
 
