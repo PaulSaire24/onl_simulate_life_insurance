@@ -11,7 +11,6 @@ public class PayloadStore {
     private InsuranceLifeSimulationBO responseRimac;
     private LifeSimulationDTO response;
     private String documentTypeId;
-
     private ProductInformationDAO productInformation;
 
 

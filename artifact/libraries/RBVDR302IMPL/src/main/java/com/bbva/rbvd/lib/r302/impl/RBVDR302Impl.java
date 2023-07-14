@@ -188,23 +188,23 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			// SimulationStore
 
 			// Fredy  --> CQRS .   Carlos
-			Map<String, Object> arguments = new HashMap<>();
-			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
-			Map<String, Object> responseGetInsuranceSimulationId = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),arguments);
-			BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationId.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
+			//Map<String, Object> arguments = new HashMap<>();
+			//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
+			//Map<String, Object> responseGetInsuranceSimulationId = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),arguments);
+			//BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationId.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
 
-			String creationUser = input.getCreationUser();
-			String userAudit = input.getUserAudit();
+			//String creationUser = input.getCreationUser();
+			//String userAudit = input.getUserAudit();
 
-			Date maturityDate = ConvertUtil.generateDate(responseRimac.getPayload().getCotizaciones().get(0).getFechaFinVigencia());
+			//Date maturityDate = ConvertUtil.generateDate(responseRimac.getPayload().getCotizaciones().get(0).getFechaFinVigencia());
 
-			SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, response);
+			//SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, response);
 
-			Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
+			//Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, documentTypeId);
 
-			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
-			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation),
-																					RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+			//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
+			//validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation),
+			//																		RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
 
 
 			///  JhonH

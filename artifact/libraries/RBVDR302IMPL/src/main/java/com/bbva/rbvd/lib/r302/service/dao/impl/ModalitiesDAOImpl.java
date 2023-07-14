@@ -7,7 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.service.dao.IModalitiesDAO;
 import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
-import com.bbva.rbvd.lib.r302.business.util.ValidationUtil;
+import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
