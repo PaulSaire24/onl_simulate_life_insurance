@@ -8,6 +8,7 @@ import com.bbva.rbvd.lib.r302.service.dao.IInsuranceSimulationDAO;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -22,28 +23,25 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
 
     @Override
     public BigDecimal getSimulationNextVal() {
-        Map<String, Object> responseGetInsuranceSimulationId = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),null);
 
-        if(isEmpty(responseGetInsuranceSimulationId)) {
+        Map<String, Object> responseGetInsuranceSimulationMap = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),new HashMap<>());
+
+        if(isEmpty(responseGetInsuranceSimulationMap)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }
 
-        BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationId.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
+        BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationMap.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
 
         return insuranceSimulationId;
     }
 
     @Override
     public void getInsertInsuranceSimulation(Map<String, Object> argumentsForSaveSimulation) {
+
         //LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
-        validationUtil.validateInsertion
-                (
-                        this.pisdR350.executeInsertSingleRow
-                        (
-                                RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),
-                                argumentsForSaveSimulation
-                        ),
-                        RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE
-                );
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation);
+        if(idNewSimulation != 1) {
+            throw RBVDValidation.build(RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+        }
     }
 }
