@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface ISimulationProductDAO {
 
-    void insertSimulationProduct(Map<String,Object> argument, );
+    void insertSimulationProduct(Map<String,Object> argument);
 
 }
