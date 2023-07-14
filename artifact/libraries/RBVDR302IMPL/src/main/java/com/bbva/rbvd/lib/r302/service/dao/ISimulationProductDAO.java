@@ -1,6 +1,9 @@
 package com.bbva.rbvd.lib.r302.service.dao;
 
+import java.util.Map;
+
 public interface ISimulationProductDAO {
 
-    void insertSimulationProductDAO();
+    void insertSimulationProduct(Map<String,Object> argument, );
+
 }

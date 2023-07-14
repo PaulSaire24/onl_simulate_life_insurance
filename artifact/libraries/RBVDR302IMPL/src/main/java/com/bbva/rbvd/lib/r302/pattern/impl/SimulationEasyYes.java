@@ -20,7 +20,7 @@ public class SimulationEasyYes extends SimulationDecorator{
 		System.err.println("Call Rimac Service");
 		System.err.println("Call Gifole");
 		
-		this.getPostSimulation().end(Arrays.asList("Data to DB"));
+		this.getPostSimulation().end(null);
 
 	}
 	

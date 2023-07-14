@@ -14,4 +14,8 @@ public class ConfigConsola {
         String documentTypeId = this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId());
     }
 
+    public String getPlanesLife(){
+        return this.applicationConfigurationService.getProperty("plansLife");
+    }
+
 }

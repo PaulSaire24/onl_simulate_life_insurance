@@ -21,6 +21,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
+import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import org.apache.felix.resolver.util.ArrayMap;
 
 import org.junit.Before;
@@ -173,7 +174,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus.put("dtoInsurance", listResponse);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -204,7 +205,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -235,7 +236,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -262,7 +263,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -285,7 +286,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
@@ -307,7 +308,7 @@ public class RBVDR302Test {
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(null);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
@@ -324,7 +325,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(null);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
@@ -340,7 +341,7 @@ public class RBVDR302Test {
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
@@ -357,7 +358,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
 		responseQuerySumCumulus = new ArrayMap<>();
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
 
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
@@ -371,7 +372,7 @@ public class RBVDR302Test {
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(null);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(null);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
 
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
@@ -397,7 +398,7 @@ public class RBVDR302Test {
 
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
 		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(this.mapperHelper.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);

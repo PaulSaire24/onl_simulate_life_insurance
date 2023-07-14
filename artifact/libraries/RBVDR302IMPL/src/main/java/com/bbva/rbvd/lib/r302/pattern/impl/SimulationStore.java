@@ -1,34 +1,51 @@
 package com.bbva.rbvd.lib.r302.pattern.impl;
 
+import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
+import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
-import com.bbva.rbvd.lib.r302.service.dao.ISimulationDAO;
+import com.bbva.rbvd.lib.r302.service.dao.IInsuranceSimulationDAO;
 import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
-
-import java.util.List;
+import com.bbva.rbvd.lib.r302.service.dao.impl.InsuranceSimulationDAOImpl;
+import com.bbva.rbvd.lib.r302.service.dao.impl.SimulationProductDAOImpl;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.util.ConvertUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Map;
 
 public class SimulationStore implements PostSimulation {
 
-	@Override
-	public void end(List<String> data) {
-		this.saveSimuation();
+	private PISDR350 pisdR350;
+	public void end(PayloadStore payloadStore) {
+		this.saveSimuation(payloadStore);
 		this.saveSimulationProd();
-	
+
 	}
-	
-	
 	//@Override
-	public void saveSimuation() {
-		// TODO Auto-generated method stub
-		//Aquí viene la Simulación donde se llamará a ISimulationDAO
-		ISimulationDAO iSimulationDAO;
-		System.out.println("  saveSimuation ....");
+	public void saveSimuation(PayloadStore payloadStore) {
+		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
+		//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
+		BigDecimal insuranceSimulationId = insuranceSimulationDao.getSimulationNextVal();
+
+		String creationUser = payloadStore.getCreationUser();
+		String userAudit = payloadStore.getUserAudit();
+		Date maturityDate = ConvertUtil.generateDate(payloadStore.getResponseRimac().getPayload().getCotizaciones().get(0).getFechaFinVigencia());
+
+		SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, payloadStore.getResponse());
+		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, payloadStore.getDocumentTypeId());
+
+		insuranceSimulationDao.getInsertInsuranceSimulation(argumentsForSaveSimulation);
+
 	}
 
 	//@Override
 	public void saveSimulationProd() {
 		// TODO Auto-generated method stub
-		//Aquí viene la Simulación donde se llamará a ISimulationProductDAO
-		ISimulationProductDAO  iSimulationProductDAO;
+
+		ISimulationProductDAO iSimulationProductDAO = new SimulationProductDAOImpl(pisdR350);
+
 		System.out.println("  saveSimuationProducts >>> ....");
 
 	}
