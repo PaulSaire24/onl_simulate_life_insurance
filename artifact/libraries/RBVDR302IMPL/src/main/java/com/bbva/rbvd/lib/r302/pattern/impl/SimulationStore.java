@@ -2,6 +2,7 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.service.dao.IInsuranceSimulationDAO;
@@ -9,7 +10,9 @@ import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.InsuranceSimulationDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.SimulationProductDAOImpl;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import com.bbva.rbvd.lib.r302.util.ConvertUtil;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,7 +24,7 @@ public class SimulationStore implements PostSimulation {
 	public void end(PayloadStore payloadStore) {
 		BigDecimal nextId = this.getInsuranceSimulationId();
 		this.saveSimulation(payloadStore, nextId);
-		this.saveSimulationProd();
+		this.saveSimulationProd(payloadStore,nextId);
 
 	}
 	public BigDecimal getInsuranceSimulationId(){
@@ -47,12 +50,22 @@ public class SimulationStore implements PostSimulation {
 	}
 
 	//@Override
-	public void saveSimulationProd() {
-		// TODO Auto-generated method stub
+	public void saveSimulationProd(PayloadStore payloadStore,BigDecimal insuranceSimulationId) {
 
+		SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(
+				insuranceSimulationId,
+				payloadStore.getProductInformation().getInsuranceProductId(),
+				payloadStore.getCreationUser(),
+				payloadStore.getUserAudit(),
+				payloadStore.getResponse()
+		);
+
+		Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+
+        //LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
 		ISimulationProductDAO iSimulationProductDAO = new SimulationProductDAOImpl(pisdR350);
+		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 
-		System.out.println("  saveSimuationProducts >>> ....");
 
 	}
 }
