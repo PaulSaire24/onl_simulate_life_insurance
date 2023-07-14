@@ -6,6 +6,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import java.util.List;
 
 /**
@@ -113,5 +114,12 @@ public abstract class AbstractRBVDT30101PETransaction extends AbstractTransactio
 	 */
 	protected void setTerm(final TermDTO field){
 		this.addParameter("term", field);
+	}
+
+	/**
+	 * Set value for InsuranceLimitsDTO output parameter insuranceLimits
+	 */
+	protected void setInsurancelimits(final InsuranceLimitsDTO field){
+		this.addParameter("insuranceLimits", field);
 	}
 }
