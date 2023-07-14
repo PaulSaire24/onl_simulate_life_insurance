@@ -51,7 +51,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Impl.class);
 
-	private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
 
 
 	/**
@@ -88,7 +87,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 
 		LifeSimulationDTO response = new LifeSimulationDTO();
-		ValidationUtil validationUtil = new ValidationUtil(this.rbvdR301);
+		//ValidationUtil validationUtil = new ValidationUtil(this.rbvdR301);
 
 		try{
 
@@ -96,7 +95,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			String documentTypeIdAsText = input.getHolder().getIdentityDocument().getDocumentType().getId();
 			String documentTypeId = this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId());
 
-			input.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeId);
+			//input.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeId);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_INFORMATION *****");
 			//llama a la R350 para ejecutar la query a la base de datos
 //
@@ -116,7 +115,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			CustomerListASO responseListCustomers = this.rbvdR301.executeCallListCustomerResponse(input.getHolder().getId());
 
 			// ParametrosInicialRimac --- Carlos
-			InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
+			//InsuranceLifeSimulationBO rimacRequest = mapperHelper.mapInRequestRimacLife(input, sumCumulus);
 
 
 			InsuranceLifeSimulationBO responseRimac = null;
@@ -124,10 +123,10 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
 
 			if(input.getProduct().getId().equals("841")){
-				this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
+				//this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
 
 
-				LOGGER.info("***** PISDR302Impl - Rimac Request: {} *****", rimacRequest);
+				//LOGGER.info("***** PISDR302Impl - Rimac Request: {} *****", rimacRequest);
 
 
 				if(this.applicationConfigurationService.getProperty("IS_MOCK_QUOTATION_DYNAMIC").equals("S")){
@@ -143,7 +142,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 				}
 
 			}else{
-				responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
+				//responseRimac = rbvdR301.executeSimulationRimacService(rimacRequest, input.getTraceId());
 			}
 
 			LOGGER.info("***** PISDR302Impl - Response Rimac : {} *****", responseRimac);
@@ -169,12 +168,13 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
 			//get Modalities() -- Axel
-			String planesLife = applicationConfigurationService.getProperty("plansLife");
-			Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
+			//String planesLife = applicationConfigurationService.getProperty("plansLife");
+			//Map<String, Object> filtersModalitiesInfo = ProductMap.createModalitiesInformationFilters(planesLife, productInformationDAO.getInsuranceProductId(), input.getSaleChannelId());
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_GET_PRODUCT_MODALITIES_INFORMATION *****");
-			Map<String, Object> responseQueryModalitiesInformation =
+
+			//Map<String, Object> responseQueryModalitiesInformation =
 					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
-			List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
+			//List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 
 			// Carlos
 			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
@@ -217,9 +217,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			response.getHolder().getIdentityDocument().getDocumentType().setId(documentTypeIdAsText);
 
 			// Axel
-			if(!input.getProduct().getId().equals("841")){
-				this.serviceAddGifole(response, responseListCustomers);
-			}
+			//if(!input.getProduct().getId().equals("841")){
+			//	this.serviceAddGifole(response, responseListCustomers);
+			//}
 
 			LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
 			LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
@@ -237,30 +237,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 	}
 
 
-	//Agrega el servicio Gifole (información de clientes)
-	private void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
-		LOGGER.info("Param 1 - LifeSimulationDTO : {}", response);
-		LOGGER.info("Param 2 - CustomerListASO : {}", responseListCustomers);
-
-		String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
-
-		LOGGER.info("FLAG : {}", flag);
-
-		if(flag.equals("true")){
-
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation | createGifoleInsuranceRequest invokation *****");
-
-			LOGGER.info("FLAG after -> {}", flag);
-
-			GifoleInsuranceRequestASO gifoleInsuranceRequest = this.mapperHelper.createGifoleASO(response, responseListCustomers);
-			LOGGER.info("**** RBVDR302Impl - GifoleInsuranceRequestASO gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
-
-			Integer httpStatusGifole = rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
-
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
-		}
-	}
 
 
 

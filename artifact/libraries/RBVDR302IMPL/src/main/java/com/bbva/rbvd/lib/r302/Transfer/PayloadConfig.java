@@ -3,19 +3,22 @@ package com.bbva.rbvd.lib.r302.Transfer;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 
 import java.util.List;
 import java.math.BigDecimal;
 
 public class PayloadConfig {
 
-    ProductInformationDAO productInformation;
-    BigDecimal sumCumulus;
+    private ProductInformationDAO productInformation;
+    private BigDecimal sumCumulus;
 
 
-    CustomerListASO customerListASO;
+    private CustomerListASO customerListASO;
 
-    List<InsuranceProductModalityDAO> listInsuranceProductModalityDAO;
+    private List<InsuranceProductModalityDAO> listInsuranceProductModalityDAO;
+    private LifeSimulationDTO input;
+    private PayloadProperties properties;
 
 
     public List<InsuranceProductModalityDAO> getListInsuranceProductModalityDAO() {
@@ -42,5 +45,21 @@ public class PayloadConfig {
 
     public void setSumCumulus(BigDecimal sumCumulus) {
         this.sumCumulus = sumCumulus;
+    }
+
+    public LifeSimulationDTO getInput() {
+        return input;
+    }
+
+    public void setInput(LifeSimulationDTO input) {
+        this.input = input;
+    }
+
+    public PayloadProperties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(PayloadProperties properties) {
+        this.properties = properties;
     }
 }

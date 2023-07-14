@@ -1,7 +1,11 @@
 package com.bbva.rbvd.lib.r302.util;
 
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.DocumentTypeASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.HolderASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.IdentityDocumentASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
+import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
@@ -87,6 +91,32 @@ public class ValidationUtil {
         //LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
         //LOGGER.info("***** RBVDR302Impl - validateTier END *****");
         return responseTierASO;
+    }
+
+    public String validateSN(String name) {
+        if(Objects.isNull(name) || "null".equals(name) || " ".equals(name)){
+            return "N/A";
+        }else{
+            name = name.replace("#","Ñ");
+            return name;
+        }
+    }
+
+    public void docValidationForGifole(IdentityDocumentsBO customerInfo, HolderASO holder, LifeSimulationDTO response){
+        IdentityDocumentASO identityDocument = new IdentityDocumentASO();
+        DocumentTypeASO documentType = new DocumentTypeASO();
+        String docNumber = customerInfo.getDocumentNumber();
+        documentType.setId(customerInfo.getDocumentType().getId());
+        identityDocument.setDocumentType(documentType);
+
+        identityDocument.setDocumentNumber(response.getHolder().getIdentityDocument().getDocumentNumber());
+        if (Objects.isNull(response.getHolder().getIdentityDocument().getDocumentNumber())) {
+            identityDocument.setDocumentNumber(docNumber);
+        } else {
+            identityDocument.setDocumentNumber(
+                    response.getHolder().getIdentityDocument().getDocumentNumber());
+        }
+        holder.setIdentityDocument(identityDocument);
     }
 
 
