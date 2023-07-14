@@ -207,10 +207,12 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 
 			///  JhonH
-			SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productInformationDAO.getInsuranceProductId(), creationUser, userAudit, response);
-			Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+			//SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(insuranceSimulationId, productId, creationUser, userAudit, insuranceSimulationDto);
+			//Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 			LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
-			validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
+			//validationUtil.validateInsertion(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), argumentsForSaveSimulationProduct), RBVDErrors.INSERTION_ERROR_IN_SIMULATION_PRD_TABLE);
+			//validationUtil.validateInsertion(insertedRows,error);
+
 
 			//Carlos
 			response.getProduct().setId(inputProductId);

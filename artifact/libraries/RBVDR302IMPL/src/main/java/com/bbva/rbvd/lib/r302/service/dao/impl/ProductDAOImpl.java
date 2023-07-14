@@ -23,7 +23,7 @@ public class ProductDAOImpl implements IProductDAO {
     }
 
     @Override
-    public ProductInformationDAO getProductInformationById(String productId)
+    public          ProductInformationDAO getProductInformationById(String productId)
     {
         Map<String, Object> responseQueryGetProductInformation =
                 this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), ProductMap.mapProductId(productId));

@@ -10,6 +10,7 @@ import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.business.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
+import com.bbva.rbvd.lib.r302.service.dao.ISimulationDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.util.ConfigConsola;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
@@ -35,8 +36,6 @@ public class SimulationParameter implements PreSimulation {
 		this.rbvdR301 = rbvdR301;
 		this.validationUtil = new ValidationUtil(rbvdR301);
 	}
-
-
 
 	@Override
 	public PayloadConfig getConfig() {
@@ -71,6 +70,14 @@ public class SimulationParameter implements PreSimulation {
 
 		return product;
 	}
+
+	public ProductSimulationDAO insertSimulationDAO(pisdR350){
+
+		ISimulationDAO insertSimulationDAO = new InsertSimulationDAOImpl(pisdR350);
+		ProductSimulationDAO simulaDAO = simulationDAO.inserSimulationDAO();
+				return simulaDAO;
+	}
+
 
 	//@Override
 	public void getCumulos() {
