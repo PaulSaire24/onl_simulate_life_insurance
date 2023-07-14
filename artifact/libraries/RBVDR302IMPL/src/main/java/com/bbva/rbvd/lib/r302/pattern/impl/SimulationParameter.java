@@ -9,16 +9,13 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.service.api.ConsumerInternalService;
 import com.bbva.rbvd.lib.r302.service.dao.IModalitiesDAO;
 import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ModalitiesDAOImpl;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
-import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.util.ConfigConsola;
@@ -27,9 +24,6 @@ import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-
-import java.math.BigDecimal;
-import java.util.Map;
 
 
 public class SimulationParameter implements PreSimulation {
@@ -65,7 +59,7 @@ public class SimulationParameter implements PreSimulation {
 
 		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId() , input.getProduct().getId(), input.getHolder().getId());
 
-		this.getTierToUpdate(input);
+		this.getTierToUpdateRequest(input);
 
 
 
@@ -128,7 +122,7 @@ public class SimulationParameter implements PreSimulation {
 
 
 
-		public void getTierToUpdate(LifeSimulationDTO input) {
+		public void getTierToUpdateRequest(LifeSimulationDTO input) {
 			TierASO responseTierASO = validationUtil.validateTier(input); //Traigo el Tier
 
 			if (Objects.nonNull(responseTierASO)) {
