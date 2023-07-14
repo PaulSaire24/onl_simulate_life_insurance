@@ -19,22 +19,28 @@ public class SimulationStore implements PostSimulation {
 
 	private PISDR350 pisdR350;
 	public void end(PayloadStore payloadStore) {
-		this.saveSimuation(payloadStore);
+		BigDecimal nextId = this.getInsuranceSimulationId();
+		this.saveSimulation(payloadStore, nextId);
 		this.saveSimulationProd();
 
 	}
-	//@Override
-	public void saveSimuation(PayloadStore payloadStore) {
+	public BigDecimal getInsuranceSimulationId(){
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
-		//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
-		BigDecimal insuranceSimulationId = insuranceSimulationDao.getSimulationNextVal();
 
-		String creationUser = payloadStore.getCreationUser();
-		String userAudit = payloadStore.getUserAudit();
+		return insuranceSimulationDao.getSimulationNextVal();
+	}
+	//@Override
+	public void saveSimulation(PayloadStore payloadStore, BigDecimal insuranceSimulationId) {
+
+		//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
+		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
+
+		//reationUser(payloadStore.getCreationUser());
+		//payloadStore.setUserAudit(payloadStore.getUserAudit());
 		Date maturityDate = ConvertUtil.generateDate(payloadStore.getResponseRimac().getPayload().getCotizaciones().get(0).getFechaFinVigencia());
 
 		SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, payloadStore.getResponse());
-		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, creationUser, userAudit, payloadStore.getDocumentTypeId());
+		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, payloadStore.getCreationUser(), payloadStore.getUserAudit(), payloadStore.getDocumentTypeId());
 
 		insuranceSimulationDao.getInsertInsuranceSimulation(argumentsForSaveSimulation);
 
