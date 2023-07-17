@@ -42,8 +42,7 @@ public class SeguroEasyYesImpl implements ISeguroEasyYes {
     private ApplicationConfigurationService applicationConfigurationService;
     private ValidationUtil validationUtil = new ValidationUtil(rbvdR301);
 
-    public InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, BigDecimal sumCumulus){
-        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,sumCumulus);
+    public InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
         InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         return responseRimac;
     }

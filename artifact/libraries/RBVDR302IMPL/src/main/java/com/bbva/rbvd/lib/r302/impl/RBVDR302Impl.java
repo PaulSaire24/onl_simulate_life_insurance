@@ -81,8 +81,9 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		}
 
 		//inicio
-		simulation.start();
+		LifeSimulationDTO response = simulation.start(this.rbvdR301,this.applicationConfigurationService);
 
+		return response;
 		//////////////////////////////////////////////////////------------
 
 
@@ -120,7 +121,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			InsuranceLifeSimulationBO responseRimac = null;
 
-			rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
+			//rimacRequest.getPayload().setProducto(productInformationDAO.getInsuranceBusinessName());
 
 			if(input.getProduct().getId().equals("841")){
 				//this.mapperHelper.addFieldsDatoParticulares(rimacRequest, input, responseListCustomers);
@@ -165,7 +166,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			Boolean seglifePlan2 =this.mapperHelper.selectValuePlansDescription(segmentoLifePlan2, input);
 			Boolean seglifePlan3 =this.mapperHelper.selectValuePlansDescription(segmentoLifePlan3, input);
 
-			mapperHelper.mapOutRequestRimacLife(responseRimac, response);
+			//mapperHelper.mapOutRequestRimacLife(responseRimac, response);
 
 			//get Modalities() -- Axel
 			//String planesLife = applicationConfigurationService.getProperty("plansLife");
@@ -176,11 +177,13 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 					this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), filtersModalitiesInfo);
 			//List<InsuranceProductModalityDAO> productModalitiesDAO = validationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
 
-			// Carlos
-			List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
-					(productModalitiesDAO, responseRimac, seglifePlan1, seglifePlan2, seglifePlan3);
 
-			response.getProduct().setPlans(plansWithNameAndRecommendedValueAndInstallmentPlan);
+			//////------------------
+			// Carlos
+			//List<InsurancePlanDTO> plansWithNameAndRecommendedValueAndInstallmentPlan = this.mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans
+			//		(productModalitiesDAO, responseRimac, seglifePlan1, seglifePlan2, seglifePlan3);
+
+			//response.getProduct().setPlans(plansWithNameAndRecommendedValueAndInstallmentPlan);
 
 
 			///////////////////------------------------------------

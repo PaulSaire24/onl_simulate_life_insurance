@@ -5,7 +5,8 @@ import java.util.List;
 public class PayloadProperties {
 
     private String documentTypeId;
-    private List<String> segmentLifePlans;
+    private String documentTypeIdAsText;
+    private List<Boolean> segmentLifePlans;
 
     public String getDocumentTypeId() {
         return documentTypeId;
@@ -15,11 +16,19 @@ public class PayloadProperties {
         this.documentTypeId = documentTypeId;
     }
 
-    public List<String> getSegmentLifePlans() {
+    public List<Boolean> getSegmentLifePlans() {
         return segmentLifePlans;
     }
 
-    public void setSegmentLifePlans(List<String> segmentLifePlans) {
+    public void setSegmentLifePlans(List<Boolean> segmentLifePlans) {
         this.segmentLifePlans = segmentLifePlans;
+    }
+
+    public String getDocumentTypeIdAsText() {
+        return documentTypeIdAsText;
+    }
+
+    public void setDocumentTypeIdAsText(String documentTypeIdAsText) {
+        this.documentTypeIdAsText = documentTypeIdAsText;
     }
 }

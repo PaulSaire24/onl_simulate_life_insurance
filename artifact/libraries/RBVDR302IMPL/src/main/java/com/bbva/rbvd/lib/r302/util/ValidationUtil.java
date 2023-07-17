@@ -19,6 +19,7 @@ import com.bbva.rbvd.lib.r302.service.api.ConsumerInternalService;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -41,8 +42,6 @@ public class ValidationUtil {
         this.consumerInternalService = new ConsumerInternalService(rbvdR301);
 
     }
-
-
 
     //realiza una validación
     public void validation(InsuranceLifeSimulationBO responseRimac){
@@ -117,6 +116,18 @@ public class ValidationUtil {
                     response.getHolder().getIdentityDocument().getDocumentNumber());
         }
         holder.setIdentityDocument(identityDocument);
+    }
+
+    public Boolean selectValuePlansDescription(String segmentoPlan, LifeSimulationDTO input){
+        boolean valuePlus= false;
+        String[] lifeArray = segmentoPlan.split(",");
+        List<String> listSegment = Arrays.stream(lifeArray).collect(toList());
+        String valueRetail = null;
+        valueRetail = listSegment.stream().filter(retail -> retail.equals(input.getId())).findFirst().orElse(null);
+        if(null!=valueRetail){
+            valuePlus=true;
+        }
+        return valuePlus;
     }
 
 

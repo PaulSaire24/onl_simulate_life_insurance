@@ -24,7 +24,7 @@ public class ContractDAOImpl implements IContractDAO {
         this.pisdR350 = pisdR350;
     }
 
-    public BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId,String productId,String customerId) {
+    public BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId,String customerId) {
 
         Map<String, Object> responseQueryGetCumulus =
                 this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), ContractMap.mapInsuranceAmount(

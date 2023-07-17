@@ -18,12 +18,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class ModalitiesDAOImpl implements IModalitiesDAO {
 
     private PISDR350 pisdr350;
-
     public ModalitiesDAOImpl(PISDR350 pisdr350){ this.pisdr350 = pisdr350;}
-
-
-
-
     @Override
     public List<InsuranceProductModalityDAO> getModalitiesInfo(String plansPT, BigDecimal insuranceProductId, String saleChannel) {
 

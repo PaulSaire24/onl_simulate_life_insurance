@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface IContractDAO {
 
-    BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId ,String productId, String customerId);
+    BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId , String customerId);
 
 }

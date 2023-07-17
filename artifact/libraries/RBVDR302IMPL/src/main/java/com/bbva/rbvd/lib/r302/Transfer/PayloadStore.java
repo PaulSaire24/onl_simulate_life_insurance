@@ -21,8 +21,6 @@ public class PayloadStore {
         this.response = response;
         this.documentTypeId = documentTypeId;
         this.productInformation = productInformation;
-
-
     }
 
 

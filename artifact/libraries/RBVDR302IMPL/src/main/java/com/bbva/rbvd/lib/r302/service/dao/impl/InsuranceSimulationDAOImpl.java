@@ -26,9 +26,9 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
 
         Map<String, Object> responseGetInsuranceSimulationMap = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),new HashMap<>());
 
-        if(isEmpty(responseGetInsuranceSimulationMap)) {
+        /*if(isEmpty(responseGetInsuranceSimulationMap)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
-        }
+        }*/
 
         BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationMap.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
 

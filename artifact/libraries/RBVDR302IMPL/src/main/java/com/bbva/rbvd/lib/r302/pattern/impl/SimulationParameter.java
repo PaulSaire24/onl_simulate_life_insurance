@@ -23,6 +23,7 @@ import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.util.ConfigConsola;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class SimulationParameter implements PreSimulation {
 
 	@Override
 	public PayloadConfig getConfig() {
-		PayloadProperties properties = this.getProperties();
+		PayloadProperties properties = this.getProperties(input);
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
 		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
@@ -59,7 +60,7 @@ public class SimulationParameter implements PreSimulation {
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
 				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), input.getSaleChannelId());
 
-		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId() , input.getProduct().getId(), input.getHolder().getId());
+		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input.getHolder().getId());
 
 		this.getTierToUpdateRequest(input);
 
@@ -77,19 +78,24 @@ public class SimulationParameter implements PreSimulation {
 	
 	
 	//@Override
-	public PayloadProperties getProperties() {
+	public PayloadProperties getProperties(LifeSimulationDTO input) {
 
 		PayloadProperties properties = new PayloadProperties();
 		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
+		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
 
 		String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
 		String segmentoLifePlan2 = applicationConfigurationService.getProperty("segmentoLifePlan2");
 		String segmentoLifePlan3 = applicationConfigurationService.getProperty("segmentoLifePlan3");
 
-		List<String> segmentLifePlans = new ArrayList<>();
-		segmentLifePlans.add(segmentoLifePlan1);
-		segmentLifePlans.add(segmentoLifePlan2);
-		segmentLifePlans.add(segmentoLifePlan3);
+		Boolean seglifePlan1 = validationUtil.selectValuePlansDescription(segmentoLifePlan1,input);
+		Boolean seglifePlan2 = validationUtil.selectValuePlansDescription(segmentoLifePlan2,input);
+		Boolean seglifePlan3 = validationUtil.selectValuePlansDescription(segmentoLifePlan3,input);
+
+		List<Boolean> segmentLifePlans = new ArrayList<>();
+		segmentLifePlans.add(seglifePlan1);
+		segmentLifePlans.add(seglifePlan2);
+		segmentLifePlans.add(seglifePlan3);
 
 		properties.setSegmentLifePlans(segmentLifePlans);
 
@@ -103,16 +109,14 @@ public class SimulationParameter implements PreSimulation {
 		IProductDAO productDAO = new ProductDAOImpl(pisdR350);
 		ProductInformationDAO product= productDAO.getProductInformationById(productId);
 
-
 		return product;
 	}
 
 	//@Override
-	public BigDecimal getCumulos(BigDecimal insuranceProductId, String productId, String customerId) {
+	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
 		IContractDAO contractDAO = new ContractDAOImpl(pisdR350);
 		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(
 				insuranceProductId,
-				productId,
 				customerId);
 
 		return cumulos;
