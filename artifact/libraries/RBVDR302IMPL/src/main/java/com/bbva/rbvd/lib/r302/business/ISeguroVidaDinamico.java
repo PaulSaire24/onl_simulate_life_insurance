@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public interface ISeguroVidaDinamico {
 
-    InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, BigDecimal sumCumulus);
+    InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac);
     InsuranceLifeSimulationBO execuetModifyQuotationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId);
 
 }
