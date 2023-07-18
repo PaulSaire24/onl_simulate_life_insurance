@@ -15,6 +15,10 @@
 					<list order="2" name="coverages" mandatory="0">
 						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO" artifactId="RBVDC301">
 							<parameter order="1" name="id" mandatory="1" type="String" size="6"/>
+							<dto order="2" name="insuredAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+								<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+								<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+							</dto>
 						</dto>
 					</list>
 					<parameter order="3" name="id" mandatory="1" type="String" size="10"/>
@@ -101,6 +105,24 @@
 								<parameter order="4" name="text" mandatory="0" type="String" size="50"/>
 								<parameter order="5" name="decimal" mandatory="0" type="Double" size="15"/>
 								<parameter order="6" name="percentage" mandatory="0" type="Double" size="6"/>
+							</dto>
+							<dto order="7" name="feePaymentAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO" artifactId="RBVDC301">
+								<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+								<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+							</dto>
+							<dto order="8" name="insuredAmount" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+								<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+								<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+							</dto>
+							<dto order="9" name="coverageLimits" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO" artifactId="RBVDC301">
+								<dto order="1" name="minimumAmount" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+									<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+									<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+								</dto>
+								<dto order="2" name="maximumAmount" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO" artifactId="RBVDC301">
+									<parameter order="1" name="amount" mandatory="1" type="Double" size="18"/>
+									<parameter order="2" name="currency" mandatory="1" type="String" size="3"/>
+								</dto>
 							</dto>
 						</dto>
 					</list>
