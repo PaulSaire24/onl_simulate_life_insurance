@@ -10,6 +10,8 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.ISeguroEasyYes;
 import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
@@ -40,10 +42,23 @@ public class SeguroEasyYesImpl implements ISeguroEasyYes {
 
     private RBVDR301 rbvdR301;
     private ApplicationConfigurationService applicationConfigurationService;
-    private ValidationUtil validationUtil = new ValidationUtil(rbvdR301);
 
-    public InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
+
+    public SeguroEasyYesImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
+        this.rbvdR301 = rbvdR301;
+        this.applicationConfigurationService = applicationConfigurationService;
+    }
+
+    public InsuranceLifeSimulationBO callQuotationRimacService(LifeSimulationDTO input, BigDecimal cumulo, String productInformation){
+        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,cumulo);
+        requestRimac.getPayload().setProducto(productInformation);
+
         InsuranceLifeSimulationBO responseRimac = rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
+
+        if(Objects.isNull(responseRimac)){
+            throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
+        }
+
         return responseRimac;
     }
 
@@ -125,6 +140,8 @@ public class SeguroEasyYesImpl implements ISeguroEasyYes {
         good.setGoodDetail(goodDetail);
 
         if(Objects.nonNull(responseListCustomers)) {
+            ValidationUtil validationUtil = new ValidationUtil();
+
             CustomerBO customer = responseListCustomers.getData().get(0);
             holder.setFirstName(validationUtil.validateSN(customer.getFirstName()));
             holder.setLastName(validationUtil.validateSN(customer.getLastName()).concat(" ").concat(validationUtil.validateSN(customer.getSecondLastName())));
@@ -194,13 +211,4 @@ public class SeguroEasyYesImpl implements ISeguroEasyYes {
         return gifoleInsuranceRequest;
     }
 
-
-
-    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
-        this.applicationConfigurationService = applicationConfigurationService;
-    }
-
-    public void setRbvdR301(RBVDR301 rbvdR301) {
-        this.rbvdR301 = rbvdR301;
-    }
 }

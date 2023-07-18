@@ -31,17 +31,6 @@ public class ValidationUtil {
 
     private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
 
-    private RBVDR301 rbvdR301;
-
-    private ConsumerInternalService consumerInternalService;
-
-
-
-    public ValidationUtil(RBVDR301 rbvdR301) {
-        this.rbvdR301 = rbvdR301;
-        this.consumerInternalService = new ConsumerInternalService(rbvdR301);
-
-    }
 
     //realiza una validación
     public void validation(InsuranceLifeSimulationBO responseRimac){
@@ -79,7 +68,7 @@ public class ValidationUtil {
         }
     }
 
-    public TierASO validateTier (LifeSimulationDTO input){
+    /*public TierASO validateTier (LifeSimulationDTO input){
         //LOGGER.info("***** RBVDR302Impl - validateTier START *****");
         TierASO responseTierASO = null;
         if (Objects.isNull(input.getTier())) {
@@ -90,7 +79,7 @@ public class ValidationUtil {
         //LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
         //LOGGER.info("***** RBVDR302Impl - validateTier END *****");
         return responseTierASO;
-    }
+    }*/
 
     public String validateSN(String name) {
         if(Objects.isNull(name) || "null".equals(name) || " ".equals(name)){

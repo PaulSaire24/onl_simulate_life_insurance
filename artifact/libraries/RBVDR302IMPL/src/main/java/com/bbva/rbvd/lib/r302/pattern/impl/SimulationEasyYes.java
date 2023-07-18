@@ -10,8 +10,6 @@ import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 
 
 public class SimulationEasyYes extends SimulationDecorator{
@@ -24,22 +22,18 @@ public class SimulationEasyYes extends SimulationDecorator{
 	@Override
 	public LifeSimulationDTO start(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		LifeSimulationDTO response = new LifeSimulationDTO();
-		ValidationUtil validationUtil = new ValidationUtil(rbvdR301);
-		ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
-		listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
+
+		//Configuraciones previas
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig();
-		SeguroEasyYesImpl seguroEasyYes = new SeguroEasyYesImpl();
-		seguroEasyYes.setRbvdR301(rbvdR301);
-		seguroEasyYes.setApplicationConfigurationService(applicationConfigurationService);
+		SeguroEasyYesImpl seguroEasyYes = new SeguroEasyYesImpl(rbvdR301,applicationConfigurationService);
 
 		//ejecucion servicio rimac
-		InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(payloadConfig.getInput(),payloadConfig.getSumCumulus());
-		requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
-		InsuranceLifeSimulationBO responseRimac = seguroEasyYes.executeQuotationRimacService(payloadConfig.getInput(),requestRimac);
-
-		validationUtil.validation(responseRimac);
+		InsuranceLifeSimulationBO responseRimac = seguroEasyYes.callQuotationRimacService(
+				payloadConfig.getInput(),payloadConfig.getSumCumulus(),payloadConfig.getProductInformation().getInsuranceBusinessName());
 
 		//construccion de respuesta trx
+		ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
+		listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
 		response = payloadConfig.getInput();
 		response.getProduct().setName(responseRimac.getPayload().getProducto());
 		response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
@@ -49,6 +43,7 @@ public class SimulationEasyYes extends SimulationDecorator{
 				payloadConfig.getProperties().getSegmentLifePlans().get(0),
 				payloadConfig.getProperties().getSegmentLifePlans().get(1),
 				payloadConfig.getProperties().getSegmentLifePlans().get(2)));
+
 		//Revisar si es necesario esta línea:
 		//response.getProduct().setId(payloadConfig.getInput().getProduct().getId());
 		response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
