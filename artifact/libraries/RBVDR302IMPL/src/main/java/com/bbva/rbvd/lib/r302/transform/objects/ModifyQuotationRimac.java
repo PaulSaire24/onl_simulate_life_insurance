@@ -1,52 +1,106 @@
 package com.bbva.rbvd.lib.r302.transform.objects;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModifyQuotationRimac {
 
-    public void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
+    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input,CustomerListASO responseListCustomers,BigDecimal cumulo){
+        InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
+        SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
-        DatoParticularBO datos1 = new DatoParticularBO();
-        DatoParticularBO datos2 = new DatoParticularBO();
-        DatoParticularBO datos3 = new DatoParticularBO();
-        DatoParticularBO datos4 = new DatoParticularBO();
-        DatoParticularBO datos5 = new DatoParticularBO();
+        List<DatoParticularBO> datoParticularBOList = new ArrayList<>();
+        datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
+        datoParticularBOList.add(getSumaAseguradaCoberturaFallecimiento(input));
+        datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
+        datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
+        datoParticularBOList.add(getDatoParticularIndEndoso());
+        datoParticularBOList.add(getCumuloCliente(cumulo));
+        payload.setDatosParticulares(datoParticularBOList);
 
-        datos1.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
-        datos1.setCodigo("");
-        datos1.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
-        rimacRequest.getPayload().getDatosParticulares().add(datos1);
+        //Construir coberturas adicionales
+        List<CoberturaBO> coberturas = new ArrayList<>();
+        payload.setCoberturas(coberturas);
 
-        datos2.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
-        datos2.setCodigo("");
-        datos2.setValor(input.getInsuredAmount() != null ? String.valueOf(input.getInsuredAmount().getAmount()) : "0");
-        rimacRequest.getPayload().getDatosParticulares().add(datos2);
+        //Constrir lista asegurados
+        //List<AseguradoBO> asegurados = new ArrayList<>();
+        //payload.setAsegurado(asegurados);
 
-        datos3.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PERIODO_ANOS.getValue());
-        datos3.setCodigo("");
-        datos3.setValor(input.getTerm() != null ? String.valueOf(input.getTerm().getNumber()) : "5");
-        rimacRequest.getPayload().getDatosParticulares().add(datos3);
-
-        datos4.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
-        datos4.setCodigo("");
-        datos4.setValor(CollectionUtils.isEmpty(input.getListRefunds()) ? "0" : String.valueOf(input.getListRefunds().get(0).getUnit().getPercentage()));
-        rimacRequest.getPayload().getDatosParticulares().add(datos4);
-
-        datos5.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
-        datos5.setCodigo("");
-        datos5.setValor("N");
-        rimacRequest.getPayload().getDatosParticulares().add(datos5);
+        simulationBo.setPayload(payload);
+        return simulationBo;
     }
 
-    private String calculateYeardOldCustomer(String birthDate){
+    public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
+
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
+        rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
+    }
+
+    private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta("CUMULO_CLIENTE");
+        datos.setCodigo("");
+        datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
+        return datos;
+    }
+
+    private static DatoParticularBO getDatoParticularIndEndoso() {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
+        datos.setCodigo("");
+        datos.setValor("N");
+        return datos;
+    }
+
+    private static DatoParticularBO getDatoParticularPorcentajeDevolucion(LifeSimulationDTO input) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
+        datos.setCodigo("");
+        datos.setValor(CollectionUtils.isEmpty(input.getListRefunds()) ? "0" : String.valueOf(input.getListRefunds().get(0).getUnit().getPercentage()));
+        return datos;
+    }
+
+    private static DatoParticularBO getDatoParticularPeriodoAnios(LifeSimulationDTO input) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PERIODO_ANOS.getValue());
+        datos.setCodigo("");
+        datos.setValor(input.getTerm() != null ? String.valueOf(input.getTerm().getNumber()) : "5");
+        return datos;
+    }
+
+    private static DatoParticularBO getSumaAseguradaCoberturaFallecimiento(LifeSimulationDTO input) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
+        datos.setCodigo("");
+        datos.setValor(input.getInsuredAmount() != null ? String.valueOf(input.getInsuredAmount().getAmount()) : "0");
+        return datos;
+    }
+
+    private static DatoParticularBO getDatoParticularEdadAsegurado(CustomerListASO responseListCustomers) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
+        datos.setCodigo("");
+        datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+        return datos;
+    }
+
+    private static String calculateYeardOldCustomer(String birthDate){
 
         LocalDate hoy = LocalDate.now();
         LocalDate nacimiento = LocalDate.parse(birthDate);

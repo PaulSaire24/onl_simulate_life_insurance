@@ -17,7 +17,7 @@ public class SeguroVidaDinamico implements ISeguroVidaDinamico {
     }
 
     @Override
-    public InsuranceLifeSimulationBO execuetModifyQuotationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId) {
+    public InsuranceLifeSimulationBO executeModifyQuotationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId) {
         return rbvdR301.executeSimulationModificationRimacService(payload,quotationId,traceId);
     }
 

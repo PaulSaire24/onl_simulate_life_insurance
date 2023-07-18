@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 public interface ISeguroVidaDinamico {
 
     InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac);
-    InsuranceLifeSimulationBO execuetModifyQuotationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId);
+    InsuranceLifeSimulationBO executeModifyQuotationRimacService(InsuranceLifeSimulationBO payload, String quotationId, String traceId);
 
 }

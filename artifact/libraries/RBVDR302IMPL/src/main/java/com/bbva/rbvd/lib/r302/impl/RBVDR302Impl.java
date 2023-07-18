@@ -132,7 +132,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 				if(this.applicationConfigurationService.getProperty("IS_MOCK_QUOTATION_DYNAMIC").equals("S")){
 					//usar mock de rimac
-					responseRimac = new MockResponse().getMockResponseRimacService();
+					//responseRimac = new MockResponse().getMockResponseRimacService();
 				}else{
 					if(Objects.nonNull(input.getExternalSimulationId())){
 						responseRimac = this.rbvdR301.executeSimulationModificationRimacService(rimacRequest, input.getExternalSimulationId(), input.getTraceId());
