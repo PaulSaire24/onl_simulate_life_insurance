@@ -9,7 +9,6 @@ import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.transform.bean.ProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.springframework.util.CollectionUtils.isEmpty;

@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
     private final PISDR350 pisdR350;

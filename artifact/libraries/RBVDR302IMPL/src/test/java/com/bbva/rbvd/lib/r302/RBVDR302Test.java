@@ -19,6 +19,7 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
@@ -100,6 +101,7 @@ public class RBVDR302Test {
 	private int executeInsertSingleRow;
 
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
+	private SeguroEasyYesImpl seguroEasyYes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -158,6 +160,9 @@ public class RBVDR302Test {
 		CryptoDataASO data = new CryptoDataASO();
 		crypto.setData(data);
 		tier = mockDTO.getTierMockResponse();
+
+		seguroEasyYes = new SeguroEasyYesImpl(rbvdr301,applicationConfigurationService);
+
 	}
 
 	@Test
@@ -189,7 +194,7 @@ public class RBVDR302Test {
 		responseConsiderations.add(uniqueExample);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(responseConsiderations);
-		when(this.mapperHelper.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -220,7 +225,7 @@ public class RBVDR302Test {
 		responseConsiderations.add(uniqueExample);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(responseConsiderations);
-		when(this.mapperHelper.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -247,7 +252,7 @@ public class RBVDR302Test {
 		responseConsiderations.add(uniqueExample);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(responseConsiderations);
-		when(this.mapperHelper.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -270,7 +275,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(new ArrayList<>());
-		when(this.mapperHelper.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
 		requestInput.setTier(new TierDTO());
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
@@ -413,7 +418,7 @@ public class RBVDR302Test {
 		responseConsiderations.add(uniqueExample);
 		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
 				thenReturn(responseConsiderations);
-		when(this.mapperHelper.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
 		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
 

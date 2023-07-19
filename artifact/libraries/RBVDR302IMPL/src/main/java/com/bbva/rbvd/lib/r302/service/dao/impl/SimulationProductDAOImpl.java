@@ -1,4 +1,5 @@
 package com.bbva.rbvd.lib.r302.service.dao.impl;
+
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;

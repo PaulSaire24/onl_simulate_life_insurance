@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 public interface ISeguroEasyYes {
 
     void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers);
-    InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac);
+    InsuranceLifeSimulationBO callQuotationRimacService(LifeSimulationDTO input, BigDecimal cumulo, String productInformation);
 
 }

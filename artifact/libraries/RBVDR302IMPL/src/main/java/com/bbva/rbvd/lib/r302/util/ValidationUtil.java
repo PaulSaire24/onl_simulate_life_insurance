@@ -32,25 +32,6 @@ public class ValidationUtil {
     private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
 
 
-    //realiza una validación
-    public void validation(InsuranceLifeSimulationBO responseRimac){
-        if(Objects.isNull(responseRimac)){
-            throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
-        }
-    }
-
-    //Valida la información del producto
-    public ProductInformationDAO validateQueryGetProductInformation(Map<String, Object> responseQueryGetProductInformation) {
-        if(isEmpty(responseQueryGetProductInformation)) {
-            throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);
-        }
-        ProductInformationDAO productInformationDAO = new ProductInformationDAO();
-        productInformationDAO.setInsuranceProductId((BigDecimal) responseQueryGetProductInformation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
-        productInformationDAO.setInsuranceProductDescription((String) responseQueryGetProductInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()));
-        productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RIMAC_PRODUCT_NAME));
-        return productInformationDAO;
-    }
-
     //valida la modalidad del producto asegurado
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
         List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
@@ -60,26 +41,6 @@ public class ValidationUtil {
         return rows.stream().map(productModality -> InsuranceProductModalityBean.createInsuranceProductModalityDAO(productModality)).collect(toList());
     }
 
-    //valida la inserción de filas
-    public void validateInsertion(int insertedRows, RBVDErrors error) {
-        //LOGGER.info("***** VALOR inSERrow {} ", insertedRows);
-        if(insertedRows != 1) {
-            throw RBVDValidation.build(error);
-        }
-    }
-
-    /*public TierASO validateTier (LifeSimulationDTO input){
-        //LOGGER.info("***** RBVDR302Impl - validateTier START *****");
-        TierASO responseTierASO = null;
-        if (Objects.isNull(input.getTier())) {
-            //LOGGER.info("Invoking Service ASO Tier");
-            CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
-            responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
-        }
-        //LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
-        //LOGGER.info("***** RBVDR302Impl - validateTier END *****");
-        return responseTierASO;
-    }*/
 
     public String validateSN(String name) {
         if(Objects.isNull(name) || "null".equals(name) || " ".equals(name)){

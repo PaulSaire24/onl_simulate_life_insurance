@@ -88,7 +88,7 @@ public class SeguroEasyYesImpl implements ISeguroEasyYes {
         }
     }
 
-    private GifoleInsuranceRequestASO createGifoleASO(LifeSimulationDTO response, CustomerListASO responseListCustomers){
+    public GifoleInsuranceRequestASO createGifoleASO(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
         InsuranceProductDTO productDto = response.getProduct();
 

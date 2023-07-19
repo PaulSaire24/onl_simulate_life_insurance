@@ -6,17 +6,11 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
 import com.bbva.rbvd.lib.r302.business.impl.SeguroVidaDinamico;
-import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
-import com.bbva.rbvd.lib.r302.transform.objects.ModifyQuotationRimac;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class SimulationVidaDinamico extends SimulationDecorator{
@@ -28,48 +22,33 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 	@Override
 	public LifeSimulationDTO start(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		LifeSimulationDTO response = new LifeSimulationDTO();
-		ValidationUtil validationUtil = new ValidationUtil(rbvdR301);
-		ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
-		listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
+
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig();
-		SeguroVidaDinamico seguroVidaDinamico = new SeguroVidaDinamico();
-		seguroVidaDinamico.setRbvdR301(rbvdR301);
+		SeguroVidaDinamico seguroVidaDinamico = new SeguroVidaDinamico(rbvdR301);
 
 		//ejecucion servicio rimac
-		InsuranceLifeSimulationBO requestRimac = null;
 		InsuranceLifeSimulationBO responseRimac = null;
 
-		requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
-
 		if(payloadConfig.getInput().getExternalSimulationId() != null) {
-			requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(
-					payloadConfig.getInput(),payloadConfig.getCustomerListASO(),payloadConfig.getSumCumulus());
-
-			if (applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
-				responseRimac = new MockResponse().getMockResponseRimacModifyQuotationService();
-			} else {
-				responseRimac = seguroVidaDinamico.executeModifyQuotationRimacService(
-						requestRimac,
-						payloadConfig.getInput().getExternalSimulationId(),
-						payloadConfig.getInput().getTraceId());
-			}
-
+			responseRimac = seguroVidaDinamico.executeModifyQuotationRimacService(
+					payloadConfig.getInput(),
+					payloadConfig.getCustomerListASO(),
+					payloadConfig.getSumCumulus(),
+					applicationConfigurationService
+			);
 		}else{
-			requestRimac = QuotationRimac.mapInRequestRimacLife(payloadConfig.getInput(),payloadConfig.getSumCumulus());
-			ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,payloadConfig.getInput(),payloadConfig.getCustomerListASO());
-
-
-			if (applicationConfigurationService.getProperty("IS_MOCK_QUOTATION_DYNAMIC").equals("S")) {
-				responseRimac = new MockResponse().getMockResponseRimacQuotationService();
-			}else{
-				responseRimac = seguroVidaDinamico.executeQuotationRimacService(payloadConfig.getInput(),requestRimac);
-			}
+			responseRimac = seguroVidaDinamico.executeQuotationRimacService(
+					payloadConfig.getInput(),
+					payloadConfig.getProductInformation().getInsuranceBusinessName(),
+					payloadConfig.getCustomerListASO(),
+					payloadConfig.getSumCumulus(),
+					applicationConfigurationService);
 
 		}
 
-		validationUtil.validation(responseRimac);
-
 		//construccion de respuesta trx
+		ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
+		listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
 		response = payloadConfig.getInput();
 		response.getProduct().setName(responseRimac.getPayload().getProducto());
 		response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());

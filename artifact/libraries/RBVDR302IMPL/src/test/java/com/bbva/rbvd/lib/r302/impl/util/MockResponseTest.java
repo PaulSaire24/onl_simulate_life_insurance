@@ -1,7 +1,6 @@
 package com.bbva.rbvd.lib.r302.impl.util;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +10,7 @@ public class MockResponseTest {
 
     @Test
     public void test_getMockResponseRimacService(){
-        InsuranceLifeSimulationBO mock = mockResponse.getMockResponseRimacService();
+        InsuranceLifeSimulationBO mock = mockResponse.getMockResponseRimacQuotationService();
 
         Assert.assertNotNull(mock);
         Assert.assertNotNull(mock.getPayload());
