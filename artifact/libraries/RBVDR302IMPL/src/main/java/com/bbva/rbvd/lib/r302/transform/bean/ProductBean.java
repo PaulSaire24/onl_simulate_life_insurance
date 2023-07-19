@@ -16,5 +16,4 @@ public class ProductBean {
         productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RIMAC_PRODUCT_NAME));
         return productInformationDAO;
     }
-
 }

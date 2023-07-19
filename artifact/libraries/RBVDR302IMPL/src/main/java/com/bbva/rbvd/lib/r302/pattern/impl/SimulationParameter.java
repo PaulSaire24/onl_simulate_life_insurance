@@ -2,17 +2,16 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TierDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.Transfer.PayloadProperties;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.service.api.ConsumerInternalService;
 import com.bbva.rbvd.lib.r302.service.dao.IModalitiesDAO;
@@ -21,9 +20,7 @@ import com.bbva.rbvd.lib.r302.service.dao.impl.ModalitiesDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
-import com.bbva.rbvd.lib.r302.util.ConfigConsola;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class SimulationParameter implements PreSimulation {
 		this.applicationConfigurationService = applicationConfigurationService;
 		this.pisdR350 = pisdR350;
 		this.rbvdR301 = rbvdR301;
-		this.validationUtil = new ValidationUtil(rbvdR301);
+		this.validationUtil = new ValidationUtil();
 	}
 
 
@@ -143,7 +140,7 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	public void getTierToUpdateRequest(LifeSimulationDTO input) {
-		TierASO responseTierASO = validationUtil.validateTier(input); //Traigo el Tier
+		TierASO responseTierASO = validateTier(input);
 
 		if (Objects.nonNull(responseTierASO)) {
 			//Actualizo el input con la data del Tier
@@ -159,4 +156,19 @@ public class SimulationParameter implements PreSimulation {
 			}
 		}
 	}
+
+	private TierASO validateTier (LifeSimulationDTO input){
+		//LOGGER.info("***** RBVDR302Impl - validateTier START *****");
+		ConsumerInternalService consumerInternalService = new ConsumerInternalService(this.rbvdR301);
+		TierASO responseTierASO = null;
+		if (Objects.isNull(input.getTier())) {
+			//LOGGER.info("Invoking Service ASO Tier");
+			CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
+			responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
+		}
+		//LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
+		//LOGGER.info("***** RBVDR302Impl - validateTier END *****");
+		return responseTierASO;
+	}
+
 }

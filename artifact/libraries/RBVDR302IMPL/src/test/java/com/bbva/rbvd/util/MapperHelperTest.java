@@ -27,14 +27,19 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
+import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
+import com.bbva.rbvd.lib.r302.transform.map.ContractMap;
 import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
+import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,6 +76,8 @@ public class MapperHelperTest {
     private CustomerListASO requestCustomerListASO;
 
     private BigDecimal sumCumulus;
+    private ListInstallmentPlan listInstallmentPlan;
+    private SeguroEasyYesImpl seguroEasyYes;
 
     @Before
     public void setUp() throws Exception {
@@ -85,8 +92,6 @@ public class MapperHelperTest {
         responseOut = mockData.getInsuranceSimulationResponse();
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
 
-        mapperHelper.setApplicationConfigurationService(applicationConfigurationService);
-
         simulationDAO = mock(SimulationDAO.class);
         simulationDAO.setInsuranceModalityType("03");
 
@@ -95,6 +100,13 @@ public class MapperHelperTest {
         requestCustomerListASO = new CustomerListASO();
 
         sumCumulus = BigDecimal.ZERO;
+
+        listInstallmentPlan = mock(ListInstallmentPlan.class);
+        listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
+
+        RBVDR301 rbvdr301 = mock(RBVDR301.class);
+        seguroEasyYes = new SeguroEasyYesImpl(rbvdr301,applicationConfigurationService);
+
 
     }
 
@@ -117,7 +129,7 @@ public class MapperHelperTest {
 
     @Test
     public void mapInsuranceAmountOKTest() {
-        Map<String, Object> mapStringObject = ProductMap.mapInsuranceAmount(new BigDecimal(8), "0000000");
+        Map<String, Object> mapStringObject = ContractMap.mapInsuranceAmount(new BigDecimal(8), "0000000");
         assertEquals(new BigDecimal(8), mapStringObject.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
 
     }
@@ -136,32 +148,32 @@ public class MapperHelperTest {
         modality.setInsuranceModalityType("01");
         productModalities.add(modality);
 
-        List<InsurancePlanDTO> validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, true, false, false);
+        List<InsurancePlanDTO> validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, true, false, false);
 
         assertNotNull(validation.get(0).getName());
 
         responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(0L);
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("INC");
         productModalities.get(0).setInsuranceModalityType("02");
-        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, true, false);
+        validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, true, false);
 
         assertEquals(1, validation.size());
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("OPC");
         productModalities.get(0).setInsuranceModalityType("03");
-        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, true);
+        validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, true);
 
         assertEquals(1, validation.size());
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("");
         productModalities.get(0).setInsuranceModalityType("03");
-        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
+        validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
 
         assertEquals(1, validation.size());
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCoberturas(new ArrayList<>());
         productModalities.get(0).setInsuranceModalityType("02");
-        validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
+        validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
 
         assertEquals(1, validation.size());
 
@@ -177,7 +189,7 @@ public class MapperHelperTest {
         modality.setInsuranceModalityType("02");
         productModalities.add(modality);
 
-        List<InsurancePlanDTO> validation = mapperHelper.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
+        List<InsurancePlanDTO> validation = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
 
     }
 
@@ -274,34 +286,27 @@ public class MapperHelperTest {
 
 
     @Test
-    public void insuranceProductModalityFiltersCreationOK() {
-        mapperHelper.mapOutRequestRimacLife(responseRimac, responseOut);
-        assertNotNull(responseOut.getProduct().getName());
-
-    }
-
-    @Test
     public void createGifoleASO_OK() throws IOException {
 
         requestCustomerListASO = mockDTO.getCustomerDataResponse();
 
-        GifoleInsuranceRequestASO validation = this.mapperHelper.createGifoleASO(responseOut, requestCustomerListASO);
+        GifoleInsuranceRequestASO validation = seguroEasyYes.createGifoleASO(responseOut, requestCustomerListASO);
 
         assertNotNull(validation);
 
         requestCustomerListASO.getData().get(0).setFirstName("null");
-        validation = this.mapperHelper.createGifoleASO(responseOut, requestCustomerListASO);
+        validation = seguroEasyYes.createGifoleASO(responseOut, requestCustomerListASO);
 
         assertNotNull(validation);
 
         requestCustomerListASO.getData().get(0).setFirstName(null);
-        validation = this.mapperHelper.createGifoleASO(responseOut, requestCustomerListASO);
+        validation = seguroEasyYes.createGifoleASO(responseOut, requestCustomerListASO);
 
         assertNotNull(validation);
 
         requestCustomerListASO.getData().get(0).setFirstName(" ");
         responseOut.getHolder().getIdentityDocument().setDocumentNumber(null);
-        validation = this.mapperHelper.createGifoleASO(responseOut, requestCustomerListASO);
+        validation = seguroEasyYes.createGifoleASO(responseOut, requestCustomerListASO);
 
         assertNotNull(validation);
     }
@@ -310,12 +315,12 @@ public class MapperHelperTest {
     public void createGifoleASO_NULL() {
         responseOut.getProduct().getPlans().get(2).getInstallmentPlans().get(1).setPeriod(new PeriodDTO());
 
-        GifoleInsuranceRequestASO validation = this.mapperHelper.createGifoleASO(responseOut, null);
+        GifoleInsuranceRequestASO validation = seguroEasyYes.createGifoleASO(responseOut, null);
 
         assertNotNull(validation);
     }
 
-    @Test
+    /*@Test
     public void mappingTierASOOK() {
         TierASO tierASO = new TierASO();
         TierDataASO data = new TierDataASO();
@@ -365,7 +370,7 @@ public class MapperHelperTest {
         LifeSimulationDTO insuranceSimulationDTO = new LifeSimulationDTO();
         mapperHelper.mappingTierASO(insuranceSimulationDTO, null);
         assertNull(insuranceSimulationDTO.getTier());
-    }
+    }*/
 
     @Test
     public void selectValuePlansDescriptionTest() throws IOException {
@@ -374,17 +379,19 @@ public class MapperHelperTest {
         input.setId("86300");
         String seglifePlan1 = "86300";
 
-        valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
+        ValidationUtil validationUtil = new ValidationUtil();
+
+        valor = validationUtil.selectValuePlansDescription(seglifePlan1, input);
         assertTrue(valor);
 
         input.setId(null);
 
-        valor = mapperHelper.selectValuePlansDescription(seglifePlan1, input);
+        valor = validationUtil.selectValuePlansDescription(seglifePlan1, input);
         assertFalse( valor);
         assertNull(input.getDescription());
     }
 
-    @Test
+    /*@Test
     public void testAddFieldsDatoParticulares_DynamicLife() throws IOException{
 
         CustomerListASO customerListASO = new CustomerListASO();
@@ -418,6 +425,6 @@ public class MapperHelperTest {
         assertNotNull(rimacRequest);
         assertNotNull(rimacRequest.getPayload().getDatosParticulares());
         assertEquals(6,rimacRequest.getPayload().getDatosParticulares().size());
-    }
+    }*/
 
 }

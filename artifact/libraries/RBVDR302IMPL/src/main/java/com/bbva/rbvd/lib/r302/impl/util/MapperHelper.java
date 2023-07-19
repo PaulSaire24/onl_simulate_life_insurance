@@ -73,7 +73,6 @@ import static java.util.stream.Collectors.toList;
 public class MapperHelper {
 
 
-    protected ApplicationConfigurationService applicationConfigurationService;
 
     /*
     public void mappingTierASO(LifeSimulationDTO input, TierASO responseTierASO) {
@@ -91,8 +90,4 @@ public class MapperHelper {
         }
     }*/
 
-
-    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
-        this.applicationConfigurationService = applicationConfigurationService;
-    }
 }

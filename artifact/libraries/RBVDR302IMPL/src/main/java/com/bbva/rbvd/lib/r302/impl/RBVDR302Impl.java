@@ -1,50 +1,15 @@
 package com.bbva.rbvd.lib.r302.impl;
 
-import com.bbva.apx.exception.business.BusinessException;
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-
-import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
-import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
-
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
-import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
-import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAO;
-import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
-import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
-import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
-import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
-import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
-import com.bbva.rbvd.lib.r302.business.util.ConvertUtil;
-import com.bbva.rbvd.lib.r302.business.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.pattern.Simulation;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
-import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
-import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.BigDecimal;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Date;
-
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 
 public class RBVDR302Impl extends RBVDR302Abstract {
@@ -64,32 +29,33 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
 		Simulation simulation = null;
-		if(input.getProduct().getId().equals("840")){
+		if (input.getProduct().getId().equals("840")) {
 
 			simulation = new SimulationEasyYes(
-					 new SimulationParameter(this.pisdR350,this.rbvdR301, input,this.applicationConfigurationService)
-					 ,new SimulationStore()
-					);
+					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
+					, new SimulationStore()
+			);
 
-		}else if(input.getProduct().getId().equals("841")){
+		} else if (input.getProduct().getId().equals("841")) {
 
 			simulation = new SimulationVidaDinamico(
-					new SimulationParameter(this.pisdR350,this.rbvdR301,input,this.applicationConfigurationService),
+					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
 					new SimulationStore()
 			);
 
 		}
 
 		//inicio
-		LifeSimulationDTO response = simulation.start(this.rbvdR301,this.applicationConfigurationService);
+		LifeSimulationDTO response = simulation.start(this.rbvdR301, this.applicationConfigurationService);
 
 		return response;
+	}
 		//////////////////////////////////////////////////////------------
 
 
-		LifeSimulationDTO response = new LifeSimulationDTO();
+		//LifeSimulationDTO response = new LifeSimulationDTO();
 		//ValidationUtil validationUtil = new ValidationUtil(this.rbvdR301);
-
+/*
 		try{
 
 			String inputProductId = input.getProduct().getId();
@@ -104,7 +70,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 //			Map<String, Object> responseQueryGetProductInformation = productDAO1.getProductInformationDAO(input.getProduct().getId());
 //
 //			ProductInformationDAO productInformationDAO = validationUtil.validateQueryGetProductInformation(responseQueryGetProductInformation);
-
+/*
 
 			//llama a la R350 para obtener el cúmulo de la base de datos -- Fredy
 			ContractDAOImpl contractDAO = new ContractDAOImpl(this.pisdR350);
@@ -239,7 +205,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	}
 
-
+*/
 
 
 
