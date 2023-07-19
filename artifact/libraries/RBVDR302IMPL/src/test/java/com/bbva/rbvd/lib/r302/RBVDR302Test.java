@@ -19,7 +19,7 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
+import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
@@ -101,7 +101,7 @@ public class RBVDR302Test {
 	private int executeInsertSingleRow;
 
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
-	private SeguroEasyYesImpl seguroEasyYes;
+	private InsrEasyYesBusinessImpl seguroEasyYes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -161,7 +161,7 @@ public class RBVDR302Test {
 		crypto.setData(data);
 		tier = mockDTO.getTierMockResponse();
 
-		seguroEasyYes = new SeguroEasyYesImpl(rbvdr301,applicationConfigurationService);
+		seguroEasyYes = new InsrEasyYesBusinessImpl(rbvdr301,applicationConfigurationService);
 
 	}
 

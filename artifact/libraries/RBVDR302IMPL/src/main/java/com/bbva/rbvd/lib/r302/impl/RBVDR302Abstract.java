@@ -5,7 +5,7 @@ import com.bbva.elara.library.AbstractLibrary;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.RBVDR302;
-import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
+// import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
 /**
  * This class automatically defines the libraries and utilities that it will use.
@@ -18,7 +18,7 @@ public abstract class RBVDR302Abstract extends AbstractLibrary implements RBVDR3
 
 	protected PISDR350 pisdR350;
 
-	protected MapperHelper mapperHelper;
+	//protected MapperHelper mapperHelper;
 
 
 	/**
@@ -42,6 +42,6 @@ public abstract class RBVDR302Abstract extends AbstractLibrary implements RBVDR3
 		this.pisdR350 = pisdR350;
 	}
 
-	public void setMapperHelper(MapperHelper mapperHelper) { this.mapperHelper = mapperHelper; }
+	//public void setMapperHelper(MapperHelper mapperHelper) { this.mapperHelper = mapperHelper; }
 
 }

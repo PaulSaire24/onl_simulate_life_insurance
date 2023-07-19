@@ -6,12 +6,6 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 
-import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
-import com.bbva.pisd.dto.insurance.aso.tier.TierDataASO;
-import com.bbva.pisd.dto.insurance.aso.tier.TierSegmentASO;
-
-import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.commons.*;
@@ -28,7 +22,7 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.business.impl.SeguroEasyYesImpl;
+import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
@@ -77,7 +71,7 @@ public class MapperHelperTest {
 
     private BigDecimal sumCumulus;
     private ListInstallmentPlan listInstallmentPlan;
-    private SeguroEasyYesImpl seguroEasyYes;
+    private InsrEasyYesBusinessImpl seguroEasyYes;
 
     @Before
     public void setUp() throws Exception {
@@ -105,7 +99,7 @@ public class MapperHelperTest {
         listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
 
         RBVDR301 rbvdr301 = mock(RBVDR301.class);
-        seguroEasyYes = new SeguroEasyYesImpl(rbvdr301,applicationConfigurationService);
+        seguroEasyYes = new InsrEasyYesBusinessImpl(rbvdr301,applicationConfigurationService);
 
 
     }
