@@ -21,7 +21,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
-import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
+//import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import org.apache.felix.resolver.util.ArrayMap;
 
@@ -74,7 +74,7 @@ public class RBVDR302Test {
 
 	private InsuranceLifeSimulationBO responseRimac;
 
-	private MapperHelper mapperHelper;
+	//private MapperHelper mapperHelper;
 
 	private InsuranceLifeSimulationBO requestRimac;
 
@@ -121,8 +121,8 @@ public class RBVDR302Test {
 
 		requestInput = mockData.getInsuranceSimulationRequest();
 
-		mapperHelper = mock(MapperHelper.class);
-		rbvdR302.setMapperHelper(mapperHelper);
+		//mapperHelper = mock(MapperHelper.class);
+		//rbvdR302.setMapperHelper(mapperHelper);
 
 		rbvdR302.setApplicationConfigurationService(applicationConfigurationService);
 
