@@ -23,7 +23,7 @@ public class SimulationStore implements PostSimulation {
 	private PISDR350 pisdR350;
 
 	public SimulationStore(PISDR350 pisdR350) {
-		this.pisdR350 = pisdR350;
+		this.pisdR350=pisdR350;
 	}
 
 	public void end(PayloadStore payloadStore) {
