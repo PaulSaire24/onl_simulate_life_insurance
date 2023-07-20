@@ -12,12 +12,14 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
+import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 //import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
@@ -99,6 +101,7 @@ public class RBVDR302Test {
 
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
 	private IInsrEasyYesBusiness seguroEasyYes;
+	private PayloadStore payloadStore;
 
 	@Before
 	public void setUp() throws Exception {
@@ -181,9 +184,9 @@ public class RBVDR302Test {
 
 
 		List<Map<String, Object>> listResponse = new ArrayList<>();
-		Map<String, Object> response = new HashMap<>();
-		response.put("INSURED_AMOUNT", new BigDecimal(13.3));
-		listResponse.add(response);
+		Map<String, Object> responseAmount = new HashMap<>();
+		responseAmount.put("INSURED_AMOUNT", new BigDecimal(13.3));
+		listResponse.add(responseAmount);
 		responseQueryModalities.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
 		responseQuerySumCumulus = new HashMap<>();
 		responseQuerySumCumulus.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
@@ -193,9 +196,10 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
+		when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(1);
+		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
+
 		/*when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-		when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
 		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
 		Map<String, Object> uniqueExample = new HashMap<>();
 		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
@@ -210,9 +214,14 @@ public class RBVDR302Test {
 		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
 		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);*/
 
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
+		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
-		assertNotNull(validation);
+		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNotNull(response);
+
+		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(), new HashMap<>());
+
 	}
 /*
 	@Test

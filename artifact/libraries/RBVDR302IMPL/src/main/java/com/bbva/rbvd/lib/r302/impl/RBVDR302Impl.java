@@ -45,8 +45,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
 
-		}else{
-			//lanzar error
 		}
 
 		//inicio
