@@ -22,7 +22,6 @@ public class SimulationEasyYes extends SimulationDecorator{
 
 	@Override
 	public LifeSimulationDTO start(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-		LifeSimulationDTO response = new LifeSimulationDTO();
 
 		//Configuraciones previas
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig();
@@ -35,7 +34,7 @@ public class SimulationEasyYes extends SimulationDecorator{
 		this.getPostSimulation().end(payloadStore);
 
 		//llamada a gifole
-		seguroEasyYes.serviceAddGifole(payloadConfig.getInput(),payloadConfig.getCustomerListASO());
+		seguroEasyYes.serviceAddGifole(payloadStore.getResponse(),payloadConfig.getCustomerListASO());
 
 
 		//LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");

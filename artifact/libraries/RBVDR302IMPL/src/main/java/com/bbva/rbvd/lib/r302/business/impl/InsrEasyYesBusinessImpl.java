@@ -56,17 +56,15 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
 
     public PayloadStore doEasyYes(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig) {
-        LifeSimulationDTO response;
 
         //ejecucion servicio rimac
         InsuranceLifeSimulationBO responseRimac = this.callQuotationRimacService(
                 payloadConfig.getInput(), payloadConfig.getSumCumulus(), payloadConfig.getProductInformation().getInsuranceBusinessName());
 
         //construccion de respuesta trx
-        response = prepareResponse(applicationConfigurationService, payloadConfig, responseRimac);
+        LifeSimulationDTO response = prepareResponse(applicationConfigurationService, payloadConfig, responseRimac);
 
-
-        PayloadStore payloadStore = new PayloadStore(
+        return new PayloadStore(
                 payloadConfig.getInput().getCreationUser(),
                 payloadConfig.getInput().getUserAudit(),
                 responseRimac,
@@ -74,7 +72,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId(),
                 payloadConfig.getProductInformation()
         );
-        return payloadStore;
+
     }
 
     private LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {

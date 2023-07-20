@@ -34,7 +34,6 @@ public class SimulationParameter implements PreSimulation {
 	private RBVDR301 rbvdR301;
 	private LifeSimulationDTO input;
 	private ApplicationConfigurationService applicationConfigurationService;
-	private PayloadConfig payloadConfig;
 
 	private com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
 
@@ -49,15 +48,17 @@ public class SimulationParameter implements PreSimulation {
 
 	@Override
 	public PayloadConfig getConfig() {
-		PayloadProperties properties = this.getProperties(input);
-		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
+		PayloadConfig payloadConfig = new PayloadConfig();
 
-		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
+		PayloadProperties properties = this.getProperties(this.input);
+		ProductInformationDAO productInformation = this.getProduct(this.input.getProduct().getId());
+
+		CustomerListASO customerResponse = this.getCustomer(this.input.getHolder().getId());
 
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
-				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), input.getSaleChannelId());
+				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), this.input.getSaleChannelId());
 
-		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input.getHolder().getId());
+		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), this.input.getHolder().getId());
 
 		this.getTierToUpdateRequest(input);
 
@@ -67,7 +68,7 @@ public class SimulationParameter implements PreSimulation {
 		payloadConfig.setCustomerListASO(customerResponse);
 		payloadConfig.setListInsuranceProductModalityDAO(insuranceProductModalityDAOList);
 		payloadConfig.setSumCumulus(cumulo);
-		payloadConfig.setInput(input);
+		payloadConfig.setInput(this.input);
 		payloadConfig.setProperties(properties);
 
 		return payloadConfig;

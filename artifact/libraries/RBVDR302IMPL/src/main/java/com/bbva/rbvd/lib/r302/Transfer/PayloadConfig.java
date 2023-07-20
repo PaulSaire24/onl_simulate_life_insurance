@@ -12,8 +12,6 @@ public class PayloadConfig {
 
     private ProductInformationDAO productInformation;
     private BigDecimal sumCumulus;
-
-
     private CustomerListASO customerListASO;
 
     private List<InsuranceProductModalityDAO> listInsuranceProductModalityDAO;
