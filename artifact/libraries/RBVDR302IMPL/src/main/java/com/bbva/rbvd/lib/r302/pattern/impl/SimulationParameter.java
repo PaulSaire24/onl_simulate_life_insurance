@@ -21,6 +21,8 @@ import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ import java.util.Objects;
 
 
 public class SimulationParameter implements PreSimulation {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParameter.class);
 
 	private PISDR350 pisdR350;
 	private RBVDR301 rbvdR301;
@@ -48,6 +52,8 @@ public class SimulationParameter implements PreSimulation {
 
 	@Override
 	public PayloadConfig getConfig() {
+		LOGGER.info("***** SimulationParameter getConfig START *****");
+
 		PayloadConfig payloadConfig = new PayloadConfig();
 
 		PayloadProperties properties = this.getProperties(this.input);
@@ -104,7 +110,7 @@ public class SimulationParameter implements PreSimulation {
 	//@Override
 	public ProductInformationDAO getProduct(String productId) {
 
-		IProductDAO productDAO = new ProductDAOImpl(pisdR350);
+		IProductDAO productDAO = new ProductDAOImpl(this.pisdR350);
 		ProductInformationDAO product= productDAO.getProductInformationById(productId);
 
 		return product;
@@ -112,7 +118,7 @@ public class SimulationParameter implements PreSimulation {
 
 	//@Override
 	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
-		IContractDAO contractDAO = new ContractDAOImpl(pisdR350);
+		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
 		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(
 				insuranceProductId,
 				customerId);
