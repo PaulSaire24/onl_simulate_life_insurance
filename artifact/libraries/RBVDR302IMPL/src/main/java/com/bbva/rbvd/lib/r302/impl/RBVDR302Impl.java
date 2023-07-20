@@ -33,14 +33,14 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			simulation = new SimulationEasyYes(
 					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
-					, new SimulationStore()
+					, new SimulationStore(pisdR350)
 			);
 
 		} else if (input.getProduct().getId().equals("841")) {
 
 			simulation = new SimulationVidaDinamico(
 					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
-					new SimulationStore()
+					new SimulationStore(pisdR350)
 			);
 
 		}
