@@ -16,8 +16,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Impl.class);
 
-
-
 	/**
 	 * The execute method...
 	 */
@@ -33,20 +31,27 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			simulation = new SimulationEasyYes(
 					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
-					, new SimulationStore()
+					, new SimulationStore(this.pisdR350)
 			);
+
+			LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
 
 		} else if (input.getProduct().getId().equals("841")) {
 
 			simulation = new SimulationVidaDinamico(
 					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
-					new SimulationStore()
+					new SimulationStore(this.pisdR350)
 			);
+
+			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
 
 		}
 
 		//inicio
 		LifeSimulationDTO response = simulation.start(this.rbvdR301, this.applicationConfigurationService);
+
+		LOGGER.info("***** RBVDR302Impl - executeGetSimulation response  ***** {}", response);
+		LOGGER.info("***** RBVDR302Impl - executeGetSimulation END  *****");
 
 		return response;
 	}

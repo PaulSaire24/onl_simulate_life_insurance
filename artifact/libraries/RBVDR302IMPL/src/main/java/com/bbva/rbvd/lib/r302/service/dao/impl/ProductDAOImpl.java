@@ -9,6 +9,7 @@ import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
 import com.bbva.rbvd.lib.r302.transform.bean.ProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -24,8 +25,8 @@ public class ProductDAOImpl implements IProductDAO {
     @Override
     public ProductInformationDAO getProductInformationById(String productId)
     {
-        Map<String, Object> responseQueryGetProductInformation =
-                this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), ProductMap.mapProductId(productId));
+        Map<String,Object> arguments = ProductMap.mapProductId(productId);
+        Map<String, Object> responseQueryGetProductInformation = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), arguments);
 
         if(isEmpty(responseQueryGetProductInformation)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);

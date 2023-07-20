@@ -21,6 +21,11 @@ import java.util.Map;
 public class SimulationStore implements PostSimulation {
 
 	private PISDR350 pisdR350;
+
+	public SimulationStore(PISDR350 pisdR350) {
+		this.pisdR350=pisdR350;
+	}
+
 	public void end(PayloadStore payloadStore) {
 		BigDecimal nextId = this.getInsuranceSimulationId();
 		this.saveSimulation(payloadStore, nextId);

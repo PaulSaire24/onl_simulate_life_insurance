@@ -21,6 +21,8 @@ import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ContractDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,11 +32,12 @@ import java.util.Objects;
 
 public class SimulationParameter implements PreSimulation {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParameter.class);
+
 	private PISDR350 pisdR350;
 	private RBVDR301 rbvdR301;
 	private LifeSimulationDTO input;
 	private ApplicationConfigurationService applicationConfigurationService;
-	private PayloadConfig payloadConfig;
 
 	private com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
 
@@ -49,15 +52,19 @@ public class SimulationParameter implements PreSimulation {
 
 	@Override
 	public PayloadConfig getConfig() {
-		PayloadProperties properties = this.getProperties(input);
-		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
+		LOGGER.info("***** SimulationParameter getConfig START *****");
 
-		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
+		PayloadConfig payloadConfig = new PayloadConfig();
+
+		PayloadProperties properties = this.getProperties(this.input);
+		ProductInformationDAO productInformation = this.getProduct(this.input.getProduct().getId());
+
+		CustomerListASO customerResponse = this.getCustomer(this.input.getHolder().getId());
 
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
-				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), input.getSaleChannelId());
+				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), this.input.getSaleChannelId());
 
-		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input.getHolder().getId());
+		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), this.input.getHolder().getId());
 
 		this.getTierToUpdateRequest(input);
 
@@ -67,7 +74,7 @@ public class SimulationParameter implements PreSimulation {
 		payloadConfig.setCustomerListASO(customerResponse);
 		payloadConfig.setListInsuranceProductModalityDAO(insuranceProductModalityDAOList);
 		payloadConfig.setSumCumulus(cumulo);
-		payloadConfig.setInput(input);
+		payloadConfig.setInput(this.input);
 		payloadConfig.setProperties(properties);
 
 		return payloadConfig;
@@ -102,7 +109,7 @@ public class SimulationParameter implements PreSimulation {
 	//@Override
 	public ProductInformationDAO getProduct(String productId) {
 
-		IProductDAO productDAO = new ProductDAOImpl(pisdR350);
+		IProductDAO productDAO = new ProductDAOImpl(this.pisdR350);
 		ProductInformationDAO product= productDAO.getProductInformationById(productId);
 
 		return product;
@@ -110,7 +117,7 @@ public class SimulationParameter implements PreSimulation {
 
 	//@Override
 	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
-		IContractDAO contractDAO = new ContractDAOImpl(pisdR350);
+		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
 		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(
 				insuranceProductId,
 				customerId);
