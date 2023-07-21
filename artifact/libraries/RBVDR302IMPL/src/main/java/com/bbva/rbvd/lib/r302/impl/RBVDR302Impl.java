@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r302.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 
 import com.bbva.rbvd.lib.r302.pattern.Simulation;
@@ -26,34 +27,44 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
-		Simulation simulation = null;
-		if (input.getProduct().getId().equals("840")) {
+		try {
 
-			simulation = new SimulationEasyYes(
-					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
-					, new SimulationStore(this.pisdR350)
-			);
+			Simulation simulation = null;
+			if (input.getProduct().getId().equals("840")) {
 
-			LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
+				simulation = new SimulationEasyYes(
+						new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
+						, new SimulationStore(this.pisdR350)
+				);
 
-		} else if (input.getProduct().getId().equals("841")) {
+				LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
 
-			simulation = new SimulationVidaDinamico(
-					new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
-					new SimulationStore(this.pisdR350)
-			);
+			} else if (input.getProduct().getId().equals("841")) {
 
-			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
+				simulation = new SimulationVidaDinamico(
+						new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
+						new SimulationStore(this.pisdR350)
+				);
 
+				LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
+
+			}
+
+			//inicio
+			LifeSimulationDTO response = simulation.start(this.rbvdR301, this.applicationConfigurationService);
+
+			LOGGER.info("***** RBVDR302Impl - executeGetSimulation response  ***** {}", response);
+			LOGGER.info("***** RBVDR302Impl - executeGetSimulation END  *****");
+
+			return response;
+
+		}catch(BusinessException ex) {
+			LOGGER.debug("***** RBVDR302Impl - executeGetGenerate | Business exception message: {} *****", ex.getMessage());
+			this.addAdviceWithDescription(ex.getAdviceCode(), ex.getMessage());
+			return null;
 		}
 
-		//inicio
-		LifeSimulationDTO response = simulation.start(this.rbvdR301, this.applicationConfigurationService);
 
-		LOGGER.info("***** RBVDR302Impl - executeGetSimulation response  ***** {}", response);
-		LOGGER.info("***** RBVDR302Impl - executeGetSimulation END  *****");
-
-		return response;
 	}
 		//////////////////////////////////////////////////////------------
 

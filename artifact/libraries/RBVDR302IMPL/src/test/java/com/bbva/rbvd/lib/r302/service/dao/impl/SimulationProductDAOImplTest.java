@@ -3,12 +3,9 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
-import junit.framework.TestCase;
-import org.junit.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.web.client.RestClientException;
 
 import java.util.HashMap;
 import java.util.Map;
