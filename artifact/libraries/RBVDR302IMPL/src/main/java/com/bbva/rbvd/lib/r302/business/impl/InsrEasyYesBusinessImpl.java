@@ -29,7 +29,7 @@ import java.util.*;
 
 public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
-    private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
+    public static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
     private static final String ANNUAL_PERIOD_ID = "ANNUAL";
     private static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
     private static final String CONTACT_DETAIL_MOBILE_TYPE = "MOBILE_NUMBER";
@@ -45,8 +45,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
     private RBVDR301 rbvdR301;
     private ApplicationConfigurationService applicationConfigurationService;
-
-
 
     public InsrEasyYesBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.rbvdR301 = rbvdR301;
@@ -121,6 +119,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
             GifoleInsuranceRequestASO gifoleInsuranceRequest = this.createGifoleASO(response, responseListCustomers);
 
             Integer httpStatusGifole = rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
+            //rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
 
             //LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
         }
