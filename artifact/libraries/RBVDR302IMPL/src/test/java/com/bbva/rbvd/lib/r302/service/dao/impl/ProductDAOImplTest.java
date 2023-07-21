@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.web.client.RestClientException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class ProductDAOImplTest {
 
+    //private IProductDAO iProductDAOImpl;
     private ProductDAOImpl productDAOImpl;
     private PISDR350 pisdR350;
     private String productId;
@@ -31,11 +31,14 @@ public class ProductDAOImplTest {
     @Before
     public void setUp() throws Exception {
 
+        //iProductDAOImpl = mock(IProductDAO.class);
+
         pisdR350 = mock(PISDR350.class);
 
         productId = "841";
 
         productDAOImpl = new ProductDAOImpl(pisdR350);
+
     }
 
     @Test(expected = BusinessException.class)

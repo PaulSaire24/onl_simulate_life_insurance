@@ -35,7 +35,6 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
     @Override
     public void getInsertInsuranceSimulation(Map<String, Object> argumentsForSaveSimulation) {
 
-        //LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSURANCE_SIMULATION *****");
         int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),argumentsForSaveSimulation);
         if(idNewSimulation != 1) {
             throw RBVDValidation.build(RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
