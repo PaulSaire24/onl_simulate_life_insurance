@@ -31,9 +31,7 @@ public class ProductDAOImpl implements IProductDAO {
             throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);
         }
 
-        ProductInformationDAO productInformationDAO = ProductBean.getProductInformation(responseQueryGetProductInformation);
-
-        return productInformationDAO;
+        return ProductBean.getProductInformation(responseQueryGetProductInformation);
 
     }
 

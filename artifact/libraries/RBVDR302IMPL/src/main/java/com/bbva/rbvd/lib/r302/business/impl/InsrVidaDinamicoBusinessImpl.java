@@ -120,7 +120,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
         //Revisar si es necesario esta línea:
-        //response.getProduct().setId(payloadConfig.getInput().getProduct().getId());
         response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
         return response;
     }

@@ -11,15 +11,20 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
+import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class GifoleBusinessImpl implements IGifoleBusiness {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GifoleBusinessImpl.class);
 
     private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
     private static final String ANNUAL_PERIOD_ID = "ANNUAL";
@@ -47,25 +52,19 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
     @Override
     public void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
-        //LOGGER.info("Param 1 - LifeSimulationDTO : {}", response);
-        //LOGGER.info("Param 2 - CustomerListASO : {}", responseListCustomers);
-
         String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
 
-        //LOGGER.info("FLAG : {}", flag);
 
         if(flag.equals("true")){
 
-            //LOGGER.info("***** RBVDR302Impl - executeGetSimulation | createGifoleInsuranceRequest invokation *****");
-
-            //LOGGER.info("FLAG after -> {}", flag);
+            LOGGER.info("***** RBVDR302Impl - executeGetSimulation | createGifoleInsuranceRequest invokation ***** --- FLAG after -> {}", flag);
 
             GifoleInsuranceRequestASO gifoleInsuranceRequest = this.createGifoleASO(response, responseListCustomers);
-            //LOGGER.info("**** RBVDR302Impl - GifoleInsuranceRequestASO gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
+            LOGGER.info("**** RBVDR302Impl - GifoleInsuranceRequestASO gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
 
             Integer httpStatusGifole = rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
 
-            //LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
+            LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
         }
     }
 

@@ -33,8 +33,7 @@ public class ContractDAOImpl implements IContractDAO {
             throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);
         }
 
-        BigDecimal sumCumulus = this.getCumuls(responseQueryGetCumulus);
-        return sumCumulus;
+        return this.getCumuls(responseQueryGetCumulus);
     }
 
     //valida la cantidad asegurada
@@ -42,7 +41,7 @@ public class ContractDAOImpl implements IContractDAO {
 
         List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryGetCumulus.get(PISDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
         BigDecimal sum = BigDecimal.ZERO;
-        if(!isEmpty(rows) && rows.size()!=0) {
+        if(!isEmpty(rows) && !rows.isEmpty()) {
             List<BigDecimal> listCumulus = rows.stream().map(this::createListCumulus).collect(toList());
             for (BigDecimal amt : listCumulus) {
                 sum = sum.add(amt);

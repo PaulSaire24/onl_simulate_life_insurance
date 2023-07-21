@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
     private final PISDR350 pisdR350;
-    private ValidationUtil validationUtil;
 
     public InsuranceSimulationDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
@@ -24,10 +23,6 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
     public BigDecimal getSimulationNextVal() {
 
         Map<String, Object> responseGetInsuranceSimulationMap = this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),new HashMap<>());
-
-        /*if(isEmpty(responseGetInsuranceSimulationMap)) {
-            throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
-        }*/
 
         return (BigDecimal) responseGetInsuranceSimulationMap.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
     }

@@ -12,11 +12,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GifoleBusinessImplTest  {
@@ -44,6 +48,7 @@ public class GifoleBusinessImplTest  {
 
         gifoleBusiness = new GifoleBusinessImpl(rbvdR301,applicationConfigurationService);
     }
+
     @Test
     public void createGifoleASO_OK() throws IOException {
 
@@ -77,6 +82,15 @@ public class GifoleBusinessImplTest  {
         GifoleInsuranceRequestASO validation = gifoleBusiness.createGifoleASO(responseOut, null);
 
         Assert.assertNotNull(validation);
+    }
+    @Test
+    public void serviceAddGifoleCaseElseTest() throws IOException {
+        when(applicationConfigurationService.getProperty(anyString())).thenReturn("true");
+        requestCustomerListASO = mockDTO.getCustomerDataResponse();
+
+        gifoleBusiness.serviceAddGifole(responseOut, requestCustomerListASO);
+
+        Mockito.verify(rbvdR301, Mockito.atLeastOnce()).executeGifolelifeService(anyObject());
     }
 
 }

@@ -32,9 +32,7 @@ public class ModalitiesDAOImpl implements IModalitiesDAO {
         }
 
 
-        List<InsuranceProductModalityDAO>  listInsuranceProductModalityDAO = ValidationUtil.
+        return ValidationUtil.
                 validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
-
-        return listInsuranceProductModalityDAO;
     }
 }

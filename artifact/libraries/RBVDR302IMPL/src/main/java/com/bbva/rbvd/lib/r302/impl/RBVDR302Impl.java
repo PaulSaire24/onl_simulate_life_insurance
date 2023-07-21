@@ -1,14 +1,11 @@
 package com.bbva.rbvd.lib.r302.impl;
 
-import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-
 import com.bbva.rbvd.lib.r302.pattern.Simulation;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +14,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Impl.class);
 
-	/**
-	 * The execute method...
-	 */
 	//Ejecuta cómo obtener la simulación
 	@Override
 	public LifeSimulationDTO executeGetSimulation(LifeSimulationDTO input) {
@@ -27,43 +21,37 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
-		try {
 
-			Simulation simulation = null;
-			if (input.getProduct().getId().equals("840")) {
+		LifeSimulationDTO response = new LifeSimulationDTO();
+		Simulation simulation;
+		if (input.getProduct().getId().equals("840")) {
 
-				simulation = new SimulationEasyYes(
-						new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService)
-						, new SimulationStore(this.pisdR350)
-				);
+			simulation = new SimulationEasyYes(
+					new SimulationParameter(this.pisdR350, this.rbvdR301, this.applicationConfigurationService)
+					, new SimulationStore(this.pisdR350)
+			);
 
-				LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
+			LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
+			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 
-			} else if (input.getProduct().getId().equals("841")) {
+		} else if (input.getProduct().getId().equals("841")) {
 
-				simulation = new SimulationVidaDinamico(
-						new SimulationParameter(this.pisdR350, this.rbvdR301, input, this.applicationConfigurationService),
-						new SimulationStore(this.pisdR350)
-				);
+			simulation = new SimulationVidaDinamico(
+					new SimulationParameter(this.pisdR350, this.rbvdR301, this.applicationConfigurationService),
+					new SimulationStore(this.pisdR350)
+			);
 
-				LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
-
-			}
-
-			//inicio
-			LifeSimulationDTO response = simulation.start(this.rbvdR301, this.applicationConfigurationService);
-
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation response  ***** {}", response);
-			LOGGER.info("***** RBVDR302Impl - executeGetSimulation END  *****");
-
-			return response;
-
-		}catch(BusinessException ex) {
-			LOGGER.debug("***** RBVDR302Impl - executeGetGenerate | Business exception message: {} *****", ex.getMessage());
-			this.addAdviceWithDescription(ex.getAdviceCode(), ex.getMessage());
-			return null;
+			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
+			 response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 		}
 
+		//inicio
+
+
+		LOGGER.info("***** RBVDR302Impl - executeGetSimulation response  ***** {}", response);
+		LOGGER.info("***** RBVDR302Impl - executeGetSimulation END  *****");
+
+		return response;
 
 	}
 		//////////////////////////////////////////////////////------------

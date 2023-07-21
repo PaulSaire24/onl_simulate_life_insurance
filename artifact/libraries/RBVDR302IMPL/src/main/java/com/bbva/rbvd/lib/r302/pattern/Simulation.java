@@ -6,6 +6,6 @@ import com.bbva.rbvd.lib.r301.RBVDR301;
 
 public interface Simulation{
 
-	LifeSimulationDTO start(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService);
+	LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService);
 	
 }

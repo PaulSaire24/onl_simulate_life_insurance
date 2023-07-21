@@ -35,15 +35,14 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         //construccion de respuesta trx
         LifeSimulationDTO response = prepareResponse(applicationConfigurationService, payloadConfig, responseRimac);
 
-        return new PayloadStore(
-                payloadConfig.getInput().getCreationUser(),
-                payloadConfig.getInput().getUserAudit(),
-                responseRimac,
-                response,
-                payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId(),
-                payloadConfig.getProductInformation()
-        );
-
+        PayloadStore payloadStore = new PayloadStore();
+        payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
+        payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
+        payloadStore.setResponseRimac(        responseRimac);
+        payloadStore.setResponse(response);
+        payloadStore.setDocumentTypeId( payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId());
+        payloadStore.setProductInformation(   payloadConfig.getProductInformation());
+        return payloadStore;
     }
 
     private LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
@@ -61,7 +60,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
 
         //Revisar si es necesario esta línea:
-        //response.getProduct().setId(payloadConfig.getInput().getProduct().getId());
         response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
         return response;
     }

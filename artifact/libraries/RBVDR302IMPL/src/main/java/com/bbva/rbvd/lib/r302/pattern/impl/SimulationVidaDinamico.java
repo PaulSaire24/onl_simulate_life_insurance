@@ -10,17 +10,21 @@ import com.bbva.rbvd.lib.r302.business.impl.InsrVidaDinamicoBusinessImpl;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimulationVidaDinamico extends SimulationDecorator{
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
 
 	public SimulationVidaDinamico(PreSimulation preSimulation, PostSimulation postSimulation) {
 		super(preSimulation, postSimulation );
 	}
 
 	@Override
-	public LifeSimulationDTO start(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
+	public LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() START *****");
 
-		PayloadConfig payloadConfig = this.getPreSimulation().getConfig();
+		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
@@ -32,10 +36,10 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 			this.getPostSimulation().end(payloadStore);
 		}
 
-		//LOGGER.debug("***** RBVDR302Impl - executeGetSimulation deb ***** Response: {}", response);
-		//LOGGER.info("***** RBVDR302Impl - executeGetSimulation info ***** Response: {}", response);
 
-		//LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
+
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() END *****");
 
 		return payloadStore.getResponse();
 	}

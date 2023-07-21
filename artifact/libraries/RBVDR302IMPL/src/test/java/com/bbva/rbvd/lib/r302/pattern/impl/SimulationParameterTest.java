@@ -71,7 +71,7 @@ public class SimulationParameterTest extends TestCase {
         when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
         tier.getData().get(0).setSegments(null);
         when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-        SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,input,applicationConfigurationService);
+        SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,applicationConfigurationService);
         //when
 
         simulationParameter.getTierToUpdateRequest(input);

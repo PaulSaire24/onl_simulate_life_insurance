@@ -13,7 +13,7 @@ public class PayloadStore {
     private String documentTypeId;
     private ProductInformationDAO productInformation;
 
-
+    public PayloadStore(){}
     public PayloadStore(String creationUser, String userAudit, InsuranceLifeSimulationBO responseRimac, LifeSimulationDTO response, String documentTypeId, ProductInformationDAO productInformation) {
         this.creationUser = creationUser;
         this.userAudit = userAudit;
