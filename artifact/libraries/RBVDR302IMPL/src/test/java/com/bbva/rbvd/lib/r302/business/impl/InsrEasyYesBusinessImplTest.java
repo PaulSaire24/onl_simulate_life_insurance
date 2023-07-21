@@ -1,10 +1,12 @@
 package com.bbva.rbvd.lib.r302.business.impl;
-
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-
+import java.math.BigDecimal;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 
@@ -37,6 +39,18 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
     private RBVDR301 rbvdR301;
     @Mock
     private ApplicationConfigurationService applicationConfigurationService;
+    @Mock
+    private GifoleInsuranceRequestASO gifoleInsuranceRequest;
+    @Mock
+    private InsuranceLifeSimulationBO responseRimac;
+    @Mock
+    private LifeSimulationDTO input;
+    @Mock
+    private BigDecimal cumulo;
+    @Mock
+    private String productInformation;
+    @Mock
+    private InsuranceLifeSimulationBO requestRimac;
 
     @Before
     public void setUp() throws Exception {
@@ -45,32 +59,46 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
 
         //instanciar los atributos
-        //LifeSimulationDTO response = mockData( );
-        //CustomerListASO responseListCustomers =mockData();
+        applicationConfigurationService = mock(ApplicationConfigurationService.class);
+        input = new LifeSimulationDTO();
+        rbvdR301 = mock(RBVDR301.class);
+        //requestRimac = QuotationRimac.mapInRequestRimacLife(input, cumulo);
+        //responseRimac = rbvdR301.executeSimulationRimacService();
 
     }
 
     @Test
 
-    public void serviceAddGifoleNull() throws IOException {
+    public void serviceAddGifoleTest() throws IOException {
         //given
         String flag = this.applicationConfigurationService.getProperty(anyString());
 
         //when
-
+        //when(flag.equals("true")).thenReturn(gifoleInsuranceRequest.createGifoleASO(response, responseListCustomers));
         //then
+        //assertEquals(rbvdR301.executeGifolelifeService(gifoleInsuranceRequest));
 
     }
 
-    /*
+
+
     @Test
-    public void serviceAddGifoleTrue(){
-        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301,applicationConfigurationService);
-        when(this.applicationConfigurationService.getProperty(anyString())).thenReturn("true");
-        response.setProduct(Mockito.anyObject());
+    public void serviceAddGifoleTrue() {
+        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301, applicationConfigurationService);
+        //when(this.applicationConfigurationService.getProperty(anyString())).thenReturn("true");
+        //response.setProduct(Mockito.anyObject());
 
 
-        insrEasyYesBusiness.serviceAddGifole(response,responseListCustomers);
+        //insrEasyYesBusiness.serviceAddGifole(response, responseListCustomers);
+    }
+    @Test
+    public void callQuotationRimacServiceTest() throws IOException{
+        //given
 
-    }*/
+        //when
+        //when(Objects.isNull(responseRimac)).thenReturn(requestRimac,input.getTraceId());
+        //then
+        //InsrEasyYesBusinessImpl insrEasyYesBusiness = InsrEasyYesBusinessImpl(rbvdR301,applicationConfigurationService);
+        //assertEquals(1, RBVDValidation.build(RBVDErrors.(anyString())));
+    }
 }
