@@ -61,7 +61,7 @@ public class SimulationStoreTest {
         //simulation = new SimulationStore(pisdR350);
         //BigDecimal resul = simulation.getInsuranceSimulationId();
         //when
-            simulation.end(payloadStore);
+        simulation.end(payloadStore);
         //then
         Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(), new HashMap<>());
     }

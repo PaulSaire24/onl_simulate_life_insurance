@@ -2,19 +2,23 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -22,19 +26,18 @@ import static org.mockito.Mockito.mock;
         "classpath:/META-INF/spring/RBVDR302-app-test.xml",
         "classpath:/META-INF/spring/RBVDR302-arc.xml",
         "classpath:/META-INF/spring/RBVDR302-arc-test.xml" })
-public class ModalitiesDAOImplTest {
+public class InsuranceSimulationDAOImplTest {
     private PISDR350 pisdR350;
-    private ModalitiesDAOImpl modalities;
+    private InsuranceSimulationDAOImpl insuranceSimulation;
     @Before
     public void setup(){
         pisdR350 = mock(PISDR350.class);
-        modalities = new ModalitiesDAOImpl(pisdR350);
+        insuranceSimulation = new InsuranceSimulationDAOImpl(pisdR350);
     }
     @Test(expected = BusinessException.class)
-    public void getModalitiesInfoIsEmpit(){
-        List<InsuranceProductModalityDAO> result = modalities.getModalitiesInfo("null", BigDecimal.valueOf(1), null);
+    public void getInsertInsuranceSimulationFailCase() {
 
-        Assert.assertNotNull(result);
-        //Assert.assertThrows(result);
+        insuranceSimulation.getInsertInsuranceSimulation(null);
+        Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),null);
     }
 }
