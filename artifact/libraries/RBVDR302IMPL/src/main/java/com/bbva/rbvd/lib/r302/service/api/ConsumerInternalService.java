@@ -23,8 +23,4 @@ public class ConsumerInternalService {
 
     public CustomerListASO callListCustomerResponse(String customerId){ return rbvdR301.executeCallListCustomerResponse(customerId);}
 
-    //public Integer callGifoleService(GifoleInsuranceRequestASO gifoleInsuranceRequest){
-    //    return rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
-    //}
-
 }

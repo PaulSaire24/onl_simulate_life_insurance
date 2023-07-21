@@ -26,16 +26,19 @@ public class SimulationStore implements PostSimulation {
 		this.pisdR350=pisdR350;
 	}
 
+	@Override
 	public void end(PayloadStore payloadStore) {
 		BigDecimal nextId = this.getInsuranceSimulationId();
 		this.saveSimulation(payloadStore, nextId);
 		this.saveSimulationProd(payloadStore,nextId);
 	}
+
+
 	public BigDecimal getInsuranceSimulationId(){
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
 		return insuranceSimulationDao.getSimulationNextVal();
 	}
-	//@Override
+
 	public void saveSimulation(PayloadStore payloadStore, BigDecimal insuranceSimulationId) {
 
 		//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
@@ -50,7 +53,7 @@ public class SimulationStore implements PostSimulation {
 
 	}
 
-	//@Override
+
 	public void saveSimulationProd(PayloadStore payloadStore,BigDecimal insuranceSimulationId) {
 
 		SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(
@@ -67,4 +70,6 @@ public class SimulationStore implements PostSimulation {
 		ISimulationProductDAO iSimulationProductDAO = new SimulationProductDAOImpl(pisdR350);
 		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 	}
+
+
 }

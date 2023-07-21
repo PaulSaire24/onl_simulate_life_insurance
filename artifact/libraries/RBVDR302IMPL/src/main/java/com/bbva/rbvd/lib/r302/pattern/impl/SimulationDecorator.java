@@ -6,7 +6,7 @@ import com.bbva.rbvd.lib.r302.pattern.Simulation;
 
 public abstract class SimulationDecorator implements Simulation {
 
-	//private Simulation simulation;
+
 	private PreSimulation preSimulation;
 	private PostSimulation postSimulation;
 
@@ -25,9 +25,5 @@ public abstract class SimulationDecorator implements Simulation {
 		return postSimulation;
 	}
 
-	
-//	public void getProperties();
-//	public void getProduct();
-//	public void getCumulos();
-//	public void getCustomer();
+
 }

@@ -48,7 +48,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
 
 
-
     public InsrEasyYesBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.rbvdR301 = rbvdR301;
         this.applicationConfigurationService = applicationConfigurationService;
@@ -112,21 +111,14 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     //Agrega el servicio Gifole
     public void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
-        //LOGGER.info("Param 1 - LifeSimulationDTO : {}", response);
-        //LOGGER.info("Param 2 - CustomerListASO : {}", responseListCustomers);
 
         String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
 
-        //LOGGER.info("FLAG : {}", flag);
 
         if(flag.equals("true")){
 
-            //LOGGER.info("***** RBVDR302Impl - executeGetSimulation | createGifoleInsuranceRequest invokation *****");
-
-            //LOGGER.info("FLAG after -> {}", flag);
 
             GifoleInsuranceRequestASO gifoleInsuranceRequest = this.createGifoleASO(response, responseListCustomers);
-            //LOGGER.info("**** RBVDR302Impl - GifoleInsuranceRequestASO gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
 
             Integer httpStatusGifole = rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
 
