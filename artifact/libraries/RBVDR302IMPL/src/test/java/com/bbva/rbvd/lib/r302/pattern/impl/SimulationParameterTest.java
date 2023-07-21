@@ -6,7 +6,6 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TierDTO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -22,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -2,9 +2,6 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -14,13 +11,10 @@ import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.util.Map;
-
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import static org.mockito.Mockito.mock;
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:/META-INF/spring/RBVDR302-app.xml",

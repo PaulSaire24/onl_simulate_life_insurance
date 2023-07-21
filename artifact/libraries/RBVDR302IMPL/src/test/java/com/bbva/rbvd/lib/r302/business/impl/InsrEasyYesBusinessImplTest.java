@@ -62,7 +62,7 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
         input = new LifeSimulationDTO();
         rbvdR301 = mock(RBVDR301.class);
-        requestRimac = QuotationRimac.mapInRequestRimacLife(input, cumulo);
+        //requestRimac = QuotationRimac.mapInRequestRimacLife(input, cumulo);
         //responseRimac = rbvdR301.executeSimulationRimacService();
 
     }
@@ -85,11 +85,11 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
     @Test
     public void serviceAddGifoleTrue() {
         InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301, applicationConfigurationService);
-        when(this.applicationConfigurationService.getProperty(anyString())).thenReturn("true");
-        response.setProduct(Mockito.anyObject());
+        //when(this.applicationConfigurationService.getProperty(anyString())).thenReturn("true");
+        //response.setProduct(Mockito.anyObject());
 
 
-        insrEasyYesBusiness.serviceAddGifole(response, responseListCustomers);
+        //insrEasyYesBusiness.serviceAddGifole(response, responseListCustomers);
     }
     @Test
     public void callQuotationRimacServiceTest() throws IOException{

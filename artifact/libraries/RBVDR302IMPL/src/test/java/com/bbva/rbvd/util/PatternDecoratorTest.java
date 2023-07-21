@@ -1,11 +1,6 @@
 package com.bbva.rbvd.util;
 
-import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-import com.bbva.rbvd.lib.r302.pattern.Simulation;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
+
 import org.junit.Before;
 import org.junit.Test;
 

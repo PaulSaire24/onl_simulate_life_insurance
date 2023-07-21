@@ -2,18 +2,9 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r302.service.dao.IModalitiesDAO;
-import com.bbva.rbvd.lib.r302.service.dao.IProductDAO;
-import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
