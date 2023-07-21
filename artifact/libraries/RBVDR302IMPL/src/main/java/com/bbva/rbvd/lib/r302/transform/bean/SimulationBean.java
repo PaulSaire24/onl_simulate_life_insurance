@@ -9,12 +9,14 @@ import java.util.Date;
 
 public class SimulationBean {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 
     private SimulationBean(){}
 
     public static SimulationDAO createSimulationDAO(BigDecimal insuranceSimulationId, final Date maturityDate, LifeSimulationDTO insuranceSimulationDTO) {
         SimulationDAO simulationDAO = new SimulationDAO();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
         simulationDAO.setInsuranceSimulationId(insuranceSimulationId);
         simulationDAO.setInsrncCompanySimulationId(insuranceSimulationDTO.getExternalSimulationId());
         simulationDAO.setCustomerId(insuranceSimulationDTO.getHolder().getId());

@@ -3,7 +3,6 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
