@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.transform.objects;
+package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;

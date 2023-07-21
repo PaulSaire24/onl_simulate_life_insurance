@@ -22,12 +22,11 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 //import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -292,7 +291,6 @@ public class RBVDR302Test {
 
 	}
 
-	@NotNull
 	private static CustomerListASO getCustomerListASO() {
 		BirthDataBO birthDataBO = new BirthDataBO();
 		birthDataBO.setBirthDate("1994-04-25");

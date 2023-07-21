@@ -3,7 +3,7 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.service.dao.IInsuranceSimulationDAO;
 import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;

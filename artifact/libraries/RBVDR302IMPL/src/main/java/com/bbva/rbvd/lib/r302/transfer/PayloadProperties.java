@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.Transfer;
+package com.bbva.rbvd.lib.r302.transfer;
 
 import java.util.List;
 

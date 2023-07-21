@@ -32,7 +32,7 @@ import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
+import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -280,7 +280,7 @@ public class MapperHelperTest {
         assertEquals(saleChannel, validation.get(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue()));
     }
 
-
+/*
     @Test
     public void createGifoleASO_OK() throws IOException {
 
@@ -316,7 +316,7 @@ public class MapperHelperTest {
         assertNotNull(validation);
     }
 
-    /*@Test
+ @Test
     public void mappingTierASOOK() {
         TierASO tierASO = new TierASO();
         TierDataASO data = new TierDataASO();

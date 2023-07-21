@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.Transfer;
+package com.bbva.rbvd.lib.r302.transfer;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;

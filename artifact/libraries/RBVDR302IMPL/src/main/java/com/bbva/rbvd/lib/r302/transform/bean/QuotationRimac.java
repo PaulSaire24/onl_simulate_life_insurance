@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.transform.objects;
+package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
