@@ -18,7 +18,6 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class ContractDAOImpl implements IContractDAO {
 
     private PISDR350 pisdR350;
-    private ProductDAOImpl productDAO;
 
     public ContractDAOImpl(PISDR350 pisdR350) {
         this.pisdR350 = pisdR350;
