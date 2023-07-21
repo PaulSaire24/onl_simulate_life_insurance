@@ -32,7 +32,7 @@ import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
+//import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.junit.Before;
 import org.junit.Ignore;
