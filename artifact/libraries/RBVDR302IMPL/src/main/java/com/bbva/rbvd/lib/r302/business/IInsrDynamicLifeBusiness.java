@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 
 public interface IInsrDynamicLifeBusiness {
 
-    InsuranceLifeSimulationBO executeQuotationRimacService(LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo, ApplicationConfigurationService applicationConfigurationService);
-    InsuranceLifeSimulationBO executeModifyQuotationRimacService(LifeSimulationDTO input,CustomerListASO customerListASO,BigDecimal cumulo, ApplicationConfigurationService applicationConfigurationService);
     PayloadStore doDynamicLife( PayloadConfig payloadConfig);
 
 }

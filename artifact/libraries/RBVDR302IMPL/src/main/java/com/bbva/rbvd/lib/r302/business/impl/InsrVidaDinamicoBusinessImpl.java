@@ -29,10 +29,9 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         this.applicationConfigurationService = applicationConfigurationService;
     }
 
-    @Override
+
     public InsuranceLifeSimulationBO executeQuotationRimacService(
-            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo,
-            ApplicationConfigurationService applicationConfigurationService) {
+            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo) {
 
         InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,cumulo);
         requestRimac.getPayload().setProducto(businessName);
@@ -52,10 +51,9 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return responseRimac;
     }
 
-    @Override
+
     public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,CustomerListASO customerListASO,BigDecimal cumulo,
-            ApplicationConfigurationService applicationConfigurationService) {
+            LifeSimulationDTO input,CustomerListASO customerListASO,BigDecimal cumulo){
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
 
@@ -83,14 +81,13 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    applicationConfigurationService);
+                    payloadConfig.getSumCumulus()
+                    );
         }else{
             responseRimac = this.executeModifyQuotationRimacService(
                     payloadConfig.getInput(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    applicationConfigurationService
+                    payloadConfig.getSumCumulus()
             );
         }
 

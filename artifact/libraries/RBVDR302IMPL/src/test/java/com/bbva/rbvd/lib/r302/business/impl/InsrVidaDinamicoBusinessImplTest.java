@@ -62,7 +62,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         mockDTO = MockDTO.getInstance();
         customerList = mockDTO.getCustomerDataResponse();
         requestInput = mockData.getInsuranceSimulationRequest();
-        insrVidaDinamicoBusiness = new InsrVidaDinamicoBusinessImpl(rbvdR301,applicationConfigurationService);
+        insrVidaDinamicoBusiness = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
 
         properties = new PayloadProperties();
@@ -123,8 +123,8 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "",
                 customerList,
-                BigDecimal.valueOf(1),
-                applicationConfigurationService);
+                BigDecimal.valueOf(1)
+                );
     //then
         Assert.assertNull(result);
     }
@@ -141,8 +141,8 @@ public class InsrVidaDinamicoBusinessImplTest{
         InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeModifyQuotationRimacService(
                 requestInput,
                 customerList,
-                BigDecimal.valueOf(1),
-                applicationConfigurationService);
+                BigDecimal.valueOf(1)
+                );
         //then
         Assert.assertNull(result);
     }
