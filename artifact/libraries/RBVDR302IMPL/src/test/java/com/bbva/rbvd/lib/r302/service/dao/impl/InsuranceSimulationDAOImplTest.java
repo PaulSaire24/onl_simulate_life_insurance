@@ -13,8 +13,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import static org.mockito.Mockito.mock;
 
+import java.io.IOException;
+import java.util.Map;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import static org.mockito.Mockito.mock;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:/META-INF/spring/RBVDR302-app.xml",
@@ -23,17 +29,10 @@ import static org.mockito.Mockito.mock;
         "classpath:/META-INF/spring/RBVDR302-arc-test.xml" })
 
 public class InsuranceSimulationDAOImplTest extends TestCase {
+
     private PISDR350 pisdR350;
     private InsuranceSimulationDAOImpl insuranceSimulation;
-    @Before
-    public void setup(){
-        pisdR350 = mock(PISDR350.class);
-        insuranceSimulation = new InsuranceSimulationDAOImpl(pisdR350);
-    }
-    @Test(expected = BusinessException.class)
-    public void getInsertInsuranceSimulationFailCase() {
-    private PISDR350 pisdR350;
-    private InsuranceSimulationDAOImpl insuranceSimulation;
+
 
     @Before
     public void setUp() {
@@ -41,19 +40,6 @@ public class InsuranceSimulationDAOImplTest extends TestCase {
         insuranceSimulation = new InsuranceSimulationDAOImpl(pisdR350);
     }
 
-    /*@Test
-    public void InsuranceSimulationDAOImplNotOne() {
-        //Agregando tres partes para el test
-        //given
-        when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(2);
-        InsuranceSimulationDAOImpl insuranceSimulationDAO = new InsuranceSimulationDAOImpl(pisdR350);
-        //when(rbvdValidation.build(any)(RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
-        //when
-        insuranceSimulationDAO.getInsertInsuranceSimulation(argumentsForSaveSimulation);
-        //then
-        assertEquals(2, argumentsForSaveSimulation.get(new Object()));
-
-    }*/
 
     @Test(expected = BusinessException.class)
     public void getInsertInsuranceSimulationFailCase() {
