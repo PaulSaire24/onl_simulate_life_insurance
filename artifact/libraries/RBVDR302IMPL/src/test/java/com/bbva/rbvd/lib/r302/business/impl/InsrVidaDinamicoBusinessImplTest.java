@@ -49,7 +49,6 @@ import static org.mockito.Mockito.when;
 public class InsrVidaDinamicoBusinessImplTest{
     private RBVDR301 rbvdR301;
     private InsrVidaDinamicoBusinessImpl insrVidaDinamicoBusiness;
-    private TierASO responseTier;
     private CustomerListASO customerList;
     private ApplicationConfigurationService applicationConfigurationService;
     private LifeSimulationDTO requestInput;
