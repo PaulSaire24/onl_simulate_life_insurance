@@ -3,8 +3,10 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
+import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
+import com.bbva.rbvd.lib.r302.business.impl.GifoleBusinessImpl;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
@@ -26,13 +28,14 @@ public class SimulationEasyYes extends SimulationDecorator{
 
 		IInsrEasyYesBusiness seguroEasyYes = new InsrEasyYesBusinessImpl(rbvdR301,applicationConfigurationService);
 
-		PayloadStore payloadStore = seguroEasyYes.doEasyYes(applicationConfigurationService, payloadConfig);
+		PayloadStore payloadStore = seguroEasyYes.doEasyYes(payloadConfig);
 
 		//guardar en bd
 		this.getPostSimulation().end(payloadStore);
 
 		//llamada a gifole
-		seguroEasyYes.serviceAddGifole(payloadStore.getResponse(),payloadConfig.getCustomerListASO());
+		IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301,applicationConfigurationService);
+		iGifoleBusiness.serviceAddGifole(payloadStore.getResponse(),payloadConfig.getCustomerListASO());
 
 
 		//LOGGER.info("***** RBVDR302Impl - executeGetSimulation END *****");

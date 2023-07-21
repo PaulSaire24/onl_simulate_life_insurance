@@ -7,25 +7,26 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.business.ISeguroVidaDinamico;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
+import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
-import com.bbva.rbvd.lib.r302.transform.objects.ModifyQuotationRimac;
-import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
+import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
+import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class InsrVidaDinamicoBusinessImpl implements ISeguroVidaDinamico {
+public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     private RBVDR301 rbvdR301;
+    private ApplicationConfigurationService applicationConfigurationService;
 
-    public InsrVidaDinamicoBusinessImpl(RBVDR301 rbvdR301) {
+    public InsrVidaDinamicoBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.rbvdR301 = rbvdR301;
+        this.applicationConfigurationService = applicationConfigurationService;
     }
 
     @Override
@@ -66,14 +67,14 @@ public class InsrVidaDinamicoBusinessImpl implements ISeguroVidaDinamico {
         }
 
         if(Objects.isNull(responseRimac)){
-            throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
+                throw RBVDValidation.build(RBVDErrors.ERROR_FROM_RIMAC);
         }
 
         return responseRimac;
     }
 
     @Override
-    public PayloadStore doDynamicLife(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig) {
+    public PayloadStore doDynamicLife( PayloadConfig payloadConfig) {
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
 
@@ -108,7 +109,6 @@ public class InsrVidaDinamicoBusinessImpl implements ISeguroVidaDinamico {
 
     }
 
-    @NotNull
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
         LifeSimulationDTO response;
         ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
