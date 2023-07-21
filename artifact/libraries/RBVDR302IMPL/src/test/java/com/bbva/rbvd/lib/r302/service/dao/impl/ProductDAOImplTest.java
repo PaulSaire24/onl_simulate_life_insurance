@@ -15,6 +15,8 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,15 +41,13 @@ public class ProductDAOImplTest {
 
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void getProductInformationByIdTest_NULL(){
 
-        when(this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).
+        when(this.pisdR350.executeGetASingleRow(anyString(), anyMap())).
                 thenReturn(null);
 
-        ProductInformationDAO productInformationDAO = productDAOImpl.getProductInformationById(Mockito.anyString());
-
-        Assert.assertNull(productInformationDAO);
+        productDAOImpl.getProductInformationById(productId);
     }
 
 }
