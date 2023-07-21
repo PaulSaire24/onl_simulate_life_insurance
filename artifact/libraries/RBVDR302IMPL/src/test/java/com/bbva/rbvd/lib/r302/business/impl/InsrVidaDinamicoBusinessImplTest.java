@@ -3,28 +3,23 @@ package com.bbva.rbvd.lib.r302.business.impl;
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
-import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadProperties;
-import com.bbva.rbvd.lib.r302.Transfer.PayloadStore;
-import junit.framework.TestCase;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
+import com.bbva.rbvd.lib.r302.transfer.PayloadProperties;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -67,7 +62,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         mockDTO = MockDTO.getInstance();
         customerList = mockDTO.getCustomerDataResponse();
         requestInput = mockData.getInsuranceSimulationRequest();
-        insrVidaDinamicoBusiness = new InsrVidaDinamicoBusinessImpl(rbvdR301);
+        insrVidaDinamicoBusiness = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
 
         properties = new PayloadProperties();
@@ -128,8 +123,8 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "",
                 customerList,
-                BigDecimal.valueOf(1),
-                applicationConfigurationService);
+                BigDecimal.valueOf(1)
+                );
     //then
         Assert.assertNull(result);
     }
@@ -146,8 +141,8 @@ public class InsrVidaDinamicoBusinessImplTest{
         InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeModifyQuotationRimacService(
                 requestInput,
                 customerList,
-                BigDecimal.valueOf(1),
-                applicationConfigurationService);
+                BigDecimal.valueOf(1)
+                );
         //then
         Assert.assertNull(result);
     }
@@ -158,7 +153,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
 
-        PayloadStore response = insrVidaDinamicoBusiness.doDynamicLife(applicationConfigurationService,payloadConfig);
+        PayloadStore response = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
 
         Assert.assertNotNull(response);
     }
