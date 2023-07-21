@@ -74,8 +74,6 @@ public class SimulationParameterTest extends TestCase {
         tier.getData().get(0).setSegments(null);
         when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
         SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,input,applicationConfigurationService);
-        //responseTierASO.getData().get(Integer.MIN_VALUE).getSegments().get(Integer.MIN_VALUE).getId();
-        //input.setId(null);
         //when
 
         simulationParameter.getTierToUpdateRequest(input);
