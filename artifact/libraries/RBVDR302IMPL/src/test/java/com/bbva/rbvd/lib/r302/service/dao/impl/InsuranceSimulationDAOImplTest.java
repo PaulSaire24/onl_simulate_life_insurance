@@ -32,11 +32,7 @@ public class InsuranceSimulationDAOImplTest extends TestCase {
 
     private PISDR350 pisdR350;
     private InsuranceSimulationDAOImpl insuranceSimulation;
-    @Before
-    public void setup(){
-        pisdR350 = mock(PISDR350.class);
-        insuranceSimulation = new InsuranceSimulationDAOImpl(pisdR350);
-    }
+
 
     @Before
     public void setUp() {
