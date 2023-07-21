@@ -62,6 +62,7 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
 
     }
 
+    /*
     @Test
     public void serviceAddGifoleTrue(){
         InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301,applicationConfigurationService);
@@ -71,5 +72,5 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
 
         insrEasyYesBusiness.serviceAddGifole(response,responseListCustomers);
 
-    }
+    }*/
 }

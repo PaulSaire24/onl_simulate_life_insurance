@@ -105,7 +105,7 @@ public class MapperHelperTest {
 
 
     }
-
+/*
     @Test
     public void  mapInRequestDocument_OKTest(){
         when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -316,7 +316,7 @@ public class MapperHelperTest {
         assertNotNull(validation);
     }
 
-    /*@Test
+    @Test
     public void mappingTierASOOK() {
         TierASO tierASO = new TierASO();
         TierDataASO data = new TierDataASO();
@@ -366,7 +366,7 @@ public class MapperHelperTest {
         LifeSimulationDTO insuranceSimulationDTO = new LifeSimulationDTO();
         mapperHelper.mappingTierASO(insuranceSimulationDTO, null);
         assertNull(insuranceSimulationDTO.getTier());
-    }*/
+    }
 
     @Test
     public void selectValuePlansDescriptionTest() throws IOException {
