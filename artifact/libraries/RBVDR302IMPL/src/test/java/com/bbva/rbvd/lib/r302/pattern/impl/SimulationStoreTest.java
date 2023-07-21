@@ -41,7 +41,6 @@ public class SimulationStoreTest {
    // private LifeSimulationDTO requestInput;
     @Before
     public void setUp() throws Exception {
-
         pisdR350 = mock(PISDR350.class);
         simulation =  new SimulationStore(pisdR350);
 
@@ -51,28 +50,20 @@ public class SimulationStoreTest {
         responseInput = mockData.getInsuranceSimulationResponse();
 
         payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
-
-
     }
     @Test
     public void endTest() {
-
         //given
         Map<String,Object> map = new HashMap<>();
         map.put("PISD.SELECT_INSURANCE_SIMULATION_ID_LIFE",new HashMap<>());
         when(this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),new HashMap<>())).thenReturn(map);
         when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(1);
-
         //simulation = new SimulationStore(pisdR350);
         //BigDecimal resul = simulation.getInsuranceSimulationId();
-
         //when
         simulation.end(payloadStore);
-
         //then
         Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(), new HashMap<>());
-
-
     }
 
 }

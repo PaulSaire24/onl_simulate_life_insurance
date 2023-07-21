@@ -29,9 +29,7 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }*/
 
-        BigDecimal insuranceSimulationId = (BigDecimal) responseGetInsuranceSimulationMap.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
-
-        return insuranceSimulationId;
+        return (BigDecimal) responseGetInsuranceSimulationMap.get(RBVDProperties.FIELD_Q_PISD_SIMULATION_ID0_NEXTVAL.getValue());
     }
 
     @Override
