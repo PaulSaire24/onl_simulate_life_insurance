@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r302.service.dao.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
@@ -7,6 +8,7 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.web.client.RestClientException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +18,6 @@ import static org.mockito.Mockito.when;
 
 public class SimulationProductDAOImplTest {
 
-    private ISimulationProductDAO iSimulationProductDAO;
     private SimulationProductDAOImpl simulationProductDAOImpl;
     private PISDR350 pisdR350;
 
@@ -25,7 +26,6 @@ public class SimulationProductDAOImplTest {
     @Before
     public void setUp() throws Exception {
 
-        iSimulationProductDAO = mock(ISimulationProductDAO.class);
 
         pisdR350 = mock(PISDR350.class);
 
@@ -35,13 +35,13 @@ public class SimulationProductDAOImplTest {
     }
 
 
-    @Test
-    public void insertSimulationProduct_ERROR(){
+    @Test(expected = BusinessException.class)
+    public void insertSimulationProduct_ERROR() {
 
         when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).
                 thenReturn(0);
 
-        iSimulationProductDAO.insertSimulationProduct(argument);
+        simulationProductDAOImpl.insertSimulationProduct(argument);
     }
 
 }
