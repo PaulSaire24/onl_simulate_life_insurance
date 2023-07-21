@@ -6,6 +6,7 @@ import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +16,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
+import java.math.BigDecimal;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -40,17 +43,27 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
     private GifoleInsuranceRequestASO gifoleInsuranceRequest;
     @Mock
     private InsuranceLifeSimulationBO responseRimac;
+    @Mock
+    private LifeSimulationDTO input;
+    @Mock
+    private BigDecimal cumulo;
+    @Mock
+    private String productInformation;
+    @Mock
+    private InsuranceLifeSimulationBO requestRimac;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         //instanciar los atributos
-        //LifeSimulationDTO response = mockData( );
-        //CustomerListASO responseListCustomers =mockData();
         applicationConfigurationService = mock(ApplicationConfigurationService.class);
-        //gifoleInsuranceRequest = mock();
-    }
+        input = new LifeSimulationDTO();
+        rbvdR301 = mock(RBVDR301.class);
+        requestRimac = QuotationRimac.mapInRequestRimacLife(input, cumulo);
+        //responseRimac = rbvdR301.executeSimulationRimacService();
 
+
+    }
     @Test
 
     public void serviceAddGifoleTest() throws IOException {
@@ -68,7 +81,9 @@ public class InsrEasyYesBusinessImplTest extends TestCase {
         //given
 
         //when
-
+        //when(Objects.isNull(responseRimac)).thenReturn(requestRimac,input.getTraceId());
         //then
+        //InsrEasyYesBusinessImpl insrEasyYesBusiness = InsrEasyYesBusinessImpl(rbvdR301,applicationConfigurationService);
+        //assertEquals(1, RBVDValidation.build(RBVDErrors.(anyString())));
     }
 }
