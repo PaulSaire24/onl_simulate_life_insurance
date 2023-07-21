@@ -104,7 +104,6 @@ public class SimulationParameter implements PreSimulation {
 		properties.setSegmentLifePlans(segmentLifePlans);
 
 		return properties;
-
 	}
 
 	//@Override

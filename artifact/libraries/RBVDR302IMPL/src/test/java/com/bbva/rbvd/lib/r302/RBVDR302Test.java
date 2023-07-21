@@ -4,10 +4,13 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
@@ -24,6 +27,7 @@ import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 //import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -166,7 +170,7 @@ public class RBVDR302Test {
 	@Test
 	public void executeGetGenerateEasyYesTest(){
 		this.requestInput.getProduct().setId("840");
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest...");
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
 		//when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
@@ -222,6 +226,83 @@ public class RBVDR302Test {
 
 		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(), new HashMap<>());
 
+	}
+
+	@Test
+	public void executeGetGenerateDynamicLifeTest(){
+
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLifeTest...");
+		this.requestInput.getProduct().setId("841");
+		this.requestInput.setExternalSimulationId(null);
+		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+
+		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(841));
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"desc dynamic");
+		responseQueryGetProductInformation2.put("PRODUCT_SHORT_DESC","VIDADINAMICO");
+		when(pisdR350.executeGetASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(responseQueryGetProductInformation2);
+
+		responseQueryModalities = new HashMap<>();
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), new BigDecimal(841));
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), Arrays.asList("01","02"));
+		responseQueryModalities.put(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue(), "PC");
+
+		List<Map<String, Object>> listResponse = new ArrayList<>();
+		Map<String, Object> responseAmount = new HashMap<>();
+		responseAmount.put("INSURED_AMOUNT", new BigDecimal(13.3));
+		listResponse.add(responseAmount);
+		responseQueryModalities.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		responseQuerySumCumulus = new HashMap<>();
+		responseQuerySumCumulus.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
+				.thenReturn(responseQueryModalities)
+				.thenReturn(responseQuerySumCumulus);
+		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
+		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
+		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
+		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
+		when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(1);
+		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
+
+		/*when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
+		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
+		Map<String, Object> uniqueExample = new HashMap<>();
+		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
+		responseConsiderations.add(uniqueExample);
+		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
+				thenReturn(responseConsiderations);*/
+
+		//when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
+		/*responseQuerySumCumulus = new ArrayMap<>();
+
+		//when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
+		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
+		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);*/
+
+		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
+
+		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNotNull(response);
+
+		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(anyString(), anyMap());
+		//Mockito.verify(rbvdr301,Mockito.times(1)).executeSimulationRimacService(anyObject(),anyString());
+
+	}
+
+	@NotNull
+	private static CustomerListASO getCustomerListASO() {
+		BirthDataBO birthDataBO = new BirthDataBO();
+		birthDataBO.setBirthDate("1994-04-25");
+		CustomerBO customerBO = new CustomerBO();
+		List<CustomerBO> data = new ArrayList<>();
+		customerBO.setBirthData(birthDataBO);
+		data.add(customerBO);
+		CustomerListASO customerListASO = new CustomerListASO();
+		customerListASO.setData(data);
+		return customerListASO;
 	}
 /*
 	@Test

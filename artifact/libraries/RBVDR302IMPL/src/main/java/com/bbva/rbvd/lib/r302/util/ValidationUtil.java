@@ -15,6 +15,7 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.Transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.service.api.ConsumerInternalService;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 
@@ -78,6 +79,10 @@ public class ValidationUtil {
             valuePlus=true;
         }
         return valuePlus;
+    }
+
+    public static boolean isFirstCalled(String externalSimulationId) {
+        return Objects.isNull(externalSimulationId);
     }
 
 
