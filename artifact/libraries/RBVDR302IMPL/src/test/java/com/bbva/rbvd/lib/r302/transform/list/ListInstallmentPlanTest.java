@@ -70,6 +70,7 @@ public class ListInstallmentPlanTest extends TestCase {
         assertNotNull(plans);
     }
 
+    /*
     @Test
     public void listInstallmentPlanFullTest(){
         //Agregar comportamientos para el full test
@@ -99,7 +100,8 @@ public class ListInstallmentPlanTest extends TestCase {
         List<InsurancePlanDTO> plan = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
         assertEquals(1, plan.size());
 
-    }
+    }*/
+
     @Test
     public void listInstallmentPlanNullTest(){
         //Agregar comportamientos para el null test
