@@ -125,8 +125,6 @@ public class InsrVidaDinamicoBusinessImplTest{
                 customerList,
                 BigDecimal.valueOf(1)
                 );
-    //then
-        Assert.assertNull(result);
     }
 
     @Test(expected = BusinessException.class)
@@ -143,8 +141,6 @@ public class InsrVidaDinamicoBusinessImplTest{
                 customerList,
                 BigDecimal.valueOf(1)
                 );
-        //then
-        Assert.assertNull(result);
     }
 
     @Test
