@@ -15,7 +15,6 @@ import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadProperties;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -138,6 +138,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         //when
         InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeModifyQuotationRimacService(
                 requestInput,
+                "VIDADINAMICO",
                 customerList,
                 BigDecimal.valueOf(1)
                 );
