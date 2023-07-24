@@ -17,7 +17,10 @@ import java.util.List;
 
 public class ModifyQuotationRimac {
 
-    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input,CustomerListASO responseListCustomers,BigDecimal cumulo){
+    private ModifyQuotationRimac() {
+    }
+
+    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input, CustomerListASO responseListCustomers, BigDecimal cumulo){
         InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 

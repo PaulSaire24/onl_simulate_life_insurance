@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
         "classpath:/META-INF/spring/RBVDR302-arc.xml",
         "classpath:/META-INF/spring/RBVDR302-arc-test.xml" })
 
-public class InsuranceSimulationDAOImplTest extends TestCase {
+public class InsuranceSimulationDAOImplTest {
 
     private PISDR350 pisdR350;
     private InsuranceSimulationDAOImpl insuranceSimulation;

@@ -21,16 +21,12 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class ValidationUtil {
 
-    private static final String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
-
-
-    //valida la modalidad del producto asegurado
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
         List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
         if (isEmpty(rows)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }
-        return rows.stream().map(productModality -> InsuranceProductModalityBean.createInsuranceProductModalityDAO(productModality)).collect(toList());
+        return rows.stream().map(InsuranceProductModalityBean::createInsuranceProductModalityDAO).collect(toList());
     }
 
 

@@ -14,12 +14,16 @@ import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import com.bbva.rbvd.lib.r302.util.ConvertUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
 public class SimulationStore implements PostSimulation {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationStore.class);
 	private PISDR350 pisdR350;
 
 	public SimulationStore(PISDR350 pisdR350) {
@@ -41,7 +45,7 @@ public class SimulationStore implements PostSimulation {
 
 	public void saveSimulation(PayloadStore payloadStore, BigDecimal insuranceSimulationId) {
 
-		//LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
+		LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
 
 		Date maturityDate = ConvertUtil.generateDate(payloadStore.getResponseRimac().getPayload().getCotizaciones().get(0).getFechaFinVigencia());
@@ -66,7 +70,7 @@ public class SimulationStore implements PostSimulation {
 
 		Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
 
-        //LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
+        LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
 		ISimulationProductDAO iSimulationProductDAO = new SimulationProductDAOImpl(pisdR350);
 		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 	}

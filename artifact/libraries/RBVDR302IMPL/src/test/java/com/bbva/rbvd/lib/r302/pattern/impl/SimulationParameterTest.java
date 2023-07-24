@@ -10,6 +10,7 @@ import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
         "classpath:/META-INF/spring/RBVDR302-app-test.xml",
         "classpath:/META-INF/spring/RBVDR302-arc.xml",
         "classpath:/META-INF/spring/RBVDR302-arc-test.xml" })
-public class SimulationParameterTest extends TestCase {
+public class SimulationParameterTest {
     private MockData mockData;
 
     @Mock
@@ -44,17 +45,15 @@ public class SimulationParameterTest extends TestCase {
 
     private TierASO tier;
 
-    private MockDTO mockDTO;
-
 
     @Before
 
     public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
-        //instanciar los atributos
+
         mockData = MockData.getInstance();
-        mockDTO = MockDTO.getInstance();
+        MockDTO mockDTO = MockDTO.getInstance();
         crypto = new CryptoASO();
         CryptoDataASO data = new CryptoDataASO();
         crypto.setData(data);
@@ -65,17 +64,15 @@ public class SimulationParameterTest extends TestCase {
     @Test
 
     public void getTierToUpdateRequestNull() throws IOException {
-        //Agregar comportamientos para el full test
-        //given
+
         LifeSimulationDTO input = mockData.getInsuranceSimulationRequest();
         when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
         tier.getData().get(0).setSegments(null);
         when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
         SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,applicationConfigurationService);
-        //when
 
         simulationParameter.getTierToUpdateRequest(input);
-        //then
-        assertEquals(null,input.getId());
+
+        Assert.assertNull(input.getId());
         }
     }

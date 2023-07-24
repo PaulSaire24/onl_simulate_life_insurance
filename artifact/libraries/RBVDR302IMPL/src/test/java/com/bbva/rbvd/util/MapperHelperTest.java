@@ -1,52 +1,22 @@
 package com.bbva.rbvd.util;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-
-import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
-
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
-
-import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
-
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
-
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
-import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
-import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
-import com.bbva.rbvd.lib.r302.transform.map.ContractMap;
-import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
-//import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
-
-import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
-import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
-//import com.bbva.rbvd.lib.r302.transform.objects.QuotationRimac;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @Ignore
 public class MapperHelperTest {

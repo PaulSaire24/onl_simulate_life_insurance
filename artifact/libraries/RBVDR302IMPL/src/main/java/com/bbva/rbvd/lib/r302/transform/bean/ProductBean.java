@@ -8,12 +8,15 @@ import java.util.Map;
 
 public class ProductBean {
 
+    private ProductBean() {
+    }
+
     public static ProductInformationDAO getProductInformation(Map<String, Object> responseQueryGetProductInformation) {
-        String RIMAC_PRODUCT_NAME = "PRODUCT_SHORT_DESC";
+        String rimacProductNAME = "PRODUCT_SHORT_DESC";
         ProductInformationDAO productInformationDAO = new ProductInformationDAO();
         productInformationDAO.setInsuranceProductId((BigDecimal) responseQueryGetProductInformation.get(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue()));
         productInformationDAO.setInsuranceProductDescription((String) responseQueryGetProductInformation.get(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue()));
-        productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(RIMAC_PRODUCT_NAME));
+        productInformationDAO.setInsuranceBusinessName((String) responseQueryGetProductInformation.get(rimacProductNAME));
         return productInformationDAO;
     }
 }

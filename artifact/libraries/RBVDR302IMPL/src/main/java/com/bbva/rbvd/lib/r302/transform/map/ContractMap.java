@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ContractMap {
+    private ContractMap(){
+
+    }
     public static Map<String, Object> mapInsuranceAmount(BigDecimal idProduct, String idHolder){
 
         Map<String, Object> mapStringObject = new HashMap<>();

@@ -5,7 +5,6 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.service.dao.IInsuranceSimulationDAO;
-import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

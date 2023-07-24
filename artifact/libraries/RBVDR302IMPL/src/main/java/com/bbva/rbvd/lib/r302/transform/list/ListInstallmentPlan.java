@@ -1,7 +1,13 @@
 package com.bbva.rbvd.lib.r302.transform.list;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;

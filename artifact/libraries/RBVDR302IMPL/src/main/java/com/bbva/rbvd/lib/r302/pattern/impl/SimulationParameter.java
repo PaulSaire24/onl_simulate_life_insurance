@@ -138,17 +138,13 @@ public class SimulationParameter implements PreSimulation {
 
 		IModalitiesDAO iModalitiesDAO = new ModalitiesDAOImpl(pisdR350);
 
-		List<InsuranceProductModalityDAO> listInsuranceProductModalityDAO =
-				iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
-
-		return listInsuranceProductModalityDAO;
+		return iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
 	}
 
 	public void getTierToUpdateRequest(LifeSimulationDTO input) {
 		TierASO responseTierASO = validateTier(input);
 
 		if (Objects.nonNull(responseTierASO)) {
-			//Actualizo el input con la data del Tier
 			TierDTO tierDTO = new TierDTO();
 			tierDTO.setId(responseTierASO.getData().get(0).getId());
 			tierDTO.setName(responseTierASO.getData().get(0).getDescription());
@@ -163,16 +159,16 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	private TierASO validateTier (LifeSimulationDTO input){
-		//LOGGER.info("***** RBVDR302Impl - validateTier START *****");
+		LOGGER.info("***** RBVDR302Impl - validateTier START *****");
 		ConsumerInternalService consumerInternalService = new ConsumerInternalService(this.rbvdR301);
 		TierASO responseTierASO = null;
 		if (Objects.isNull(input.getTier())) {
-			//LOGGER.info("Invoking Service ASO Tier");
+			LOGGER.info("Invoking Service ASO Tier");
 			CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
 			responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
 		}
-		//LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
-		//LOGGER.info("***** RBVDR302Impl - validateTier END *****");
+		LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
+		LOGGER.info("***** RBVDR302Impl - validateTier END *****");
 		return responseTierASO;
 	}
 
