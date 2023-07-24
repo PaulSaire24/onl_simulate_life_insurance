@@ -41,7 +41,6 @@ public class SimulationParameter implements PreSimulation {
 	private com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
 
 	public SimulationParameter(PISDR350 pisdR350,RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-		//input = input;
 		this.applicationConfigurationService = applicationConfigurationService;
 		this.pisdR350 = pisdR350;
 		this.rbvdR301 = rbvdR301;
@@ -80,7 +79,7 @@ public class SimulationParameter implements PreSimulation {
 	}
 	
 	
-	//@Override
+
 	public PayloadProperties getProperties(LifeSimulationDTO input) {
 
 		PayloadProperties properties = new PayloadProperties();
@@ -105,33 +104,27 @@ public class SimulationParameter implements PreSimulation {
 		return properties;
 	}
 
-	//@Override
+
 	public ProductInformationDAO getProduct(String productId) {
 
 		IProductDAO productDAO = new ProductDAOImpl(this.pisdR350);
-		ProductInformationDAO product= productDAO.getProductInformationById(productId);
 
-		return product;
+		return productDAO.getProductInformationById(productId);
 	}
 
-	//@Override
+
 	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
 		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
-		BigDecimal cumulos = contractDAO.getInsuranceAmountDAO(
-				insuranceProductId,
-				customerId);
 
-		return cumulos;
+		return contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
 	}
 
-	//@Override
+
 	public CustomerListASO getCustomer(String customerId) {
 
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
 
-		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
-
-		return customer;
+		return consumer.callListCustomerResponse(customerId);
 	}
 
 	public List<InsuranceProductModalityDAO> getModalities(String plansPT, BigDecimal insuranceProductId, String saleChannel){
