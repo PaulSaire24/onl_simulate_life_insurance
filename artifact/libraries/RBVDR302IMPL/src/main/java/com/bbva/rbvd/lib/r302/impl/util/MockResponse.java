@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r302.impl.util;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
+import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -28,21 +29,16 @@ public class MockResponse {
         return this.gson.fromJson(RESPONSE_MOCK_MODIFY_QUOTATION,InsuranceLifeSimulationBO.class);
     }
 
-    private static String randomChar(){
-        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random r = new Random();
-        char c = alphabet.charAt(r.nextInt(alphabet.length()));
-        return String.valueOf(c);
-    }
-
-    private static String generateExternalQuotationIdRandom(){
+    public static String generateExternalQuotationIdRandom(){
+        StringBuilder bld = new StringBuilder();
         String preRandom = "1b7m829f-a8d9-49ec-8535-";
+        bld.append(preRandom);
 
-        while(preRandom.length() < 36){
-            preRandom = preRandom + randomChar();
+        while(bld.toString().length() < 36){
+            bld.append(ValidationUtil.randomChar());
         }
 
-        return preRandom;
+        return bld.toString();
     }
 
 }
