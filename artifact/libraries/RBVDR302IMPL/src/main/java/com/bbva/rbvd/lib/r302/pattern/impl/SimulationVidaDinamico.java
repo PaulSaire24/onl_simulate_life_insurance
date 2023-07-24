@@ -22,7 +22,7 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 
 	@Override
 	public LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() START *****");
+		LOGGER.info("***** SimulationVidaDinamico - start START | input {} *****",input);
 
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
 
@@ -31,6 +31,7 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 		String simulationId = payloadConfig.getInput().getExternalSimulationId();
 		//ejecucion servicio rimac
 		PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
+		LOGGER.info("***** SimulationVidaDinamico - start | payloadStore {} *****",payloadStore);
 
 		if(ValidationUtil.isFirstCalled(simulationId)){
 			this.getPostSimulation().end(payloadStore);

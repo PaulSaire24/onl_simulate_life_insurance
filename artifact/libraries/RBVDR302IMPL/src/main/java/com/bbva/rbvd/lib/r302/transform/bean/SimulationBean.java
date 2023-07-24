@@ -10,7 +10,6 @@ import java.util.Date;
 public class SimulationBean {
 
 
-
     private SimulationBean(){}
 
     public static SimulationDAO createSimulationDAO(BigDecimal insuranceSimulationId, final Date maturityDate, LifeSimulationDTO insuranceSimulationDTO) {

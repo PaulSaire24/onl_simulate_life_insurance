@@ -71,18 +71,19 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         if(flag.equals("true")){
 
-            LOGGER.info("***** RBVDR302Impl - executeGetSimulation | createGifoleInsuranceRequest invokation ***** --- FLAG after -> {}", flag);
+            LOGGER.info("***** GifoleBusinessImpl - serviceAddGifole ***** --- FLAG after -> {}", flag);
 
             GifoleInsuranceRequestASO gifoleInsuranceRequest = this.createGifoleASO(response, responseListCustomers);
-            LOGGER.info("**** RBVDR302Impl - GifoleInsuranceRequestASO gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
+            LOGGER.info("**** GifoleBusinessImpl - gifoleInsuranceRequest: {}", gifoleInsuranceRequest);
 
             Integer httpStatusGifole = rbvdR301.executeGifolelifeService(gifoleInsuranceRequest);
 
-            LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** Gifole Response Status: {}", httpStatusGifole);
+            LOGGER.info("***** GifoleBusinessImpl ***** Gifole Response Status: {}", httpStatusGifole);
         }
     }
 
     public GifoleInsuranceRequestASO createGifoleASO(LifeSimulationDTO response, CustomerListASO responseListCustomers){
+        LOGGER.info("***** GifoleBusinessImpl ***** - createGifoleASO START");
 
         InsuranceProductDTO productDto = response.getProduct();
 
@@ -201,6 +202,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
         gifoleInsuranceRequest.setGood(good);
+
+        LOGGER.info("***** GifoleBusinessImpl ***** - createGifoleASO END - gifoleInsuranceRequest {}",gifoleInsuranceRequest);
 
         return gifoleInsuranceRequest;
     }

@@ -5,8 +5,11 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.service.dao.IContractDAO;
 import com.bbva.rbvd.lib.r302.transform.map.ContractMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +20,8 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class ContractDAOImpl implements IContractDAO {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContractDAOImpl.class);
+
     private PISDR350 pisdR350;
 
     public ContractDAOImpl(PISDR350 pisdR350) {
@@ -24,10 +29,12 @@ public class ContractDAOImpl implements IContractDAO {
     }
 
     public BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId,String customerId) {
+        LOGGER.info("***** ContractDAOImpl - getInsuranceAmountDAO START *****");
 
         Map<String, Object> responseQueryGetCumulus =
                 this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), ContractMap.mapInsuranceAmount(
                         insuranceProductId, customerId));
+        LOGGER.info("***** ContractDAOImpl - getInsuranceAmountDAO | responseQueryGetCumulus: {} *****",responseQueryGetCumulus);
 
         if (isEmpty(responseQueryGetCumulus)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PRODUCT_CODE);

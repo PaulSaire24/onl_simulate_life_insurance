@@ -72,7 +72,16 @@ public class PayloadStore {
         this.productInformation = productInformation;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("PayloadStore{");
+        sb.append("creationUser='").append(creationUser).append('\'');
+        sb.append(", userAudit='").append(userAudit).append('\'');
+        sb.append(", responseRimac=").append(responseRimac);
+        sb.append(", response=").append(response);
+        sb.append(", documentTypeId='").append(documentTypeId).append('\'');
+        sb.append(", productInformation=").append(productInformation);
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -51,6 +51,7 @@ public class SimulationParameter implements PreSimulation {
 	@Override
 	public PayloadConfig getConfig(LifeSimulationDTO input) {
 		LOGGER.info("***** SimulationParameter getConfig START *****");
+		LOGGER.info("***** SimulationParameter getConfig - input : {} *****",input);
 		
 		PayloadConfig payloadConfig = new PayloadConfig();
 
@@ -75,12 +76,16 @@ public class SimulationParameter implements PreSimulation {
 		payloadConfig.setInput(input);
 		payloadConfig.setProperties(properties);
 
+		LOGGER.info("***** SimulationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);
+
 		return payloadConfig;
 	}
 	
 	
 
 	public PayloadProperties getProperties(LifeSimulationDTO input) {
+
+		LOGGER.info("***** SimulationParameter getProperties START *****");
 
 		PayloadProperties properties = new PayloadProperties();
 		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
@@ -101,37 +106,63 @@ public class SimulationParameter implements PreSimulation {
 
 		properties.setSegmentLifePlans(segmentLifePlans);
 
+		LOGGER.info("***** SimulationParameter getProperties END - properties: {} *****",properties);
+
 		return properties;
 	}
 
 
 	public ProductInformationDAO getProduct(String productId) {
 
-		IProductDAO productDAO = new ProductDAOImpl(this.pisdR350);
+		LOGGER.info("***** SimulationParameter getProduct START - productId: {} *****",productId);
 
-		return productDAO.getProductInformationById(productId);
+		IProductDAO productDAO = new ProductDAOImpl(this.pisdR350);
+		ProductInformationDAO response = productDAO.getProductInformationById(productId);
+
+		LOGGER.info("***** SimulationParameter getProduct END - response: {} *****",response);
+
+		return response;
 	}
 
 
 	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
-		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
 
-		return contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
+		LOGGER.info("***** SimulationParameter getCumulos START - insuranceProductId: {} *****",insuranceProductId);
+		LOGGER.info("***** SimulationParameter getCumulos START - customerId: {} *****",customerId);
+
+		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
+		BigDecimal cumulus = contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
+
+		LOGGER.info("***** SimulationParameter getCumulos END - cumulus: {} *****",cumulus);
+
+		return cumulus;
 	}
 
 
 	public CustomerListASO getCustomer(String customerId) {
 
-		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
+		LOGGER.info("***** SimulationParameter getCustomer START - customerId: {} *****",customerId);
 
-		return consumer.callListCustomerResponse(customerId);
+		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
+		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
+
+		LOGGER.info("***** SimulationParameter getCustomer END - customer: {} *****",customer);
+
+		return customer;
 	}
 
 	public List<InsuranceProductModalityDAO> getModalities(String plansPT, BigDecimal insuranceProductId, String saleChannel){
 
-		IModalitiesDAO iModalitiesDAO = new ModalitiesDAOImpl(pisdR350);
+		LOGGER.info("***** SimulationParameter getModalities START argument - plansPT: {} *****",plansPT);
+		LOGGER.info("***** SimulationParameter getModalities START argument - insuranceProductId: {} *****",insuranceProductId);
+		LOGGER.info("***** SimulationParameter getModalities START argument - saleChannel: {} *****",saleChannel);
 
-		return iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
+		IModalitiesDAO iModalitiesDAO = new ModalitiesDAOImpl(pisdR350);
+		List<InsuranceProductModalityDAO> list = iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
+
+		LOGGER.info("***** SimulationParameter getModalities END - list: {} *****",list);
+
+		return list;
 	}
 
 	public void getTierToUpdateRequest(LifeSimulationDTO input) {
@@ -149,10 +180,12 @@ public class SimulationParameter implements PreSimulation {
 				input.setId(null);
 			}
 		}
+
+		LOGGER.info("***** SimulationParameter - getTierToUpdateRequest END | input {} *****",input);
 	}
 
 	private TierASO validateTier (LifeSimulationDTO input){
-		LOGGER.info("***** RBVDR302Impl - validateTier START *****");
+		LOGGER.info("***** SimulationParameter - validateTier START *****");
 		ConsumerInternalService consumerInternalService = new ConsumerInternalService(this.rbvdR301);
 		TierASO responseTierASO = null;
 		if (Objects.isNull(input.getTier())) {
@@ -160,8 +193,8 @@ public class SimulationParameter implements PreSimulation {
 			CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
 			responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
 		}
-		LOGGER.info("***** RBVDR302Impl - validateTier ***** Response: {}", responseTierASO);
-		LOGGER.info("***** RBVDR302Impl - validateTier END *****");
+		LOGGER.info("***** SimulationParameter - validateTier ***** Response: {}", responseTierASO);
+		LOGGER.info("***** SimulationParameter - validateTier END *****");
 		return responseTierASO;
 	}
 

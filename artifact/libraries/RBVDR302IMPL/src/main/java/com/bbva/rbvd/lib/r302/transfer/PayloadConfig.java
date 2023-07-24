@@ -60,4 +60,17 @@ public class PayloadConfig {
     public void setProperties(PayloadProperties properties) {
         this.properties = properties;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("PayloadConfig{");
+        sb.append("productInformation=").append(productInformation);
+        sb.append(", sumCumulus=").append(sumCumulus);
+        sb.append(", customerListASO=").append(customerListASO);
+        sb.append(", listInsuranceProductModalityDAO=").append(listInsuranceProductModalityDAO);
+        sb.append(", input=").append(input);
+        sb.append(", properties=").append(properties);
+        sb.append('}');
+        return sb.toString();
+    }
 }

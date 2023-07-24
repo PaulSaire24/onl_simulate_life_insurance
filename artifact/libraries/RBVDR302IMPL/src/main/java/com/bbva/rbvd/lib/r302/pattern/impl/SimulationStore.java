@@ -39,19 +39,27 @@ public class SimulationStore implements PostSimulation {
 
 
 	public BigDecimal getInsuranceSimulationId(){
+		LOGGER.info("***** SimulationStore - getInsuranceSimulationId START *****");
+
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
-		return insuranceSimulationDao.getSimulationNextVal();
+		BigDecimal simulationNextValue = insuranceSimulationDao.getSimulationNextVal();
+
+		LOGGER.info("***** SimulationStore - getInsuranceSimulationId | simulationNextValue: {} *****",simulationNextValue);
+		return simulationNextValue;
 	}
 
 	public void saveSimulation(PayloadStore payloadStore, BigDecimal insuranceSimulationId) {
 
-		LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_SELECT_INSURANCE_SIMULATION_ID *****");
+		LOGGER.info("***** SimulationStore - saveSimulation START - arguments: payloadStore {} *****",payloadStore);
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
 
 		Date maturityDate = ConvertUtil.generateDate(payloadStore.getResponseRimac().getPayload().getCotizaciones().get(0).getFechaFinVigencia());
 
 		SimulationDAO simulationDAO = SimulationBean.createSimulationDAO(insuranceSimulationId, maturityDate, payloadStore.getResponse());
+		LOGGER.info("***** SimulationStore - saveSimulation - simulationDAO {} *****",simulationDAO);
+
 		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, payloadStore.getCreationUser(), payloadStore.getUserAudit(), payloadStore.getDocumentTypeId());
+		LOGGER.info("***** SimulationStore - saveSimulation - argumentsForSaveSimulation {} *****",argumentsForSaveSimulation);
 
 		insuranceSimulationDao.getInsertInsuranceSimulation(argumentsForSaveSimulation);
 
@@ -60,6 +68,8 @@ public class SimulationStore implements PostSimulation {
 
 	public void saveSimulationProd(PayloadStore payloadStore,BigDecimal insuranceSimulationId) {
 
+		LOGGER.info("***** SimulationStore - saveSimulationProd START - arguments: payloadStore {} *****",payloadStore);
+
 		SimulationProductDAO simulationProductDAO = SimulationProductBean.createSimulationProductDAO(
 				insuranceSimulationId,
 				payloadStore.getProductInformation().getInsuranceProductId(),
@@ -67,10 +77,11 @@ public class SimulationStore implements PostSimulation {
 				payloadStore.getUserAudit(),
 				payloadStore.getResponse()
 		);
+		LOGGER.info("***** SimulationStore - saveSimulationProd - simulationProductDAO {} *****",simulationProductDAO);
 
 		Map<String, Object> argumentsForSaveSimulationProduct = SimulationProductMap.createArgumentsForSaveSimulationProduct(simulationProductDAO);
+		LOGGER.info("***** SimulationStore - saveSimulationProd - argumentsForSaveSimulationProduct {} *****",argumentsForSaveSimulationProduct);
 
-        LOGGER.info("***** PISDR302Impl - Invoking PISDR350 QUERY_INSERT_INSRNC_SIMLT_PRD *****");
 		ISimulationProductDAO iSimulationProductDAO = new SimulationProductDAOImpl(pisdR350);
 		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 	}

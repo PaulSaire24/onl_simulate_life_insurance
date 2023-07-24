@@ -21,7 +21,6 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
-
 		LifeSimulationDTO response = new LifeSimulationDTO();
 		Simulation simulation;
 		if (input.getProduct().getId().equals("840")) {
