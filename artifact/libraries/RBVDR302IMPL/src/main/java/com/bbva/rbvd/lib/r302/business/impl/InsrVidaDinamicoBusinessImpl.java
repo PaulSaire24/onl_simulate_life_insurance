@@ -143,8 +143,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(0),
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
-        //Revisar si es necesario esta línea:
-        response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+
+        //response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
