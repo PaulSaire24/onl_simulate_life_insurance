@@ -1,6 +1,8 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -13,7 +15,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ModifyQuotationRimac {
 
@@ -37,7 +42,7 @@ public class ModifyQuotationRimac {
         List<CoberturaBO> coberturas = new ArrayList<>();
         payload.setCoberturas(coberturas);
 
-        //Constrir lista asegurados
+        //Construir lista asegurados
         //List<AseguradoBO> asegurados = new ArrayList<>();
         //payload.setAsegurado(asegurados);
 
@@ -106,9 +111,19 @@ public class ModifyQuotationRimac {
 
         LocalDate hoy = LocalDate.now();
         LocalDate nacimiento = LocalDate.parse(birthDate);
-        Long years = ChronoUnit.YEARS.between(nacimiento, hoy);
+        long years = ChronoUnit.YEARS.between(nacimiento, hoy);
 
-        return years.toString();
+        return Long.toString(years);
+    }
+
+    public static List<Long> planesToRequestRimac(List<InsuranceProductModalityDAO> planes){
+        if(CollectionUtils.isEmpty(planes)){
+            return Collections.emptyList();
+        }else{
+            List<String> insrcCompanyModalities = planes.stream().filter(Objects::nonNull).map(CommonsDAO::getInsuranceCompanyModalityId).collect(Collectors.toList());
+            return insrcCompanyModalities.stream().filter(Objects::nonNull).map(Long::parseLong).collect(Collectors.toList());
+        }
+
     }
 
 }

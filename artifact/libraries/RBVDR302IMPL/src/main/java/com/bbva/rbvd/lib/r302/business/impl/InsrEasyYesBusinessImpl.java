@@ -47,10 +47,10 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         PayloadStore payloadStore = new PayloadStore();
         payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
         payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
-        payloadStore.setResponseRimac(        responseRimac);
+        payloadStore.setResponseRimac(responseRimac);
         payloadStore.setResponse(response);
         payloadStore.setDocumentTypeId( payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId());
-        payloadStore.setProductInformation(   payloadConfig.getProductInformation());
+        payloadStore.setProductInformation(payloadConfig.getProductInformation());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes END | payloadStore: {} *****",payloadStore);
         return payloadStore;
@@ -72,8 +72,8 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
 
-        //Revisar si es necesario esta línea:
-        response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+
+        //response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - prepareResponse END | response: {} *****",response);
         return response;

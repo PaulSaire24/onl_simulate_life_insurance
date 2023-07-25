@@ -22,10 +22,10 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
-//import com.bbva.rbvd.lib.r302.impl.util.MapperHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +36,7 @@ import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -105,6 +106,7 @@ public class RBVDR302Test {
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
 	private IInsrEasyYesBusiness seguroEasyYes;
 	private PayloadStore payloadStore;
+	private PayloadConfig payloadConfig;
 
 	@Before
 	public void setUp() throws Exception {
@@ -167,7 +169,7 @@ public class RBVDR302Test {
 	}
 
 	@Test
-	public void executeGetGenerateEasyYesTest(){
+	public void executeGetGenerateEasyYesTest() {
 		this.requestInput.getProduct().setId("840");
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -178,7 +180,7 @@ public class RBVDR302Test {
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(840));
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"desc easy yes");
 		responseQueryGetProductInformation2.put("PRODUCT_SHORT_DESC","EASYYES");
-		when(pisdR350.executeGetASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(responseQueryGetProductInformation2);
+		when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(responseQueryGetProductInformation2);
 
 		responseQueryModalities = new HashMap<>();
 		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), new BigDecimal(840));
@@ -199,7 +201,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(1);
+		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
 		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
 
 		/*when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
@@ -240,7 +242,7 @@ public class RBVDR302Test {
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(841));
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"desc dynamic");
 		responseQueryGetProductInformation2.put("PRODUCT_SHORT_DESC","VIDADINAMICO");
-		when(pisdR350.executeGetASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(responseQueryGetProductInformation2);
+		when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(responseQueryGetProductInformation2);
 
 		responseQueryModalities = new HashMap<>();
 		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), new BigDecimal(841));
@@ -249,7 +251,7 @@ public class RBVDR302Test {
 
 		List<Map<String, Object>> listResponse = new ArrayList<>();
 		Map<String, Object> responseAmount = new HashMap<>();
-		responseAmount.put("INSURED_AMOUNT", new BigDecimal(13.3));
+		responseAmount.put("INSURED_AMOUNT", new BigDecimal("13.3"));
 		listResponse.add(responseAmount);
 		responseQueryModalities.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
 		responseQuerySumCumulus = new HashMap<>();
@@ -262,10 +264,10 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
-		when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(1);
+		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
 		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
 
-		/*when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
+		/*
 		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
 		Map<String, Object> uniqueExample = new HashMap<>();
 		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
@@ -274,6 +276,7 @@ public class RBVDR302Test {
 				thenReturn(responseConsiderations);*/
 
 		//when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
+		//when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
 		/*responseQuerySumCumulus = new ArrayMap<>();
 
 		//when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);

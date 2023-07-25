@@ -39,6 +39,9 @@ public class SimulationEasyYes extends SimulationDecorator{
 		//guardar en bd
 		this.getPostSimulation().end(payloadStore);
 
+		//Actualizacion tipo documento en salida trx
+		payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+
 		//llamada a gifole
 		IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301,applicationConfigurationService);
 		iGifoleBusiness.serviceAddGifole(payloadStore.getResponse(),payloadConfig.getCustomerListASO());

@@ -2,6 +2,7 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
@@ -19,14 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InsrVidaDinamicoBusinessImpl.class);
 
-    private RBVDR301 rbvdR301;
-    private ApplicationConfigurationService applicationConfigurationService;
+    private final RBVDR301 rbvdR301;
+    private final ApplicationConfigurationService applicationConfigurationService;
 
     public InsrVidaDinamicoBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.rbvdR301 = rbvdR301;
@@ -35,13 +37,14 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
 
     public InsuranceLifeSimulationBO executeQuotationRimacService(
-            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo) {
+            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo, List<InsuranceProductModalityDAO> planes) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService START *****");
 
         InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,cumulo);
         requestRimac.getPayload().setProducto(businessName);
         ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO);
+        requestRimac.getPayload().setPlanes(ModifyQuotationRimac.planesToRequestRimac(planes));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -61,11 +64,12 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
 
     public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo){
+            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo,List<InsuranceProductModalityDAO> planes){
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService START *****");
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
         requestRimac.getPayload().setProducto(businessName);
+        requestRimac.getPayload().setPlanes(ModifyQuotationRimac.planesToRequestRimac(planes));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -95,14 +99,16 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus()
+                    payloadConfig.getSumCumulus(),
+                    payloadConfig.getListInsuranceProductModalityDAO()
                     );
         }else{
             responseRimac = this.executeModifyQuotationRimacService(
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus()
+                    payloadConfig.getSumCumulus(),
+                    payloadConfig.getListInsuranceProductModalityDAO()
             );
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);

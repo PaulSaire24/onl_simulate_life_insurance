@@ -5,6 +5,7 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CommonFieldsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TierDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
@@ -28,17 +29,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class SimulationParameter implements PreSimulation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParameter.class);
 
-	private PISDR350 pisdR350;
-	private RBVDR301 rbvdR301;
-	private ApplicationConfigurationService applicationConfigurationService;
+	private final PISDR350 pisdR350;
+	private final RBVDR301 rbvdR301;
+	private final ApplicationConfigurationService applicationConfigurationService;
 
-	private com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
+	private final com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
 
 	public SimulationParameter(PISDR350 pisdR350,RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		this.applicationConfigurationService = applicationConfigurationService;
@@ -61,7 +63,7 @@ public class SimulationParameter implements PreSimulation {
 		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
 
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
-				this.getModalities(this.applicationConfigurationService.getProperty("plansLife"), productInformation.getInsuranceProductId(), input.getSaleChannelId());
+				this.getModalities(this.getModalitiesSelected(input), productInformation.getInsuranceProductId(), input.getSaleChannelId());
 
 		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input.getHolder().getId());
 
@@ -80,7 +82,19 @@ public class SimulationParameter implements PreSimulation {
 
 		return payloadConfig;
 	}
-	
+
+	private String getModalitiesSelected(LifeSimulationDTO input){
+		String plans;
+
+		if(Objects.nonNull(input.getProduct()) && Objects.nonNull(input.getProduct().getPlans())){
+			List<String> plansIn = input.getProduct().getPlans().stream().map(CommonFieldsDTO::getId).collect(Collectors.toList());
+			plans = String.join(",",plansIn);
+		}else{
+			plans = this.applicationConfigurationService.getProperty("plansLife");
+		}
+
+		return plans;
+	}
 	
 
 	public PayloadProperties getProperties(LifeSimulationDTO input) {

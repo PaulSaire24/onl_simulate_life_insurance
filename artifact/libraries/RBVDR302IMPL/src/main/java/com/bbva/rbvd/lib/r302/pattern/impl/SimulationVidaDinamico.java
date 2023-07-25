@@ -37,6 +37,8 @@ public class SimulationVidaDinamico extends SimulationDecorator{
 			this.getPostSimulation().end(payloadStore);
 		}
 
+		//Actualizacion tipo documento en salida trx
+		payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
 
