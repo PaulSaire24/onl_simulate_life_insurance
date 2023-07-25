@@ -24,6 +24,7 @@ import com.bbva.rbvd.lib.r302.service.dao.impl.ProductDAOImpl;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class SimulationParameter implements PreSimulation {
 	private String getModalitiesSelected(LifeSimulationDTO input){
 		String plans;
 
-		if(Objects.nonNull(input.getProduct()) && Objects.nonNull(input.getProduct().getPlans())){
+		if(Objects.nonNull(input.getProduct()) && !CollectionUtils.isEmpty(input.getProduct().getPlans())){
 			List<String> plansIn = input.getProduct().getPlans().stream().map(CommonFieldsDTO::getId).collect(Collectors.toList());
 			plans = String.join(",",plansIn);
 		}else{
