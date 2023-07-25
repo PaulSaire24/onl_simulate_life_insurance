@@ -11,7 +11,11 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 
-import java.util.*;
+import java.util.Random;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Arrays;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -23,7 +27,8 @@ public class ValidationUtil {
 
 
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
-        List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
+        List<Map<String, Object>> rows =
+                (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
         if (isEmpty(rows)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }

@@ -5,7 +5,6 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
 import com.bbva.rbvd.lib.r302.service.dao.IModalitiesDAO;
 import com.bbva.rbvd.lib.r302.transform.map.ProductMap;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
