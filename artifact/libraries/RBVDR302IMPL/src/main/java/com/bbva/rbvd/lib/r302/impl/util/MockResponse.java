@@ -29,10 +29,10 @@ public class MockResponse {
 
     public static String generateExternalQuotationIdRandom(){
         StringBuilder bld = new StringBuilder();
-        String preRandom = "1b7m829f-a8d9-49ec-8535-";
+        String preRandom = "1b7m629f-a8d9-49ec-85j5-";
         bld.append(preRandom);
 
-        while(bld.toString().length() < 36){
+        while(bld.length() < 32){
             bld.append(ValidationUtil.randomChar());
         }
 

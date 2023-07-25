@@ -43,7 +43,6 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /*@RunWith(SpringJUnit4ClassRunner.class)
@@ -530,6 +529,5 @@ public class RBVDR302Test {
 		assertNotNull(validation);
 	}
 	*/
-
 
 }

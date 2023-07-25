@@ -23,7 +23,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class ValidationUtil {
 
     private static final Random rand = new Random();
-    private static final int INDEX_RANDOM = rand.nextInt(36);
+    private static final int INDEX_RANDOM = rand.nextInt(58);
 
 
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
