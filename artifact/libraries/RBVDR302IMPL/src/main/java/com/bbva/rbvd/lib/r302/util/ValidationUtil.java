@@ -27,7 +27,8 @@ public class ValidationUtil {
 
 
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
-        List<Map<String, Object>> rows = (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
+        List<Map<String, Object>> rows =
+                (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
         if (isEmpty(rows)) {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }
