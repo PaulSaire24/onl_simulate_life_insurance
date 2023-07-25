@@ -72,7 +72,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
 
 
-        //response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - prepareResponse END | response: {} *****",response);
         return response;

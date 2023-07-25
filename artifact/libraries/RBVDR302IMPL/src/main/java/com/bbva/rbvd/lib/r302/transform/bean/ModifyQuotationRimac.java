@@ -42,9 +42,6 @@ public class ModifyQuotationRimac {
         List<CoberturaBO> coberturas = new ArrayList<>();
         payload.setCoberturas(coberturas);
 
-        //Construir lista asegurados
-        //List<AseguradoBO> asegurados = new ArrayList<>();
-        //payload.setAsegurado(asegurados);
 
         simulationBo.setPayload(payload);
         return simulationBo;

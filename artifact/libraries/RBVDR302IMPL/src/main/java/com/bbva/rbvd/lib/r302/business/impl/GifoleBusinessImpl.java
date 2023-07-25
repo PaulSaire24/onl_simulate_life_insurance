@@ -86,8 +86,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         LOGGER.info("***** GifoleBusinessImpl ***** - createGifoleASO START");
 
         InsuranceProductDTO productDto = response.getProduct();
-
-        InsurancePlanDTO planDTO = productDto.getPlans().stream().filter(r -> r.getIsRecommended()).findFirst().orElse(new InsurancePlanDTO());
+        InsurancePlanDTO planDTO = productDto.getPlans().stream().filter(InsurancePlanDTO::getIsRecommended).findFirst().orElse(new InsurancePlanDTO());
         List<InstallmentsDTO> installmentPlanDto = planDTO.getInstallmentPlans();
 
         GifoleInsuranceRequestASO gifoleInsuranceRequest = new GifoleInsuranceRequestASO();
