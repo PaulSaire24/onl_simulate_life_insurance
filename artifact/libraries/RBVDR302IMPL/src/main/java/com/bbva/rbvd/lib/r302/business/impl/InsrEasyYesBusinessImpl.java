@@ -70,7 +70,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
 
 
-
         LOGGER.info("***** InsrEasyYesBusinessImpl - prepareResponse END | response: {} *****",response);
         return response;
     }

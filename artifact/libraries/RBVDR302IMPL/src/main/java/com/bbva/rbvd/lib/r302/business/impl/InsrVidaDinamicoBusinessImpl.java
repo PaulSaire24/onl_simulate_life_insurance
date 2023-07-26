@@ -48,7 +48,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO responseRimac = null;
         if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
-            responseRimac = new MockResponse().getMockResponseRimacQuotationService();
+            responseRimac = MockResponse.getInstance().getMockResponseRimacQuotationService();
         }else{
             responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         }
@@ -73,7 +73,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO responseRimac = null;
         if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
-            responseRimac = new MockResponse().getMockResponseRimacModifyQuotationService();
+            responseRimac = MockResponse.getInstance().getMockResponseRimacModifyQuotationService();
         } else {
             responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
         }
@@ -143,7 +143,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
 
-        //response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;

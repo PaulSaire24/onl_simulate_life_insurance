@@ -6,11 +6,10 @@ import org.junit.Test;
 
 public class MockResponseTest {
 
-    MockResponse mockResponse = new MockResponse();
 
     @Test
     public void test_getMockResponseRimacService(){
-        InsuranceLifeSimulationBO mock = mockResponse.getMockResponseRimacQuotationService();
+        InsuranceLifeSimulationBO mock = MockResponse.getInstance().getMockResponseRimacQuotationService();
 
         Assert.assertNotNull(mock);
         Assert.assertNotNull(mock.getPayload());
