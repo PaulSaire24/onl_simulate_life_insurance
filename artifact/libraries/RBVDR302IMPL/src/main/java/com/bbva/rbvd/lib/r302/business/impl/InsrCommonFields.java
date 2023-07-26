@@ -4,8 +4,8 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.rbvd.lib.r301.RBVDR301;
 
 public class InsrCommonFields {
-    private RBVDR301 rbvdR301;
-    private ApplicationConfigurationService applicationConfigurationService;
+    private final RBVDR301 rbvdR301;
+    private final ApplicationConfigurationService applicationConfigurationService;
 
     public InsrCommonFields(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.rbvdR301 = rbvdR301;

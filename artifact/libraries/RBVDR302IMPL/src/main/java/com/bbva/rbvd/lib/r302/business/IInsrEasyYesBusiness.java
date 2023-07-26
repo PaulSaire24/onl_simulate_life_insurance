@@ -5,6 +5,6 @@ import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 
 public interface IInsrEasyYesBusiness {
 
-     PayloadStore doEasyYes( PayloadConfig payloadConfig);
+     PayloadStore doEasyYes(PayloadConfig payloadConfig);
 
 }

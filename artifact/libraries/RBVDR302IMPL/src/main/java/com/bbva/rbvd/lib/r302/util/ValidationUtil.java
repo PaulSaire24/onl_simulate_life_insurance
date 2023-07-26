@@ -11,7 +11,6 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 
-import java.util.Random;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,10 +20,6 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class ValidationUtil {
-
-    private static final Random rand = new Random();
-    private static final int INDEX_RANDOM = rand.nextInt(58);
-
 
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
         List<Map<String, Object>> rows =
@@ -76,13 +71,6 @@ public class ValidationUtil {
 
     public static boolean isFirstCalled(String externalSimulationId) {
         return Objects.isNull(externalSimulationId);
-    }
-
-
-    public static String randomChar(){
-        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        char c = alphabet.charAt(INDEX_RANDOM);
-        return String.valueOf(c);
     }
 
 
