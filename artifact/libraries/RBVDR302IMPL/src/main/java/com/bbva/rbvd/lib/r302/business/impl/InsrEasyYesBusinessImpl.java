@@ -17,14 +17,16 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class InsrEasyYesBusinessImpl extends InsrCommonFields implements IInsrEasyYesBusiness {
+public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InsrEasyYesBusinessImpl.class);
+    private final RBVDR301 rbvdR301;
+    private final ApplicationConfigurationService applicationConfigurationService;
 
     public InsrEasyYesBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-        super(rbvdR301, applicationConfigurationService);
+        this.rbvdR301 = rbvdR301;
+        this.applicationConfigurationService = applicationConfigurationService;
     }
-
 
     public PayloadStore doEasyYes(PayloadConfig payloadConfig) {
 
@@ -36,7 +38,7 @@ public class InsrEasyYesBusinessImpl extends InsrCommonFields implements IInsrEa
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | responseRimac: {} *****",responseRimac);
 
         //construccion de respuesta trx
-        LifeSimulationDTO response = prepareResponse(getApplicationConfigurationService(), payloadConfig, responseRimac);
+        LifeSimulationDTO response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | response trx: {} *****",response);
 
         PayloadStore payloadStore = new PayloadStore();
@@ -80,7 +82,7 @@ public class InsrEasyYesBusinessImpl extends InsrCommonFields implements IInsrEa
         requestRimac.getPayload().setProducto(productInformation);
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = getRbvdR301().executeSimulationRimacService(requestRimac,input.getTraceId());
+        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | responseRimac: {} *****",responseRimac);
 
         if(Objects.isNull(responseRimac)){

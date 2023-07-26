@@ -23,12 +23,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-public class InsrVidaDinamicoBusinessImpl extends InsrCommonFields implements IInsrDynamicLifeBusiness {
+public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InsrVidaDinamicoBusinessImpl.class);
 
+    private final RBVDR301 rbvdR301;
+    private final ApplicationConfigurationService applicationConfigurationService;
+
     public InsrVidaDinamicoBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-        super(rbvdR301, applicationConfigurationService);
+        this.rbvdR301 = rbvdR301;
+        this.applicationConfigurationService = applicationConfigurationService;
     }
 
     public InsuranceLifeSimulationBO executeQuotationRimacService(
@@ -43,10 +47,10 @@ public class InsrVidaDinamicoBusinessImpl extends InsrCommonFields implements II
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
-        if (getApplicationConfigurationService().getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
+        if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
             responseRimac = new MockResponse().getMockResponseRimacQuotationService();
         }else{
-            responseRimac = getRbvdR301().executeSimulationRimacService(requestRimac,input.getTraceId());
+            responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | responseRimac: {} *****",responseRimac);
 
@@ -68,10 +72,10 @@ public class InsrVidaDinamicoBusinessImpl extends InsrCommonFields implements II
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
-        if (getApplicationConfigurationService().getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
+        if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
             responseRimac = new MockResponse().getMockResponseRimacModifyQuotationService();
         } else {
-            responseRimac = getRbvdR301().executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
+            responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | responseRimac: {} *****",responseRimac);
 
@@ -109,7 +113,7 @@ public class InsrVidaDinamicoBusinessImpl extends InsrCommonFields implements II
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);
 
         //construccion de respuesta trx
-        response = prepareResponse(getApplicationConfigurationService(), payloadConfig, responseRimac);
+        response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
 
         //guardar en bd
         return new PayloadStore(
