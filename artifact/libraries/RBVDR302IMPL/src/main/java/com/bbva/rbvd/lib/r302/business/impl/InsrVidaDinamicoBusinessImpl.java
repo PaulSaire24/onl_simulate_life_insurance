@@ -135,7 +135,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
         response = payloadConfig.getInput();
         response.getProduct().setName(responseRimac.getPayload().getProducto());
-        response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
+        //response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
+        response.setExternalSimulationId(applicationConfigurationService.getProperty("EXTERNAL_SIMULATION_ID_MOCK"));
         response.getProduct().setPlans(listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(
                 payloadConfig.getListInsuranceProductModalityDAO(),
                 responseRimac,
