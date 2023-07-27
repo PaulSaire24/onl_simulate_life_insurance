@@ -2,6 +2,8 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -16,6 +18,7 @@ import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
+import io.jsonwebtoken.lang.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +29,9 @@ import java.util.Objects;
 public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InsrVidaDinamicoBusinessImpl.class);
+
+    private static final String REFUNDS_UNITTYPE_AMOUNT = "AMOUNT";
+
 
     private final RBVDR301 rbvdR301;
     private final ApplicationConfigurationService applicationConfigurationService;
@@ -134,18 +140,31 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
         response = payloadConfig.getInput();
         response.getProduct().setName(responseRimac.getPayload().getProducto());
-        //response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
-        response.setExternalSimulationId(applicationConfigurationService.getProperty("EXTERNAL_SIMULATION_ID_MOCK"));
+        response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
         response.getProduct().setPlans(listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(
                 payloadConfig.getListInsuranceProductModalityDAO(),
                 responseRimac,
                 payloadConfig.getProperties().getSegmentLifePlans().get(0),
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
+        modifyRefundAmount(responseRimac,response);
 
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
+    }
+
+    private static void modifyRefundAmount(InsuranceLifeSimulationBO responseRimac,LifeSimulationDTO response){
+        if(!Collections.isEmpty(responseRimac.getPayload().getCotizaciones()) &&
+            Objects.nonNull(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMontoDevolucion())){
+            RefundsDTO montoDevolucion = new RefundsDTO();
+            UnitDTO unit = new UnitDTO();
+            unit.setUnitType(REFUNDS_UNITTYPE_AMOUNT);
+            unit.setAmount(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMontoDevolucion());
+            unit.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+            montoDevolucion.setUnit(unit);
+            response.getListRefunds().add(montoDevolucion);
+        }
     }
 
 

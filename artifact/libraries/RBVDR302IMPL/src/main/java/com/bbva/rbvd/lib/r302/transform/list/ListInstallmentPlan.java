@@ -156,9 +156,9 @@ public class ListInstallmentPlan {
         CoverageDTO coverageDTO = new CoverageDTO();
 
         coverageDTO.setId(coverage.getCobertura().toString());
-        coverageDTO.setName(coverage.getObservacionCobertura());
+        coverageDTO.setName(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setIsSelected(YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
-        coverageDTO.setDescription(coverage.getDetalleCobertura());
+        coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
 
