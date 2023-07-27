@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
 
 public class ModifyQuotationRimac {
 
+    private static final String REFUNDS_UNITTYPE_PERCENTAGE = "PERCENTAGE";
+
+
     private ModifyQuotationRimac() {
     }
 
@@ -34,14 +38,13 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getSumaAseguradaCoberturaFallecimiento(input));
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
-        datoParticularBOList.add(getDatoParticularIndEndoso());
         datoParticularBOList.add(getCumuloCliente(cumulo));
+        //datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
 
         //Construir coberturas adicionales
         List<CoberturaBO> coberturas = new ArrayList<>();
         payload.setCoberturas(coberturas);
-
 
         simulationBo.setPayload(payload);
         return simulationBo;
@@ -53,7 +56,7 @@ public class ModifyQuotationRimac {
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
+        //rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
     }
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
@@ -76,8 +79,24 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_PORCENTAJE_DEVOLUCION.getValue());
         datos.setCodigo("");
-        datos.setValor(CollectionUtils.isEmpty(input.getListRefunds()) ? "0" : String.valueOf(input.getListRefunds().get(0).getUnit().getPercentage()));
+        datos.setValor(getRefundPercentage(input));
         return datos;
+    }
+
+    private static String getRefundPercentage(LifeSimulationDTO input) {
+
+        String percentage;
+
+        if(CollectionUtils.isEmpty(input.getListRefunds())){
+            percentage = "0";
+        }else{
+            List<RefundsDTO> refunds = input.getListRefunds().stream()
+                    .filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(REFUNDS_UNITTYPE_PERCENTAGE))
+                    .collect(Collectors.toList());
+            percentage = String.valueOf(refunds.get(0).getUnit().getPercentage());
+        }
+
+        return percentage;
     }
 
     private static DatoParticularBO getDatoParticularPeriodoAnios(LifeSimulationDTO input) {
