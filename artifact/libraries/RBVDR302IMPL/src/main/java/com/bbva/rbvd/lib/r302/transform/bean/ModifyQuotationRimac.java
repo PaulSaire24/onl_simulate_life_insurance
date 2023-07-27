@@ -93,7 +93,8 @@ public class ModifyQuotationRimac {
             List<RefundsDTO> refunds = input.getListRefunds().stream()
                     .filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(REFUNDS_UNITTYPE_PERCENTAGE))
                     .collect(Collectors.toList());
-            percentage = String.valueOf(refunds.get(0).getUnit().getPercentage());
+            BigDecimal numPercentage = refunds.get(0).getUnit().getPercentage();
+            percentage = String.valueOf(numPercentage.intValue());
         }
 
         return percentage;
@@ -111,7 +112,14 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_SUMA_ASEGURADA_COBERTURA_FALLECIMIENTO.getValue());
         datos.setCodigo("");
-        datos.setValor(input.getInsuredAmount() != null ? String.valueOf(input.getInsuredAmount().getAmount()) : "0");
+
+        if(input.getInsuredAmount() != null){
+            BigDecimal insuredAmount = input.getInsuredAmount().getAmount();
+            datos.setValor(String.valueOf(insuredAmount.intValue()));
+        }else{
+            datos.setValor("0");
+        }
+
         return datos;
     }
 
