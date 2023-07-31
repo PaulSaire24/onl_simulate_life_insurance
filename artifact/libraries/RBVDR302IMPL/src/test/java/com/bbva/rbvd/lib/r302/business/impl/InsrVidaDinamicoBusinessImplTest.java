@@ -186,4 +186,13 @@ public class InsrVidaDinamicoBusinessImplTest{
         Assert.assertNotNull(response);
     }
 
+    @Test(expected = BusinessException.class)
+    public void callQuotationRimacServiceIsNull(){
+
+        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301, applicationConfigurationService);
+        insrEasyYesBusiness.doEasyYes(payloadConfig);
+
+
+    }
+
 }
