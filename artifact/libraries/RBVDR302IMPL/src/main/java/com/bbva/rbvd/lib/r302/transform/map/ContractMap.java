@@ -15,6 +15,7 @@ public class ContractMap {
         Map<String, Object> mapStringObject = new HashMap<>();
         mapStringObject.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), idProduct);
         mapStringObject.put(RBVDProperties.FIELD_CUSTOMER_ID.getValue(), idHolder);
+        mapStringObject.put("PARTICIPANT_ROLE_ID",new BigDecimal("2"));
 
         return mapStringObject;
     }
