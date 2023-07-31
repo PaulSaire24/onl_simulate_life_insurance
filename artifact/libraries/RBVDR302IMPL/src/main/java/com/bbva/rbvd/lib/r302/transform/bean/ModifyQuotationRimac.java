@@ -39,7 +39,7 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
         datoParticularBOList.add(getCumuloCliente(cumulo));
-        //datoParticularBOList.add(getDatoParticularIndEndoso());
+        datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
 
         //Construir coberturas adicionales
@@ -56,7 +56,7 @@ public class ModifyQuotationRimac {
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
-        //rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
     }
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
