@@ -18,7 +18,6 @@ import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
-import io.jsonwebtoken.lang.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +68,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
 
     public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo,List<InsuranceProductModalityDAO> planes){
+            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo){
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService START *****");
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
@@ -111,8 +110,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    payloadConfig.getListInsuranceProductModalityDAO()
+                    payloadConfig.getSumCumulus()
             );
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);
@@ -155,7 +153,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     private static void modifyRefundAmount(InsuranceLifeSimulationBO responseRimac,LifeSimulationDTO response){
-        if(!Collections.isEmpty(responseRimac.getPayload().getCotizaciones()) &&
+        if(responseRimac.getPayload().getCotizaciones() != null &&
             Objects.nonNull(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMontoDevolucion())){
             RefundsDTO montoDevolucion = new RefundsDTO();
             UnitDTO unit = new UnitDTO();
