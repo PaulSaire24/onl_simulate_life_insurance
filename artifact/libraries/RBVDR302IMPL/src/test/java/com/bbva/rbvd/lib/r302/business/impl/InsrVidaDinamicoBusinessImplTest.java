@@ -150,8 +150,7 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "VIDADINAMICO",
                 customerList,
-                BigDecimal.valueOf(1),
-                new ArrayList<>()
+                BigDecimal.valueOf(1)
                 );
     }
 
@@ -193,6 +192,15 @@ public class InsrVidaDinamicoBusinessImplTest{
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits());
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMinimumAmount());
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMaximumAmount());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void callQuotationRimacServiceIsNull(){
+
+        InsrEasyYesBusinessImpl insrEasyYesBusiness = new InsrEasyYesBusinessImpl(rbvdR301, applicationConfigurationService);
+        insrEasyYesBusiness.doEasyYes(payloadConfig);
+
+
     }
 
 }
