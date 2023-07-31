@@ -2,10 +2,12 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
@@ -148,6 +150,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getProperties().getSegmentLifePlans().get(1),
                 payloadConfig.getProperties().getSegmentLifePlans().get(2)));
         modifyRefundAmount(responseRimac,response);
+        response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
@@ -166,6 +169,35 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             response.getListRefunds().add(montoDevolucion);
         }
     }
+
+
+    private static InsuranceLimitsDTO getInsuranceLimits(InsuranceLifeSimulationBO responseRimac){
+
+        if(responseRimac != null && responseRimac.getPayload().getCotizaciones() != null &&
+                responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMinima() != null &&
+                responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMaxima() != null){
+
+            InsuranceLimitsDTO insuranceLimits = new InsuranceLimitsDTO();
+
+            InsuredAmountDTO sumaAseguradaMinima = new InsuredAmountDTO();
+            InsuredAmountDTO sumaAseguradaMaxima = new InsuredAmountDTO();
+
+            sumaAseguradaMinima.setAmount(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMinima());
+            sumaAseguradaMinima.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+
+            sumaAseguradaMaxima.setAmount(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMaxima());
+            sumaAseguradaMaxima.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+
+            insuranceLimits.setMinimumAmount(sumaAseguradaMinima);
+            insuranceLimits.setMaximumAmount(sumaAseguradaMaxima);
+
+            return insuranceLimits;
+
+        } else {
+            return null;
+        }
+    }
+
 
 
 }

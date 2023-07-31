@@ -15,6 +15,7 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
@@ -179,12 +180,19 @@ public class InsrVidaDinamicoBusinessImplTest{
         termDTO.setNumber(10);
         requestInput.setTerm(termDTO);
 
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMinima(new BigDecimal(1000));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMaxima(new BigDecimal(2000));
+
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
 
-        PayloadStore response = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
+        PayloadStore validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
 
-        Assert.assertNotNull(response);
+        Assert.assertNotNull(validation);
+
+        Assert.assertNotNull(validation.getResponse().getInsuranceLimits());
+        Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMinimumAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMaximumAmount());
     }
 
 }
