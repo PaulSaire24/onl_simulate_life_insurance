@@ -34,7 +34,6 @@ public class GifoleBusinessImplTest  {
     private GifoleBusinessImpl gifoleBusiness ;
     private RBVDR301 rbvdR301;
 
-
     @Before
     public void setUp() throws Exception {
 
