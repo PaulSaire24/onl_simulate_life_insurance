@@ -4,6 +4,11 @@ import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
@@ -61,6 +66,9 @@ public class InsrVidaDinamicoBusinessImplTest{
         mockData = MockData.getInstance();
         mockDTO = MockDTO.getInstance();
         customerList = mockDTO.getCustomerDataResponse();
+
+
+
         requestInput = mockData.getInsuranceSimulationRequest();
         insrVidaDinamicoBusiness = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
@@ -148,6 +156,28 @@ public class InsrVidaDinamicoBusinessImplTest{
 
     @Test
     public void doDynamicLifeTestWithExecuteModifyQuotationRimacServiceOK(){
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setMontoDevolucion(new BigDecimal(40000));
+
+        List<RefundsDTO> listRefunds = new ArrayList<>();
+        RefundsDTO refundsDTO = new RefundsDTO();
+        UnitDTO unitDTO = new UnitDTO();
+        unitDTO.setUnitType("PERCENTAGE");
+        unitDTO.setPercentage(new BigDecimal(100));
+
+        refundsDTO.setUnit(unitDTO);
+        listRefunds.add(refundsDTO);
+
+        requestInput.setListRefunds(listRefunds);
+
+        InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
+        insuredAmountDTO.setAmount(new BigDecimal(2000));
+        insuredAmountDTO.setCurrency("PEN");
+        requestInput.setInsuredAmount(insuredAmountDTO);
+
+        TermDTO termDTO = new TermDTO();
+        termDTO.setNumber(10);
+        requestInput.setTerm(termDTO);
 
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
