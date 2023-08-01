@@ -2,10 +2,10 @@ package com.bbva.rbvd.lib.r302.impl;
 
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r302.pattern.Simulation;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationEasyYes;
+import com.bbva.rbvd.lib.r302.pattern.product.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationVidaDinamico;
+import com.bbva.rbvd.lib.r302.pattern.product.SimulationVidaDinamico;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

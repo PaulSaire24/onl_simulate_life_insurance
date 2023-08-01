@@ -1,9 +1,10 @@
-package com.bbva.rbvd.lib.r302.pattern.impl;
+package com.bbva.rbvd.lib.r302.pattern.product;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SimulationVidaDinamico extends SimulationDecorator{
+public class SimulationVidaDinamico extends SimulationDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
 
 	public SimulationVidaDinamico(PreSimulation preSimulation, PostSimulation postSimulation) {

@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.pattern.impl;
+package com.bbva.rbvd.lib.r302.pattern.product;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -9,13 +9,14 @@ import com.bbva.rbvd.lib.r302.business.impl.GifoleBusinessImpl;
 import com.bbva.rbvd.lib.r302.business.impl.InsrEasyYesBusinessImpl;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class SimulationEasyYes extends SimulationDecorator{
+public class SimulationEasyYes extends SimulationDecorator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationEasyYes.class);
 
