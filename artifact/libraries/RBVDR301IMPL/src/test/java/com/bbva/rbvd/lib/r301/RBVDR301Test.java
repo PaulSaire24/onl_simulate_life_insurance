@@ -36,6 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
@@ -277,8 +278,8 @@ public class RBVDR301Test {
 	public void executeSimulationModificationRimacService_OK(){
 		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_OK...");
 
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), anyObject(),anyMap())).
-				thenReturn(new InsuranceLifeSimulationBO());
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(),(Class<InsuranceLifeSimulationBO>) any(),anyMap())).
+				thenReturn(new ResponseEntity<>(new InsuranceLifeSimulationBO(),HttpStatus.OK));
 
 		InsuranceLifeSimulationBO validation = rbvdr301Impl.executeSimulationModificationRimacService(
 				new InsuranceLifeSimulationBO(),
@@ -291,8 +292,9 @@ public class RBVDR301Test {
 	public void executeSimulationModificationRimacService_RestClientException() {
 		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_RestClientException...");
 
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), anyObject(),anyMap())).
-				thenThrow(new RestClientException(MESSAGE_EXCEPTION));
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(),(Class<InsuranceLifeSimulationBO>) any(),anyMap()))
+				.thenThrow(new HttpServerErrorException(HttpStatus.BAD_REQUEST,""));
+				//thenThrow(new RestClientException(MESSAGE_EXCEPTION));
 
 		this.rbvdr301Impl.executeSimulationModificationRimacService(
 				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");

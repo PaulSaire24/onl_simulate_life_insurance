@@ -85,17 +85,19 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		try {
 
-			response = this.externalApiConnector.postForObject(RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), entity,
-					InsuranceLifeSimulationBO.class,singletonMap("idCotizacion",quotationId));
-			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
+			ResponseEntity<InsuranceLifeSimulationBO> output =this.externalApiConnector.exchange(
+					RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), org.springframework.http.HttpMethod.PATCH,entity,InsuranceLifeSimulationBO.class,singletonMap("idCotizacion",quotationId));
 
+			response = output.getBody();
+			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
+			return response;
 		} catch (RestClientException ex) {
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Exception: {}", ex.getMessage());
 			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
 			exceptionHandler.handler(ex);
+			return null;
 		}
 
-		return response;
 	}
 
 	private String getRequestJson(Object o) {
