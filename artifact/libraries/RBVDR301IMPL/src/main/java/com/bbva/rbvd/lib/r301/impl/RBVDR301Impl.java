@@ -28,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.singletonMap;
+
 public class RBVDR301Impl extends RBVDR301Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR301Impl.class);
@@ -84,7 +86,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		try {
 
 			response = this.externalApiConnector.postForObject(RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), entity,
-					InsuranceLifeSimulationBO.class);
+					InsuranceLifeSimulationBO.class,singletonMap("idCotizacion",quotationId));
 			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
 
 		} catch (RestClientException ex) {

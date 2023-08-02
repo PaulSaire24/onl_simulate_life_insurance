@@ -277,7 +277,7 @@ public class RBVDR301Test {
 	public void executeSimulationModificationRimacService_OK(){
 		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_OK...");
 
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
+		when(this.externalApiConnector.postForObject(anyString(), anyObject(), anyObject(),anyMap())).
 				thenReturn(new InsuranceLifeSimulationBO());
 
 		InsuranceLifeSimulationBO validation = rbvdr301Impl.executeSimulationModificationRimacService(
@@ -291,7 +291,7 @@ public class RBVDR301Test {
 	public void executeSimulationModificationRimacService_RestClientException() {
 		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_RestClientException...");
 
-		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
+		when(this.externalApiConnector.postForObject(anyString(), anyObject(), anyObject(),anyMap())).
 				thenThrow(new RestClientException(MESSAGE_EXCEPTION));
 
 		this.rbvdr301Impl.executeSimulationModificationRimacService(
