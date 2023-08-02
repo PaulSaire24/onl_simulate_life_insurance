@@ -2,10 +2,12 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -22,10 +24,14 @@ import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
@@ -75,6 +81,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
         requestRimac.getPayload().setProducto(businessName);
+        requestRimac.getPayload().setCoberturas(getDeathCoverageFromResponse(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -193,6 +200,33 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         } else {
             return null;
+        }
+    }
+
+    private static List<CoberturaBO> getDeathCoverageFromResponse(LifeSimulationDTO response){
+        if(response.getProduct().getPlans() != null && response.getProduct().getPlans().get(0).getCoverages() != null){
+            //Obtener cobeertura de fallecimiento
+            List<CoverageDTO> deathCoverage = response.getProduct().getPlans().get(0).getCoverages().stream().filter(coverageDTO -> coverageDTO.getId().equals("10920")).collect(Collectors.toList());
+
+            if(!CollectionUtils.isEmpty(deathCoverage)){
+                String idDeathCoverage = deathCoverage.get(0).getId();
+                BigDecimal insuredAmountDeathCoverage =  deathCoverage.get(0).getUnit().getAmount();
+
+                //Construir
+                List<CoberturaBO> coberturaBOS = new ArrayList<>();
+                CoberturaBO cobertura = new CoberturaBO();
+                cobertura.setCodigoCobertura(Long.parseLong(idDeathCoverage));
+                cobertura.setIndSeleccionar("S");
+                cobertura.setSumaAsegurada(insuredAmountDeathCoverage);
+                coberturaBOS.add(cobertura);
+
+                return coberturaBOS;
+            }else{
+                return Collections.emptyList();
+            }
+
+        }else{
+            return Collections.emptyList();
         }
     }
 

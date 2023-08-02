@@ -42,10 +42,6 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
 
-        //Construir coberturas adicionales
-        List<CoberturaBO> coberturas = new ArrayList<>();
-        payload.setCoberturas(coberturas);
-
         simulationBo.setPayload(payload);
         return simulationBo;
     }
