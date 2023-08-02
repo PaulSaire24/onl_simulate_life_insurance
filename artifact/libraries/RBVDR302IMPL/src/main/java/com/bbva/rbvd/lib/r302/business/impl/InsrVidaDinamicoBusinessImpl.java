@@ -81,7 +81,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
         requestRimac.getPayload().setProducto(businessName);
-        requestRimac.getPayload().setCoberturas(getDeathCoverageFromResponse(input));
+        requestRimac.getPayload().setCoberturas(getDeathCoverageFromRequest(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -203,31 +203,22 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }
     }
 
-    private static List<CoberturaBO> getDeathCoverageFromResponse(LifeSimulationDTO response){
-        if(response.getProduct().getPlans() != null && response.getProduct().getPlans().get(0).getCoverages() != null){
-            //Obtener cobeertura de fallecimiento
-            List<CoverageDTO> deathCoverage = response.getProduct().getPlans().get(0).getCoverages().stream().filter(coverageDTO -> coverageDTO.getId().equals("10920")).collect(Collectors.toList());
-
-            if(!CollectionUtils.isEmpty(deathCoverage)){
-                String idDeathCoverage = deathCoverage.get(0).getId();
-                BigDecimal insuredAmountDeathCoverage =  deathCoverage.get(0).getUnit().getAmount();
-
-                //Construir
-                List<CoberturaBO> coberturaBOS = new ArrayList<>();
-                CoberturaBO cobertura = new CoberturaBO();
-                cobertura.setCodigoCobertura(Long.parseLong(idDeathCoverage));
-                cobertura.setIndSeleccionar("S");
-                cobertura.setSumaAsegurada(insuredAmountDeathCoverage);
-                coberturaBOS.add(cobertura);
-
-                return coberturaBOS;
-            }else{
-                return Collections.emptyList();
-            }
-
+    private static List<CoberturaBO> getDeathCoverageFromRequest(LifeSimulationDTO request){
+        if(request.getProduct().getPlans() != null && request.getProduct().getPlans().get(0).getCoverages() != null &&
+                request.getProduct().getPlans().get(0).getCoverages().get(0).getInsuredAmount() != null){
+            //Obtener el arreglo de coberturas
+            return request.getProduct().getPlans().get(0).getCoverages().stream().map(InsrVidaDinamicoBusinessImpl::mapCoveragesForRequest).collect(Collectors.toList());
         }else{
             return Collections.emptyList();
         }
+    }
+
+    private static CoberturaBO mapCoveragesForRequest(CoverageDTO coverageDTO){
+        CoberturaBO cobertura = new CoberturaBO();
+        cobertura.setCodigoCobertura(Long.parseLong(coverageDTO.getId()));
+        cobertura.setIndSeleccionar("S");
+        cobertura.setSumaAsegurada(coverageDTO.getInsuredAmount().getAmount());
+        return cobertura;
     }
 
 

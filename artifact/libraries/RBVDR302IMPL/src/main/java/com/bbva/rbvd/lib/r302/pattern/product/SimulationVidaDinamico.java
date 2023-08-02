@@ -14,9 +14,11 @@ import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +59,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 	}
 
 	private static void validatePlanWithRefundPercentage(LifeSimulationDTO input) {
-		if(input.getListRefunds() != null){
+		if(input.getListRefunds() != null && CollectionUtils.isEmpty(input.getProduct().getPlans())){
 			BigDecimal percentage = input.getListRefunds().stream().filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals("PERCENTAGE")).map(refundsDTO -> refundsDTO.getUnit().getPercentage()).collect(Collectors.toList()).get(0);
 			if(percentage.compareTo(BigDecimal.ZERO) == 0){
 				InsurancePlanDTO plan01 = new InsurancePlanDTO();
