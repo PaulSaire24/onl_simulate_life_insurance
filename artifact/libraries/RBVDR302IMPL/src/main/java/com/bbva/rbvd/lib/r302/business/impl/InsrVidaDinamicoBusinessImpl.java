@@ -2,12 +2,10 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -24,14 +22,10 @@ import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
@@ -81,7 +75,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
         requestRimac.getPayload().setProducto(businessName);
-        requestRimac.getPayload().setCoberturas(getDeathCoverageFromRequest(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -202,25 +195,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             return null;
         }
     }
-
-    private static List<CoberturaBO> getDeathCoverageFromRequest(LifeSimulationDTO request){
-        if(request.getProduct().getPlans() != null && request.getProduct().getPlans().get(0).getCoverages() != null &&
-                request.getProduct().getPlans().get(0).getCoverages().get(0).getInsuredAmount() != null){
-            //Obtener el arreglo de coberturas
-            return request.getProduct().getPlans().get(0).getCoverages().stream().map(InsrVidaDinamicoBusinessImpl::mapCoveragesForRequest).collect(Collectors.toList());
-        }else{
-            return Collections.emptyList();
-        }
-    }
-
-    private static CoberturaBO mapCoveragesForRequest(CoverageDTO coverageDTO){
-        CoberturaBO cobertura = new CoberturaBO();
-        cobertura.setCodigoCobertura(Long.parseLong(coverageDTO.getId()));
-        cobertura.setIndSeleccionar("S");
-        cobertura.setSumaAsegurada(coverageDTO.getInsuredAmount().getAmount());
-        return cobertura;
-    }
-
 
 
 }
