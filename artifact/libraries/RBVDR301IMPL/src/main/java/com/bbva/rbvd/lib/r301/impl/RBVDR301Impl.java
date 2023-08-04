@@ -28,13 +28,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.singletonMap;
+
 public class RBVDR301Impl extends RBVDR301Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR301Impl.class);
 
 	private static final String AUTHORIZATION = "Authorization";
 
-
+	//ejecuta la simulación del servicio Rímac
 	@Override
 	public InsuranceLifeSimulationBO executeSimulationRimacService(final InsuranceLifeSimulationBO payload, String traceId) {
 
@@ -83,17 +85,19 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		try {
 
-			response = this.externalApiConnector.postForObject(RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), entity,
-					InsuranceLifeSimulationBO.class);
-			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
+			ResponseEntity<InsuranceLifeSimulationBO> output =this.externalApiConnector.exchange(
+					RBVDProperties.SIMULATION_UPDATE_LIFE_RIMAC.getValue(), org.springframework.http.HttpMethod.PATCH,entity,InsuranceLifeSimulationBO.class,singletonMap("idCotizacion",quotationId));
 
+			response = output.getBody();
+			LOGGER.info("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Response: {}", getRequestJson(response));
+			return response;
 		} catch (RestClientException ex) {
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Exception: {}", ex.getMessage());
 			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
 			exceptionHandler.handler(ex);
+			return null;
 		}
 
-		return response;
 	}
 
 	private String getRequestJson(Object o) {
@@ -124,7 +128,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return responseList;
 	}
 
-
+	//ejecuta el servicio de Gifole para vida
 	public Integer executeGifolelifeService(GifoleInsuranceRequestASO requestBody) {
 		LOGGER.info("***** RBVDR301Impl - executeGifolelifeService START *****");
 
@@ -152,7 +156,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGifolelifeService END *****");
 		return httpStatus;
 	}
-
+	//Ejecuta el servicio Cryto (entrada: cryptoASO)
 	public CryptoASO executeCryptoService(CryptoASO cryptoASO) {
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService START *****");
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService ***** Param: {}", cryptoASO.getStream());
@@ -174,7 +178,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return output;
 	}
 
-
+	//Ejecuta para obtener el servicio Tier
 	public TierASO executeGetTierService(String holderId) {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService START *****");
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService ***** Params: {}", holderId);
@@ -200,14 +204,14 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService END *****");
 		return output;
 	}
-
+	//Crea las cabeceras Http
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application","json", StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
 		return headers;
 	}
-
+	//Crea las cabeceras AWS de Http
 	private HttpHeaders createHttpHeadersAWS(SignatureAWS signature) {
 		HttpHeaders headers = new HttpHeaders();
 		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);

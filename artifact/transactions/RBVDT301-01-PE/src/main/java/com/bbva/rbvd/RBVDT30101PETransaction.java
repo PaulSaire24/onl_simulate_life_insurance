@@ -40,7 +40,6 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setTraceId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
 		lifeSimulationDTO.setAap((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.AAP));
 
-
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
 		if(nonNull(response)) {
