@@ -4,6 +4,8 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
+import com.bbva.rbvd.lib.r302.business.impl.GifoleBusinessImpl;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
@@ -50,8 +52,13 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 
 		//Actualizacion tipo documento en salida trx
 		payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
-
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
+
+
+		if(ValidationUtil.isFirstCalled(simulationId)){
+			IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301,applicationConfigurationService);
+			iGifoleBusiness.serviceAddGifole(payloadStore.getResponse(),payloadConfig.getCustomerListASO());
+		}
 
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() END *****");
 
