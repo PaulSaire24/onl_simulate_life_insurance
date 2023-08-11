@@ -4,13 +4,13 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
-import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r302.business.impl.InsrVidaDinamicoBusinessImpl;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
 import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
+import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
