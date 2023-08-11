@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
@@ -15,6 +16,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.PlanBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import java.util.ArrayList;
@@ -152,7 +154,7 @@ public class ListInstallmentPlan {
         return result;
     }
 
-    private CoverageDTO createCoverageDTO(final CoberturaBO coverage) {
+    private CoverageDTO createCoverageDTO(CoberturaBO coverage) {
         CoverageDTO coverageDTO = new CoverageDTO();
 
         coverageDTO.setId(coverage.getCobertura().toString());
@@ -162,7 +164,38 @@ public class ListInstallmentPlan {
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
 
+        coverageDTO.setFeePaymentAmount(createPaymentAmount(coverage));
+        coverageDTO.setInsuredAmount(createInsuredAmount(coverageDTO));
+        coverageDTO.setCoverageLimits(createInsuranceLimits(coverage));
+
         return coverageDTO;
+    }
+
+    private PaymentAmountDTO createPaymentAmount(CoberturaBO coverage){
+        PaymentAmountDTO paymentAmountDTO = new PaymentAmountDTO();
+
+        paymentAmountDTO.setAmount(coverage.getPrimaBruta());
+        paymentAmountDTO.setCurrency(coverage.getMoneda());
+
+        return paymentAmountDTO;
+    }
+
+    private InsuredAmountDTO createInsuredAmount(CoverageDTO coverage){
+        InsuredAmountDTO insurancePlanDTO = new InsuredAmountDTO();
+
+        insurancePlanDTO.setAmount(coverage.getAmount());
+        insurancePlanDTO.setCurrency(coverage.getCurrency());
+
+        return insurancePlanDTO;
+    }
+
+    private InsuranceLimitsDTO createInsuranceLimits (CoberturaBO coverage) {
+        InsuranceLimitsDTO coverageLimits = new InsuranceLimitsDTO();
+
+        coverageLimits.getMinimumAmount().setAmount(coverage.getSumaAseguradaMinima());
+        coverageLimits.getMaximumAmount().setAmount(coverage.getSumaAseguradaMaxima());
+
+        return null;
     }
 
     private UnitDTO createUnit(CoberturaBO coverage){
