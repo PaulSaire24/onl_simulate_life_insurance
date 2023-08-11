@@ -163,11 +163,9 @@ public class ListInstallmentPlan {
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
-
         coverageDTO.setFeePaymentAmount(createPaymentAmount(coverage));
         coverageDTO.setInsuredAmount(createInsuredAmount(coverageDTO));
         coverageDTO.setCoverageLimits(createInsuranceLimits(coverage));
-
         return coverageDTO;
     }
 
