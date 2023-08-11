@@ -163,10 +163,35 @@ public class ListInstallmentPlan {
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
+
         coverageDTO.setFeePaymentAmount(createPaymentAmount(coverage));
-        coverageDTO.setInsuredAmount(createInsuredAmount(coverageDTO));
+        coverageDTO.setInsuredAmount(createInsuredAmount(coverage));
         coverageDTO.setCoverageLimits(createInsuranceLimits(coverage));
+
         return coverageDTO;
+    }
+
+    private InsuranceLimitsDTO createInsuranceLimits (CoberturaBO coverage) {
+        InsuranceLimitsDTO insuranceLimits = new InsuranceLimitsDTO();
+        InsuredAmountDTO minimumAmount = new InsuredAmountDTO();
+        InsuredAmountDTO maximumAmount = new InsuredAmountDTO();
+
+        minimumAmount.setCurrency(coverage.getMoneda());
+        minimumAmount.setAmount(coverage.getSumaAseguradaMinima());
+
+        maximumAmount.setCurrency(coverage.getMoneda());
+        maximumAmount.setAmount(coverage.getSumaAseguradaMaxima());
+
+        insuranceLimits.setMaximumAmount(maximumAmount);
+        insuranceLimits.setMinimumAmount(minimumAmount);
+
+        /*insuranceLimits.getMaximumAmount().setAmount(coverage.getSumaAseguradaMaxima());
+        insuranceLimits.getMaximumAmount().setCurrency(coverage.getMoneda());
+
+        insuranceLimits.getMinimumAmount().setAmount(coverage.getSumaAseguradaMinima());
+        insuranceLimits.getMinimumAmount().setCurrency(coverage.getMoneda());
+        */
+        return insuranceLimits;
     }
 
     private PaymentAmountDTO createPaymentAmount(CoberturaBO coverage){
@@ -178,22 +203,13 @@ public class ListInstallmentPlan {
         return paymentAmountDTO;
     }
 
-    private InsuredAmountDTO createInsuredAmount(CoverageDTO coverage){
+    private InsuredAmountDTO createInsuredAmount(CoberturaBO coverage){
         InsuredAmountDTO insurancePlanDTO = new InsuredAmountDTO();
 
-        insurancePlanDTO.setAmount(coverage.getAmount());
-        insurancePlanDTO.setCurrency(coverage.getCurrency());
+        insurancePlanDTO.setAmount(coverage.getSumaAsegurada());
+        insurancePlanDTO.setCurrency(coverage.getMoneda());
 
         return insurancePlanDTO;
-    }
-
-    private InsuranceLimitsDTO createInsuranceLimits (CoberturaBO coverage) {
-        InsuranceLimitsDTO coverageLimits = new InsuranceLimitsDTO();
-
-        coverageLimits.getMinimumAmount().setAmount(coverage.getSumaAseguradaMinima());
-        coverageLimits.getMaximumAmount().setAmount(coverage.getSumaAseguradaMaxima());
-
-        return null;
     }
 
     private UnitDTO createUnit(CoberturaBO coverage){
