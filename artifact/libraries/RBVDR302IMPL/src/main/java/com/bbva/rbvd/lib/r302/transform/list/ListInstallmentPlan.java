@@ -185,12 +185,6 @@ public class ListInstallmentPlan {
         insuranceLimits.setMaximumAmount(maximumAmount);
         insuranceLimits.setMinimumAmount(minimumAmount);
 
-        /*insuranceLimits.getMaximumAmount().setAmount(coverage.getSumaAseguradaMaxima());
-        insuranceLimits.getMaximumAmount().setCurrency(coverage.getMoneda());
-
-        insuranceLimits.getMinimumAmount().setAmount(coverage.getSumaAseguradaMinima());
-        insuranceLimits.getMinimumAmount().setCurrency(coverage.getMoneda());
-        */
         return insuranceLimits;
     }
 
