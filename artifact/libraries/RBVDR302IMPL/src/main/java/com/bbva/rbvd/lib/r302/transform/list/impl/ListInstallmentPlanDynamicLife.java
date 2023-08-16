@@ -130,9 +130,9 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
         CoverageDTO coverageDTO = new CoverageDTO();
 
         coverageDTO.setId(coverage.getCobertura().toString());
-        coverageDTO.setName(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : coverage.getDescripcionCobertura());
-        coverageDTO.setIsSelected(ConstantsUtil.YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
-        coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
+        coverageDTO.setName(Objects.nonNull(coverage.getDescripcionCobertura()) ? coverage.getDescripcionCobertura() : "");
+        coverageDTO.setIsSelected(ConstantsUtil.YES_CONSTANT.equalsIgnoreCase(coverage.getIndSeleccionar()));
+        coverageDTO.setDescription(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : "");
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
         coverageDTO.setFeePaymentAmount(createPaymentAmount(coverage));
