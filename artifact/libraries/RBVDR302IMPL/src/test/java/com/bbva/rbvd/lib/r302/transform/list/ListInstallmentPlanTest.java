@@ -4,6 +4,8 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CuotaFinanciamientoBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanDynamicLife;
 import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanEasyYes;
@@ -216,14 +218,63 @@ public class ListInstallmentPlanTest {
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMinima(BigDecimal.valueOf(1000));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMaxima(BigDecimal.valueOf(5000));
 
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(1).setCondicion("OPC");
+
         plans = iListInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities,responseRimac,new ArrayList<>());
         Assert.assertNotNull(plans);
         Assert.assertNotNull(plans.get(0).getCoverages());
         Assert.assertNotNull(plans.get(0).getCoverages().get(0).getCoverageLimits());
         Assert.assertNotNull(plans.get(0).getCoverages().get(0).getInsuredAmount());
         Assert.assertNotNull(plans.get(0).getCoverages().get(0).getFeePaymentAmount());
+    }
 
+    private static FinanciamientoBO generateFinancingQuarterly(){
+        FinanciamientoBO financiamiento = new FinanciamientoBO();
+        financiamiento.setPeriodicidad("Trimestral");
+        financiamiento.setNumeroCuotas(4L);
+        List<CuotaFinanciamientoBO> cuotas = new ArrayList<>();
+        CuotaFinanciamientoBO cuota1 = new CuotaFinanciamientoBO();
+        cuota1.setMoneda("PEN");
+        cuota1.setMonto(new BigDecimal("1717.57"));
+        cuotas.add(cuota1);
+        financiamiento.setCuotasFinanciamiento(cuotas);
+        return financiamiento;
+    }
 
+    private static FinanciamientoBO generateFinancingBiMonthly(){
+        FinanciamientoBO financiamiento = new FinanciamientoBO();
+        financiamiento.setPeriodicidad("Semestral");
+        financiamiento.setNumeroCuotas(2L);
+        List<CuotaFinanciamientoBO> cuotas = new ArrayList<>();
+        CuotaFinanciamientoBO cuota1 = new CuotaFinanciamientoBO();
+        cuota1.setMoneda("PEN");
+        cuota1.setMonto(new BigDecimal("1792.57"));
+        cuotas.add(cuota1);
+        financiamiento.setCuotasFinanciamiento(cuotas);
+        return financiamiento;
+    }
+
+    @Test
+    public void testInstallmentPlansQuarterlyAndBiMonthlyDynamicLife() throws IOException {
+        LOGGER.info("ListInstallmentPlanTest - Executing testgetPlansNamesAndRecommendedValuesAndInstallmentsPlansInDynamicLife...");
+
+        responseRimac.getPayload().setProducto("VIDADINAMICO");
+        responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().add(generateFinancingQuarterly());
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().add(generateFinancingBiMonthly());
+        productModalities = mockData.getInsuranceProductModalitiesDAO();
+
+        iListInstallmentPlan = new ListInstallmentPlanDynamicLife(applicationConfigurationService);
+        List<InsurancePlanDTO> plans = iListInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, new ArrayList<>());
+
+        Assert.assertNotNull(plans);
+        Assert.assertNotNull(plans.get(0).getInstallmentPlans());
+        Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(0));
+        Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(1));
+        Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(2));
+        Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(3));
+        Assert.assertEquals(4,plans.get(0).getInstallmentPlans().size());
     }
 
 }
