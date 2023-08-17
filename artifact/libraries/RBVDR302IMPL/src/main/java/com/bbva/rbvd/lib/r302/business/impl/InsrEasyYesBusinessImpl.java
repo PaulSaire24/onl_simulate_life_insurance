@@ -10,7 +10,8 @@ import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
-import com.bbva.rbvd.lib.r302.transform.list.ListInstallmentPlan;
+import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
+import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanEasyYes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,18 +58,15 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         LOGGER.info("***** InsrEasyYesBusinessImpl - prepareResponse START *****");
 
         LifeSimulationDTO response;
-        ListInstallmentPlan listInstallmentPlan = new ListInstallmentPlan();
-        listInstallmentPlan.setApplicationConfigurationService(applicationConfigurationService);
+        IListInstallmentPlan listInstallmentPlanEasyYes = new ListInstallmentPlanEasyYes(applicationConfigurationService);
+
         response = payloadConfig.getInput();
         response.getProduct().setName(responseRimac.getPayload().getProducto());
         response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
-        response.getProduct().setPlans(listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(
+        response.getProduct().setPlans(listInstallmentPlanEasyYes.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(
                 payloadConfig.getListInsuranceProductModalityDAO(),
                 responseRimac,
-                payloadConfig.getProperties().getSegmentLifePlans().get(0),
-                payloadConfig.getProperties().getSegmentLifePlans().get(1),
-                payloadConfig.getProperties().getSegmentLifePlans().get(2)));
-
+                payloadConfig.getProperties().getSegmentLifePlans()));
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - prepareResponse END | response: {} *****",response);
         return response;
