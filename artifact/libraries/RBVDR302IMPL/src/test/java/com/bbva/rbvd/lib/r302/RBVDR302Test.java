@@ -229,7 +229,7 @@ public class RBVDR302Test {
 	}
 
 	@Test
-	public void executeGetGenerateDynamicLifeTest(){
+	public void executeGetGenerateDynamicLifeTest() {
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLifeTest...");
 		this.requestInput.getProduct().setId("841");
