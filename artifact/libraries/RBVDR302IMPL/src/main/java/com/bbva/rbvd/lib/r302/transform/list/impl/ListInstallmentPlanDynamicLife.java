@@ -1,7 +1,14 @@
 package com.bbva.rbvd.lib.r302.transform.list.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PaymentAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
@@ -13,7 +20,6 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +65,14 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             FinanciamientoBO monthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
                     filter(financing -> "Mensual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
 
-
             FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
                     filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+
+            FinanciamientoBO biMonthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
+                    filter(financing -> "Semestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+
+            FinanciamientoBO quarterlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
+                    filter(financing -> "Trimestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
 
             List<InstallmentsDTO> installments = new ArrayList<>();
 
@@ -73,6 +84,16 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             if(annualFinancing != null){
                 InstallmentsDTO installmentPlanAnnual = this.getInstallmentPlan(annualFinancing);
                 installments.add(installmentPlanAnnual);
+            }
+
+            if(biMonthlyFinancing != null){
+                InstallmentsDTO installmentPlanBiMonthly = this.getInstallmentPlan(biMonthlyFinancing);
+                installments.add(installmentPlanBiMonthly);
+            }
+
+            if(quarterlyFinancing != null){
+                InstallmentsDTO installmentPlanQuarterly = this.getInstallmentPlan(quarterlyFinancing);
+                installments.add(installmentPlanQuarterly);
             }
 
             plan.setInstallmentPlans(installments);
