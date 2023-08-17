@@ -1,4 +1,4 @@
-package com.bbva.rbvd.lib.r302.transform.list;
+package com.bbva.rbvd.lib.r302.transform.list.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
@@ -16,6 +16,8 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,28 +25,21 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-public class ListInstallmentPlan {
-
-    private static final String AMOUNT_UNIT_TYPE = "AMOUNT";
-    private static final String ANNUAL_PERIOD_ID = "ANNUAL";
-    private static final String ANNUAL_PERIOD_NAME = "ANUAL";
-    private static final String YES_CONSTANT = "S";
-    private static final String PLANUNO = "01";
-
-    private static final String PLANDOS = "02";
-
-    private static final String PLANTRES = "03";
+public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
 
 
-    private ApplicationConfigurationService applicationConfigurationService;
+    private final ApplicationConfigurationService applicationConfigurationService;
 
+    public ListInstallmentPlanEasyYes(ApplicationConfigurationService applicationConfigurationService) {
+        this.applicationConfigurationService = applicationConfigurationService;
+    }
 
+    @Override
     public List<InsurancePlanDTO> getPlansNamesAndRecommendedValuesAndInstallmentsPlans(List<InsuranceProductModalityDAO> productModalities,
-                                                                                        InsuranceLifeSimulationBO responseRimac,
-                                                                                        Boolean seglifePlan1, Boolean seglifePlan2, Boolean seglifePlan3) {
+                                                                                        InsuranceLifeSimulationBO responseRimac, List<Boolean> seglifePlans) {
         List<CotizacionBO> quotations = responseRimac.getPayload().getCotizaciones();
         return productModalities.stream().
-                map(modality -> createProductModalityDTO(modality, quotations, seglifePlan1, seglifePlan2, seglifePlan3)).
+                map(modality -> createProductModalityDTO(modality, quotations, seglifePlans.get(0), seglifePlans.get(1), seglifePlans.get(2))).
                 filter(Objects::nonNull).
                 collect(toList());
     }
@@ -109,8 +104,8 @@ public class ListInstallmentPlan {
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
             PeriodDTO periodAnual = new PeriodDTO();
             totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
-            periodAnual.setId(ANNUAL_PERIOD_ID);
-            periodAnual.setName(ANNUAL_PERIOD_NAME);
+            periodAnual.setId(ConstantsUtil.ANNUAL_PERIOD_ID);
+            periodAnual.setName(ConstantsUtil.ANNUAL_PERIOD_NAME);
             totalInstallmentPlan.setPeriod(periodAnual);
             totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
 
@@ -130,16 +125,16 @@ public class ListInstallmentPlan {
     private Boolean setValueRecommended(InsuranceProductModalityDAO modalityDao, Boolean seglifePlan1,
                                         Boolean seglifePlan2, Boolean seglifePlan3){
         Boolean checkRecommend = false;
-        if(PLANUNO.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.PLANUNO.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan1;
         }
-        if(PLANDOS.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.PLANDOS.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan2;
         }
-        if(PLANTRES.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.PLANTRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan3;
         }
-        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && PLANTRES.equals(modalityDao.getInsuranceModalityType())){
+        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && ConstantsUtil.PLANTRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend=true;
         }
 
@@ -152,12 +147,12 @@ public class ListInstallmentPlan {
         return result;
     }
 
-    private CoverageDTO createCoverageDTO(final CoberturaBO coverage) {
+    private CoverageDTO createCoverageDTO(CoberturaBO coverage) {
         CoverageDTO coverageDTO = new CoverageDTO();
 
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : coverage.getDescripcionCobertura());
-        coverageDTO.setIsSelected(YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
+        coverageDTO.setIsSelected(ConstantsUtil.YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
@@ -165,9 +160,10 @@ public class ListInstallmentPlan {
         return coverageDTO;
     }
 
+
     private UnitDTO createUnit(CoberturaBO coverage){
         UnitDTO unit = new UnitDTO();
-        unit.setUnitType(AMOUNT_UNIT_TYPE);
+        unit.setUnitType(ConstantsUtil.AMOUNT_UNIT_TYPE);
         unit.setAmount(coverage.getSumaAsegurada());
         unit.setCurrency(coverage.getMoneda());
 
@@ -195,7 +191,5 @@ public class ListInstallmentPlan {
         return coverageTypeDTO;
     }
 
-    public void setApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
-        this.applicationConfigurationService = applicationConfigurationService;
-    }
+
 }
