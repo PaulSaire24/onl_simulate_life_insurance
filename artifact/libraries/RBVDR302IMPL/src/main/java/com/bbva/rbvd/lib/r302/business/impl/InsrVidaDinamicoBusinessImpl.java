@@ -48,14 +48,12 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     public InsuranceLifeSimulationBO executeQuotationRimacService(
-            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo, List<InsuranceProductModalityDAO> planes) {
+            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,cumulo);
-        requestRimac.getPayload().setProducto(businessName);
+        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName);
         ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO);
-        requestRimac.getPayload().setPlanes(ModifyQuotationRimac.planesToRequestRimac(planes));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = null;
@@ -110,8 +108,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    payloadConfig.getListInsuranceProductModalityDAO()
+                    payloadConfig.getSumCumulus()
                     );
         }else{
             responseRimac = this.executeModifyQuotationRimacService(
