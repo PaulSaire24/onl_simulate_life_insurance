@@ -10,5 +10,7 @@ public class ConstantsUtil {
     public static final String PLANDOS = "02";
     public static final String PLANTRES = "03";
     public static final String REFUNDS_UNITTYPE_AMOUNT = "AMOUNT";
+    public static final String CURRENCY_CODE_PEN = "PEN";
+    public static final String DATO_PARTICULAR_CUMULO_CLIENTE = "CUMULO_CLIENTE";
 
 }

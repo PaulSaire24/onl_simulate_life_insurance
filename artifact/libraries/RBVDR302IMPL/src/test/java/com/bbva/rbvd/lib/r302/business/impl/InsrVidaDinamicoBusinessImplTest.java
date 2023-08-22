@@ -132,8 +132,7 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "",
                 customerList,
-                BigDecimal.valueOf(1),
-                new ArrayList<>()
+                BigDecimal.valueOf(1)
                 );
     }
 

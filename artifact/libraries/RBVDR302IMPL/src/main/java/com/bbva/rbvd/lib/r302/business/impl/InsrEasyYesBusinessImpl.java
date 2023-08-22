@@ -75,7 +75,7 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
     private InsuranceLifeSimulationBO callQuotationRimacService(LifeSimulationDTO input, BigDecimal cumulo, String productInformation){
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacLife(input,cumulo);
+        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacEasyyesLife(input,cumulo);
         requestRimac.getPayload().setProducto(productInformation);
         LOGGER.info("***** InsrEasyYesBusinessImpl - callQuotationRimacService | requestRimac: {} *****",requestRimac);
 
