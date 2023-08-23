@@ -13,5 +13,7 @@ public class ConstantsUtil {
     public static final String CURRENCY_CODE_PEN = "PEN";
     public static final String DATO_PARTICULAR_CUMULO_CLIENTE = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
+    public static final String COVERAGE_TYPE_ID_BLOCKED = "BLOCKED";
+    public static final String COVERAGE_TYPE_NAME_BLOCKED = "BLOQUEADO";
 
 }

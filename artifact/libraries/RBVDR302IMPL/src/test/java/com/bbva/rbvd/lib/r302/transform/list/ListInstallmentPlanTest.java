@@ -219,6 +219,7 @@ public class ListInstallmentPlanTest {
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMaxima(BigDecimal.valueOf(5000));
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(1).setCondicion("OPC");
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("BLO");
 
         plans = iListInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities,responseRimac,new ArrayList<>());
         Assert.assertNotNull(plans);

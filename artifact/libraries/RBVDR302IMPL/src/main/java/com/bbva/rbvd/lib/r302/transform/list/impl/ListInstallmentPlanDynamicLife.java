@@ -71,16 +71,16 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             PlanBO rimacPlan = cotizacion.getPlan();
 
             FinanciamientoBO monthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Mensual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Mensual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Anual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO biMonthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Semestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Semestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO quarterlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Trimestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Trimestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             List<InstallmentsDTO> installments = new ArrayList<>();
 
@@ -197,6 +197,10 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             case "OPC":
                 coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
                 coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
+                break;
+            case "BLO":
+                coverageTypeDTO.setId(ConstantsUtil.COVERAGE_TYPE_ID_BLOCKED);
+                coverageTypeDTO.setName(ConstantsUtil.COVERAGE_TYPE_NAME_BLOCKED);
                 break;
             default:
                 break;
