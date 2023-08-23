@@ -20,6 +20,8 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListInstallmentPlanDynamicLife.class);
 
     private final ApplicationConfigurationService applicationConfigurationService;
 
@@ -45,6 +49,10 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
     }
 
     private InsurancePlanDTO createProductModalityDTO(InsuranceProductModalityDAO modalityDao, List<CotizacionBO> quotations) {
+
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO START");
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO : Params modalityDao: {}",modalityDao);
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO : Params quotations: {}",quotations);
 
         InsurancePlanDTO plan = null;
 
@@ -106,6 +114,9 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             plan.setCoverages(coverages);
 
         }
+
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO end");
+
         return plan;
     }
 

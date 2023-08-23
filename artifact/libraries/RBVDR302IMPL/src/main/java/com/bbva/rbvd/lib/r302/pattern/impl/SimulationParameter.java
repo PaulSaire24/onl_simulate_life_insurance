@@ -175,7 +175,7 @@ public class SimulationParameter implements PreSimulation {
 		IModalitiesDAO iModalitiesDAO = new ModalitiesDAOImpl(pisdR350);
 		List<InsuranceProductModalityDAO> list = iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
 
-		LOGGER.info("***** SimulationParameter getModalities END - list: {} *****",list);
+		LOGGER.info("***** SimulationParameter getModalities END *****");
 
 		return list;
 	}

@@ -12,5 +12,6 @@ public class ConstantsUtil {
     public static final String REFUNDS_UNITTYPE_AMOUNT = "AMOUNT";
     public static final String CURRENCY_CODE_PEN = "PEN";
     public static final String DATO_PARTICULAR_CUMULO_CLIENTE = "CUMULO_CLIENTE";
+    public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
 
 }
