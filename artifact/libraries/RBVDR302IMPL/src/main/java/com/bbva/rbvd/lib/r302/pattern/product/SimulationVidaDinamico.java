@@ -39,7 +39,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
-		String simulationId = payloadConfig.getInput().getExternalSimulationId();
+		String simulationId = input.getExternalSimulationId();
 		//ejecucion servicio rimac
 		PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
 		LOGGER.info("***** SimulationVidaDinamico - start | payloadStore {} *****",payloadStore);
