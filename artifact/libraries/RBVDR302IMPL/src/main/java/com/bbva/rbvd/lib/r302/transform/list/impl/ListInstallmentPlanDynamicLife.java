@@ -20,6 +20,8 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListInstallmentPlanDynamicLife.class);
 
     private final ApplicationConfigurationService applicationConfigurationService;
 
@@ -46,6 +50,10 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private InsurancePlanDTO createProductModalityDTO(InsuranceProductModalityDAO modalityDao, List<CotizacionBO> quotations) {
 
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO START");
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO : Params modalityDao: {}",modalityDao);
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO : Params quotations: {}",quotations);
+
         InsurancePlanDTO plan = null;
 
         String rimacPlanCodeFromDB = modalityDao.getInsuranceCompanyModalityId();
@@ -63,16 +71,16 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             PlanBO rimacPlan = cotizacion.getPlan();
 
             FinanciamientoBO monthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Mensual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Mensual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Anual".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Anual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO biMonthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Semestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Semestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             FinanciamientoBO quarterlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Trimestral".equals(financing.getPeriodicidad())).findFirst().orElse(null);
+                    filter(financing -> "Trimestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
 
             List<InstallmentsDTO> installments = new ArrayList<>();
 
@@ -106,6 +114,9 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             plan.setCoverages(coverages);
 
         }
+
+        LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO end");
+
         return plan;
     }
 
@@ -186,6 +197,10 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             case "OPC":
                 coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
                 coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
+                break;
+            case "BLO":
+                coverageTypeDTO.setId(ConstantsUtil.COVERAGE_TYPE_ID_BLOCKED);
+                coverageTypeDTO.setName(ConstantsUtil.COVERAGE_TYPE_NAME_BLOCKED);
                 break;
             default:
                 break;

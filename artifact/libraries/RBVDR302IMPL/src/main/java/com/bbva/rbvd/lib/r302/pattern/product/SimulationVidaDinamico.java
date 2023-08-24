@@ -11,6 +11,7 @@ import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +33,13 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 	public LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		LOGGER.info("***** SimulationVidaDinamico - start START | input {} *****",input);
 
+		validatePlanWithRefundPercentage(input);
+
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
-		String simulationId = payloadConfig.getInput().getExternalSimulationId();
+		String simulationId = input.getExternalSimulationId();
 		//ejecucion servicio rimac
 		PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
 		LOGGER.info("***** SimulationVidaDinamico - start | payloadStore {} *****",payloadStore);
@@ -53,6 +56,28 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() END *****");
 
 		return payloadStore.getResponse();
+	}
+
+	private static void validatePlanWithRefundPercentage(LifeSimulationDTO input) {
+		if(input.getListRefunds() != null && CollectionUtils.isEmpty(input.getProduct().getPlans())){
+			BigDecimal percentage = input.getListRefunds().stream()
+					.filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(ConstantsUtil.REFUND_UNIT_PERCENTAGE))
+					.map(refundsDTO -> refundsDTO.getUnit().getPercentage()).collect(Collectors.toList()).get(0);
+
+			if(percentage.compareTo(BigDecimal.ZERO) == 0){
+				InsurancePlanDTO plan01 = new InsurancePlanDTO();
+				plan01.setId(ConstantsUtil.PLANUNO);
+				List<InsurancePlanDTO> plans = new ArrayList<>();
+				plans.add(plan01);
+				input.getProduct().setPlans(plans);
+			}else{
+				InsurancePlanDTO plan02 = new InsurancePlanDTO();
+				plan02.setId(ConstantsUtil.PLANDOS);
+				List<InsurancePlanDTO> plans = new ArrayList<>();
+				plans.add(plan02);
+				input.getProduct().setPlans(plans);
+			}
+		}
 	}
 
 
