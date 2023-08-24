@@ -156,12 +156,12 @@ public class SimulationParameter implements PreSimulation {
 
 	public CustomerListASO getCustomer(String customerId) {
 
-		LOGGER.info("***** SimulationParameter getCustomer START - customerId: {} *****",customerId);
+		LOGGER.info("***** SimulationParameter getCustomer START *****");
 
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
 
-		LOGGER.info("***** SimulationParameter getCustomer END - customer: {} *****",customer);
+		LOGGER.info("***** SimulationParameter getCustomer END *****");
 
 		return customer;
 	}
@@ -175,7 +175,7 @@ public class SimulationParameter implements PreSimulation {
 		IModalitiesDAO iModalitiesDAO = new ModalitiesDAOImpl(pisdR350);
 		List<InsuranceProductModalityDAO> list = iModalitiesDAO.getModalitiesInfo(plansPT, insuranceProductId, saleChannel);
 
-		LOGGER.info("***** SimulationParameter getModalities END - list: {} *****",list);
+		LOGGER.info("***** SimulationParameter getModalities END *****");
 
 		return list;
 	}

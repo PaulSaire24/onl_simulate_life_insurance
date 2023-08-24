@@ -148,6 +148,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getListInsuranceProductModalityDAO(),
                 responseRimac,
                 payloadConfig.getProperties().getSegmentLifePlans()));
+
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
@@ -158,10 +159,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     private static List<CoberturaBO> getAddtionalCoverages(LifeSimulationDTO input){
         if(!CollectionUtils.isEmpty(input.getProduct().getPlans()) && !CollectionUtils.isEmpty(input.getProduct().getPlans().get(0).getCoverages())){
-
             return input.getProduct().getPlans().get(0).getCoverages().stream()
                     .map(InsrVidaDinamicoBusinessImpl::mapAdditionalCoverageForRequest).collect(Collectors.toList());
-
         }else{
             return Collections.emptyList();
         }

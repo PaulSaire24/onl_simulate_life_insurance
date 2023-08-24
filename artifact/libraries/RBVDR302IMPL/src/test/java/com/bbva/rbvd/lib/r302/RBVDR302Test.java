@@ -15,6 +15,8 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -228,6 +230,30 @@ public class RBVDR302Test {
 
 	}
 
+	private List<RefundsDTO> generateRefunds0PercentageInput(){
+		List<RefundsDTO> refunds = new ArrayList<>();
+		RefundsDTO percentage = new RefundsDTO();
+		UnitDTO unit = new UnitDTO();
+		unit.setUnitType("PERCENTAGE");
+		unit.setPercentage(new BigDecimal("0"));
+		percentage.setUnit(unit);
+
+		refunds.add(percentage);
+		return refunds;
+	}
+
+	private List<RefundsDTO> generateRefunds125PercentageInput(){
+		List<RefundsDTO> refunds = new ArrayList<>();
+		RefundsDTO percentage = new RefundsDTO();
+		UnitDTO unit = new UnitDTO();
+		unit.setUnitType("PERCENTAGE");
+		unit.setPercentage(new BigDecimal("125"));
+		percentage.setUnit(unit);
+
+		refunds.add(percentage);
+		return refunds;
+	}
+
 	@Test
 	public void executeGetGenerateDynamicLifeTest() {
 
@@ -290,6 +316,102 @@ public class RBVDR302Test {
 
 		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(anyString(), anyMap());
 		//Mockito.verify(rbvdr301,Mockito.times(1)).executeSimulationRimacService(anyObject(),anyString());
+
+	}
+
+	@Test
+	public void executeGetGenerateDynamicLife_PLAN1Test() {
+
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLife_PLAN1Test...");
+		this.requestInput.getProduct().setId("841");
+		this.requestInput.setListRefunds(generateRefunds0PercentageInput());
+		this.requestInput.getProduct().setPlans(null);
+		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+
+		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(841));
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"desc dynamic");
+		responseQueryGetProductInformation2.put("PRODUCT_SHORT_DESC","VIDADINAMICO");
+		when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(responseQueryGetProductInformation2);
+
+		responseQueryModalities = new HashMap<>();
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), new BigDecimal(841));
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), Arrays.asList("01"));
+		responseQueryModalities.put(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue(), "PC");
+
+		List<Map<String, Object>> listResponse = new ArrayList<>();
+		Map<String, Object> responseAmount = new HashMap<>();
+		responseAmount.put("INSURED_AMOUNT", new BigDecimal("13.3"));
+		listResponse.add(responseAmount);
+		responseQueryModalities.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		responseQuerySumCumulus = new HashMap<>();
+		responseQuerySumCumulus.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
+				.thenReturn(responseQueryModalities)
+				.thenReturn(responseQuerySumCumulus);
+		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
+		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
+		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
+		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
+		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+
+		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
+
+		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNotNull(response);
+
+		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(anyString(), anyMap());
+
+	}
+
+	@Test
+	public void executeGetGenerateDynamicLife_PLAN2Test() {
+
+		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLife_PLAN2Test...");
+		this.requestInput.getProduct().setId("841");
+		this.requestInput.setListRefunds(generateRefunds125PercentageInput());
+		this.requestInput.getProduct().setPlans(null);
+		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+
+		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(841));
+		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_INSURANCE_PRODUCT_DESC.getValue(),"desc dynamic");
+		responseQueryGetProductInformation2.put("PRODUCT_SHORT_DESC","VIDADINAMICO");
+		when(pisdR350.executeGetASingleRow(anyString(), anyMap())).thenReturn(responseQueryGetProductInformation2);
+
+		responseQueryModalities = new HashMap<>();
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(), new BigDecimal(841));
+		responseQueryModalities.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), Arrays.asList("02"));
+		responseQueryModalities.put(RBVDProperties.FIELD_SALE_CHANNEL_ID.getValue(), "PC");
+
+		List<Map<String, Object>> listResponse = new ArrayList<>();
+		Map<String, Object> responseAmount = new HashMap<>();
+		responseAmount.put("INSURED_AMOUNT", new BigDecimal("1359.3"));
+		listResponse.add(responseAmount);
+		responseQueryModalities.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		responseQuerySumCumulus = new HashMap<>();
+		responseQuerySumCumulus.put(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue(), listResponse);
+		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
+				.thenReturn(responseQueryModalities)
+				.thenReturn(responseQuerySumCumulus);
+		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
+		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
+		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
+		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
+		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+
+		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
+
+		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
+
+		assertNotNull(response);
+
+		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(anyString(), anyMap());
 
 	}
 
