@@ -138,25 +138,16 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse START *****");
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - responseRimac {} *****",responseRimac);
-
         LifeSimulationDTO response;
         IListInstallmentPlan listInstallmentPlan = new ListInstallmentPlanDynamicLife(applicationConfigurationService);
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - payloadConfig input {} *****",payloadConfig.getInput());
         response = payloadConfig.getInput();
-
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - responseRimac producto {} *****",responseRimac.getPayload().getProducto());
         response.getProduct().setName(responseRimac.getPayload().getProducto());
-
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - responseRimac externalsimula {} *****",responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
         response.setExternalSimulationId(responseRimac.getPayload().getCotizaciones().get(0).getCotizacion());
         response.getProduct().setPlans(listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(
                 payloadConfig.getListInsuranceProductModalityDAO(),
                 responseRimac,
                 payloadConfig.getProperties().getSegmentLifePlans()));
-
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response externalid  {} *****",response.getExternalSimulationId());
 
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
