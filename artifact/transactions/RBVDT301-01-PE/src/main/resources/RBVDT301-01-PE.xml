@@ -129,7 +129,7 @@
 								<parameter order="1" name="unitType" mandatory="1" type="String" size="10"/>
 								<parameter order="2" name="amount" mandatory="0" type="Double" size="18"/>
 								<parameter order="3" name="currency" mandatory="0" type="String" size="3"/>
-								<parameter order="4" name="text" mandatory="0" type="String" size="50"/>
+								<parameter order="4" name="text" mandatory="0" type="String" size="500"/>
 								<parameter order="5" name="decimal" mandatory="0" type="Double" size="15"/>
 								<parameter order="6" name="percentage" mandatory="0" type="Double" size="6"/>
 							</dto>
