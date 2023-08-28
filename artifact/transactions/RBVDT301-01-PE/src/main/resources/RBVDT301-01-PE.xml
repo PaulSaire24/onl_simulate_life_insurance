@@ -122,8 +122,8 @@
 							<parameter order="3" name="description" mandatory="0" type="String" size="1000"/>
 							<parameter order="4" name="isSelected" mandatory="1" type="Boolean" size="0"/>
 							<dto order="5" name="coverageType" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO" artifactId="RBVDC301">
-								<parameter order="1" name="id" mandatory="1" type="String" size="15"/>
-								<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+								<parameter order="1" name="id" mandatory="1" type="String" size="30"/>
+								<parameter order="2" name="name" mandatory="0" type="String" size="30"/>
 							</dto>
 							<dto order="6" name="unit" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO" artifactId="RBVDC301">
 								<parameter order="1" name="unitType" mandatory="1" type="String" size="10"/>
