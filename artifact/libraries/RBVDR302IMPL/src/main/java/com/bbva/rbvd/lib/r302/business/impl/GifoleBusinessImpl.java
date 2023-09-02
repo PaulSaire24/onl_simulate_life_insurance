@@ -17,10 +17,14 @@ import com.bbva.pisd.dto.insurance.aso.gifole.BankASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.BranchASO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
+import com.bbva.rbvd.dto.connectionapi.aso.common.BusinessAgentASO;
+import com.bbva.rbvd.dto.connectionapi.aso.common.GenericAmountASO;
+import com.bbva.rbvd.dto.connectionapi.aso.common.ProductModalityASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
@@ -30,6 +34,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +63,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR301 rbvdR301;
 
-    public GifoleBusinessImpl( RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
+    public GifoleBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;
         this.rbvdR301 = rbvdR301;
     }
@@ -203,6 +209,174 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setGood(good);
 
         LOGGER.info("***** GifoleBusinessImpl ***** - createGifoleASO END - gifoleInsuranceRequest {}",gifoleInsuranceRequest);
+
+        return gifoleInsuranceRequest;
+    }
+
+    /*-----------------------------------------------------------------*/
+
+
+    @Override
+    public void callGifoleDynamicService(LifeSimulationDTO inputLife, CustomerListASO inputListCustomers, RBVDR044 rbvdr044) {
+
+        LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService START *****");
+
+        String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
+
+        if(flag.equals("true")){
+
+            LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService ***** --- FLAG after -> {}", flag);
+
+            com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO gifoleInsuranceRequest =
+                    this.createGifoleAsoDynamic(inputLife, inputListCustomers);
+            LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService: {}", gifoleInsuranceRequest);
+
+            Integer httpStatusGifole = rbvdr044.executeGifoleRegistration(gifoleInsuranceRequest);
+
+            LOGGER.info("***** GifoleBusinessImpl ***** Gifole Response Status: {}", httpStatusGifole);
+        }
+    }
+
+
+
+    public com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO createGifoleAsoDynamic(LifeSimulationDTO response, CustomerListASO responseListCustomers){
+
+        com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO gifoleInsuranceRequest =
+                new com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO();
+
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.BankASO bank =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.BankASO();
+        bank.setId(DEFAULT_BANK_ID);
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO branch =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO();
+        branch.setId(DEFAULT_BRANCH_ID);
+        bank.setBranch(branch);
+
+
+        BusinessAgentASO businessAgent = new BusinessAgentASO();
+        businessAgent.setId(response.getCreationUser());
+
+
+        InsuranceProductDTO productDto = response.getProduct();
+        InsurancePlanDTO planDTO = productDto.getPlans().get(0);
+        List<InstallmentsDTO> installmentPlanDto = planDTO.getInstallmentPlans();
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.ProductASO product =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.ProductASO();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+
+        ProductModalityASO plan = new ProductModalityASO();
+        plan.setId(planDTO.getId());
+        plan.setName(planDTO.getName());
+
+        product.setPlan(plan);
+
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO installmentPlan =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO();
+
+        GenericAmountASO premiumAmount = new GenericAmountASO();
+        if(installmentPlanDto.size() >= 1 && installmentPlanDto.get(0).getPaymentAmount() !=  null){
+
+            premiumAmount.setAmount(installmentPlanDto.get(0).getPaymentAmount().getAmount());
+            premiumAmount.setCurrency(installmentPlanDto.get(0).getPaymentAmount().getCurrency());
+
+        } else {
+            premiumAmount.setAmount(new BigDecimal(1000));
+            premiumAmount.setCurrency("PEN");
+        }
+        installmentPlan.setPremiumAmount(premiumAmount);
+        installmentPlan.setTotalInstallmentsNumber(installmentPlanDto.get(0).getPaymentsTotalNumber().intValue());
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.PeriodASO period =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.PeriodASO();
+        period.setId(installmentPlanDto.get(0).getPeriod().getId());
+        period.setName(installmentPlanDto.get(0).getPeriod().getName());
+        installmentPlan.setPeriod(period);
+
+
+        GenericAmountASO totalPremiumAmount = new GenericAmountASO();
+        totalPremiumAmount.setAmount(planDTO.getTotalInstallment().getAmount());
+        totalPremiumAmount.setCurrency(planDTO.getTotalInstallment().getCurrency());
+
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
+                new com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO();
+        holder.setIsBankCustomer(true);
+        holder.setIsDataTreatment(true);
+
+        if(Objects.nonNull(responseListCustomers)){
+
+            ValidationUtil validationUtil = new ValidationUtil();
+
+            CustomerBO customer = responseListCustomers.getData().get(0);
+            holder.setFirstName(validationUtil.validateSN(customer.getFirstName()));
+            holder.setLastName(validationUtil.validateSN(customer.getLastName().concat(" ").concat(validationUtil.validateSN(customer.getSecondLastName()))));
+
+            List<ContactDetailsBO> contactDetails = responseListCustomers.getData().get(0).getContactDetails();
+            List<com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO> contactDetailASOS = new ArrayList<>();
+
+            Optional<ContactDetailsBO> phoneContact = contactDetails.stream()
+                    .filter(phone -> CONTACT_DETAIL_MOBILE_TYPE.equals(phone.getContactType().getId())).findFirst();
+
+            com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO phoneContactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
+
+            com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO phonecontactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
+            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse("No se encontro celular"));
+            phonecontactASO.setContactType(CONTACT_DETAIL_MOBILE_TYPE_GIFOLE);
+            phoneContactDetailASO.setContact(phonecontactASO);
+
+            contactDetailASOS.add(phoneContactDetailASO);
+
+
+            Optional<ContactDetailsBO> emailContact = contactDetails.stream()
+                    .filter(email -> CONTACT_DETAIL_EMAIL_TYPE.equals(email.getContactType().getId())).findFirst();
+
+            com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO emailContactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
+
+            com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO emailcontactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
+
+            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse("No se encontro correo"));
+            emailcontactASO.setContactType(CONTACT_DETAIL_EMAIL_TYPE);
+            emailContactDetailASO.setContact(emailcontactASO);
+
+            contactDetailASOS.add(emailContactDetailASO);
+
+            holder.setContactDetails(contactDetailASOS);
+
+            validationUtil.docValidationForGifoleDynamic(customer.getIdentityDocuments().get(0),holder,response);
+
+            response.getHolder().setFirstName(holder.getFirstName());
+            response.getHolder().setLastName(holder.getLastName());
+            response.getHolder().setFullName(holder.getFirstName().concat(" ").concat(holder.getLastName()));
+
+        } else if(response.getHolder() != null) {
+
+            response.getHolder().setFirstName(response.getHolder().getFirstName());
+            response.getHolder().setLastName(response.getHolder().getLastName());
+            response.getHolder().setFullName(response.getHolder().getFullName());
+
+        } else{
+            response.getHolder().setFirstName("");
+            response.getHolder().setLastName("");
+            response.getHolder().setFullName("");
+        }
+
+        gifoleInsuranceRequest.setBank(bank);
+        gifoleInsuranceRequest.setBusinessAgent(businessAgent);
+        gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
+        gifoleInsuranceRequest.setProduct(product);
+        gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
+        gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
+        gifoleInsuranceRequest.setHolder(holder);
+        gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
+        gifoleInsuranceRequest.setChannel(response.getSaleChannelId());
+
+        DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
+        gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
 
         return gifoleInsuranceRequest;
     }

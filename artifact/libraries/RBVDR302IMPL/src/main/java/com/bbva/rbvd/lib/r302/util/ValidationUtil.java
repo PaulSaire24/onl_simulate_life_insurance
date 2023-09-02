@@ -4,6 +4,7 @@ import com.bbva.pisd.dto.insurance.aso.gifole.DocumentTypeASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.HolderASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.IdentityDocumentASO;
 import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
+import com.bbva.rbvd.dto.connectionapi.aso.common.GenericTypeASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
@@ -56,6 +57,27 @@ public class ValidationUtil {
         }
         holder.setIdentityDocument(identityDocument);
     }
+
+
+    public void docValidationForGifoleDynamic(IdentityDocumentsBO customerInfo, com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder, LifeSimulationDTO response){
+        com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO identityDocument = new com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO();
+        GenericTypeASO documentType = new GenericTypeASO();
+        String docNumber = customerInfo.getDocumentNumber();
+        documentType.setId(customerInfo.getDocumentType().getId());
+        identityDocument.setDocumentType(documentType);
+
+        identityDocument.setDocumentNumber(response.getHolder().getIdentityDocument().getDocumentNumber());
+        if (Objects.isNull(response.getHolder().getIdentityDocument().getDocumentNumber())) {
+            identityDocument.setDocumentNumber(docNumber);
+        } else {
+            identityDocument.setDocumentNumber(
+                    response.getHolder().getIdentityDocument().getDocumentNumber());
+        }
+        holder.setIdentityDocument(identityDocument);
+    }
+
+
+
 
     public Boolean selectValuePlansDescription(String segmentoPlan, LifeSimulationDTO input){
         boolean valuePlus= false;
