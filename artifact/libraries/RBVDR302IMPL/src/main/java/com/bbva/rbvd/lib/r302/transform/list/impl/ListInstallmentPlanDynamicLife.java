@@ -70,17 +70,10 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
             PlanBO rimacPlan = cotizacion.getPlan();
 
-            FinanciamientoBO monthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Mensual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
-
-            FinanciamientoBO annualFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Anual".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
-
-            FinanciamientoBO biMonthlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Semestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
-
-            FinanciamientoBO quarterlyFinancing = cotizacion.getPlan().getFinanciamientos().stream().
-                    filter(financing -> "Trimestral".equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
+            FinanciamientoBO monthlyFinancing = getFinancingByPeriodicity(cotizacion,"Mensual");
+            FinanciamientoBO annualFinancing = getFinancingByPeriodicity(cotizacion,"Anual");
+            FinanciamientoBO biMonthlyFinancing = getFinancingByPeriodicity(cotizacion,"Semestral");
+            FinanciamientoBO quarterlyFinancing = getFinancingByPeriodicity(cotizacion,"Trimestral");
 
             List<InstallmentsDTO> installments = new ArrayList<>();
 
@@ -118,6 +111,11 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
         LOGGER.info("ListInstallmentPlanDynamicLife - createProductModalityDTO end");
 
         return plan;
+    }
+
+    private static FinanciamientoBO getFinancingByPeriodicity(CotizacionBO cotizacion,String periodicity) {
+        return cotizacion.getPlan().getFinanciamientos().stream().
+                filter(financing -> periodicity.equalsIgnoreCase(financing.getPeriodicidad())).findFirst().orElse(null);
     }
 
     private static TotalInstallmentDTO getTotalInstallmentDTO(PlanBO rimacPlan) {
@@ -164,7 +162,7 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getDescripcionCobertura()) ? coverage.getDescripcionCobertura() : "");
         coverageDTO.setIsSelected(ConstantsUtil.YES_CONSTANT.equalsIgnoreCase(coverage.getIndSeleccionar()));
-        coverageDTO.setDescription(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : "");
+        coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : "");
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
         coverageDTO.setFeePaymentAmount(createPaymentAmount(coverage));
@@ -176,9 +174,8 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private UnitDTO createUnit(CoberturaBO coverage){
         UnitDTO unit = new UnitDTO();
-        unit.setUnitType(ConstantsUtil.AMOUNT_UNIT_TYPE);
-        unit.setAmount(coverage.getSumaAsegurada());
-        unit.setCurrency(coverage.getMoneda());
+        unit.setUnitType(ConstantsUtil.TEXT_UNIT_TYPE);
+        unit.setText(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : "");
 
         return unit;
     }
