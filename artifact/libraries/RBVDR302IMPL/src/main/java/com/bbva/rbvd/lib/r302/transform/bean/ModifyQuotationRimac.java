@@ -9,6 +9,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -56,7 +57,7 @@ public class ModifyQuotationRimac {
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
         DatoParticularBO datos = new DatoParticularBO();
-        datos.setEtiqueta("CUMULO_CLIENTE");
+        datos.setEtiqueta(ConstantsUtil.DATO_PARTICULAR_CUMULO_CLIENTE);
         datos.setCodigo("");
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         return datos;
@@ -79,7 +80,6 @@ public class ModifyQuotationRimac {
     }
 
     private static String getRefundPercentage(LifeSimulationDTO input) {
-
         String percentage;
 
         if(CollectionUtils.isEmpty(input.getListRefunds())){
@@ -122,18 +122,12 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
-
-        if(responseListCustomers != null){
-            datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
-        }else{
-            datos.setValor("35");
-        }
+        datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
 
         return datos;
     }
 
     private static String calculateYeardOldCustomer(String birthDate){
-
         LocalDate hoy = LocalDate.now();
         LocalDate nacimiento = LocalDate.parse(birthDate);
         long years = ChronoUnit.YEARS.between(nacimiento, hoy);

@@ -373,7 +373,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
         gifoleInsuranceRequest.setHolder(holder);
         gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
-        gifoleInsuranceRequest.setChannel(response.getSaleChannelId());
+        gifoleInsuranceRequest.setChannel(response.getAap());
 
         DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));

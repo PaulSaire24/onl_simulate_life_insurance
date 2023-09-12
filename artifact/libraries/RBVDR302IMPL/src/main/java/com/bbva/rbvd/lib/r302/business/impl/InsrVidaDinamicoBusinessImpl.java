@@ -6,7 +6,6 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
@@ -56,12 +55,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO);
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = null;
-        if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
-            responseRimac = MockResponse.getInstance().getMockResponseRimacQuotationService();
-        }else{
-            responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
-        }
+        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | responseRimac: {} *****",responseRimac);
 
         if(Objects.isNull(responseRimac)){
@@ -81,12 +75,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = null;
-        if (this.applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC").equals("S")) {
-            responseRimac = MockResponse.getInstance().getMockResponseRimacModifyQuotationService();
-        } else {
-            responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
-        }
+        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
+
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | responseRimac: {} *****",responseRimac);
 
         if(Objects.isNull(responseRimac)){
