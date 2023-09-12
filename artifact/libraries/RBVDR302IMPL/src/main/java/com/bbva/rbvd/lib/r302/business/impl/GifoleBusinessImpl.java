@@ -308,6 +308,13 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         holder.setIsBankCustomer(true);
         holder.setIsDataTreatment(true);
 
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO good = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO();
+
+        com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO goodDetail = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO();
+        goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
+        good.setGoodDetail(goodDetail);
+
         if(Objects.nonNull(responseListCustomers)){
 
             ValidationUtil validationUtil = new ValidationUtil();
@@ -365,6 +372,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             response.getHolder().setFullName("");
         }
 
+        holder.setHasBankAccount(false);
+        holder.setHasCreditCard(false);
+
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
         gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
@@ -377,6 +387,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
+        gifoleInsuranceRequest.setGood(good);
 
         return gifoleInsuranceRequest;
     }
