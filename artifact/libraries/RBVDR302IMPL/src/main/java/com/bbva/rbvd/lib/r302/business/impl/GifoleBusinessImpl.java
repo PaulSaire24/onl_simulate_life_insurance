@@ -365,6 +365,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             response.getHolder().setFullName("");
         }
 
+        holder.setHasBankAccount(false);
+        holder.setHasCreditCard(false);
+
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
         gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
