@@ -52,7 +52,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService START *****");
 
         InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName,isParticipant);
-        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO);
+        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO,isParticipant);
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
@@ -65,12 +65,11 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         return responseRimac;
     }
 
-
     public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo){
+            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo,boolean isParticipant){
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
+        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo,isParticipant);
         requestRimac.getPayload().setProducto(businessName);
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
@@ -106,7 +105,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus()
+                    payloadConfig.getSumCumulus(),
+                    payloadConfig.isParticipant()
             );
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);

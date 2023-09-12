@@ -61,10 +61,13 @@ public class SimulationParameter implements PreSimulation {
 		PayloadProperties properties = this.getProperties(input);
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
-		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
 		//validation by participant
-		if(Objects.nonNull(input.getParticipants().get(0).getId())){
-			customerResponse = this.getCustomer(input.getParticipants().get(0).getId());
+		CustomerListASO customerResponse = null;
+		if(!Objects.nonNull(input.getParticipants()) && !Objects.nonNull(input.getParticipants().get(0))){
+			LOGGER.info("***** SimulationParameter: participan is null *****");
+			customerResponse = this.getCustomer(input.getHolder().getId());
+		}else{
+			LOGGER.info("***** SimulationParameter: participan is not null *****");
 			payloadConfig.setParticipant(true);
 		}
 

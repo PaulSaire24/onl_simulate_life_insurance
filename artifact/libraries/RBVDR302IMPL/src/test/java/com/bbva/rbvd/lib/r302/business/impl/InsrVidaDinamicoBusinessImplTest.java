@@ -150,7 +150,8 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "VIDADINAMICO",
                 customerList,
-                BigDecimal.valueOf(1)
+                BigDecimal.valueOf(1),
+                false
                 );
     }
 

@@ -271,6 +271,7 @@ public class RBVDR302Test {
 
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setId("12455");
+		participantDTO.setBirthDate("2023-08-28");
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
 		identityDocumentDTO.setDocumentNumber("10447852");
 		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
@@ -349,6 +350,7 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setPlans(null);
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setId("12455");
+		participantDTO.setBirthDate("2023-08-28");
 		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
 		participantDTOList.add(participantDTO);
 		this.requestInput.setParticipants(participantDTOList);
@@ -402,6 +404,7 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setPlans(null);
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setId("12455");
+		participantDTO.setBirthDate("2023-08-28");
 		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
 		participantDTOList.add(participantDTO);
 		this.requestInput.setParticipants(participantDTOList);
