@@ -11,7 +11,6 @@ import com.bbva.elara.test.osgi.DummyBundleContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.Resource;
 
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
@@ -22,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
@@ -85,7 +82,7 @@ public class RBVDT30101PETransactionTest {
 
 
 	@Test
-	public void testNotNull() throws IOException {
+	public void testNotNull()  throws IOException {
 		LOGGER.info("RBVDT30101PETransactionTest - Executing testNotNull...");
 
 		assertNotNull(this.transaction);

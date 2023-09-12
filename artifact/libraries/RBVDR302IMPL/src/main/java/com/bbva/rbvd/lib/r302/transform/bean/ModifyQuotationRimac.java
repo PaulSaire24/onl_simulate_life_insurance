@@ -43,7 +43,7 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
         datoParticularBOList.add(getCumuloCliente(cumulo));
-        datoParticularBOList.add(getDatoParticularIndEndoso(input.isEndorsed()));
+        datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
 
         simulationBo.setPayload(payload);
@@ -59,7 +59,7 @@ public class ModifyQuotationRimac {
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso(input.isEndorsed()));
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
     }
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
@@ -70,15 +70,13 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    private static DatoParticularBO getDatoParticularIndEndoso(boolean isEndoso) {
+    private static DatoParticularBO getDatoParticularIndEndoso() {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
-        if(isEndoso){
-            datos.setValor("S");
-        }else{
+
             datos.setValor("N");
-        }
+
         return datos;
     }
 
