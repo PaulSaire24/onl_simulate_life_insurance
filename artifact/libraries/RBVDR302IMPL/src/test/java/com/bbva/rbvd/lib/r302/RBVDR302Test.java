@@ -15,12 +15,15 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
+import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -172,6 +175,11 @@ public class RBVDR302Test {
 	@Test
 	public void executeGetGenerateEasyYesTest() {
 		this.requestInput.getProduct().setId("840");
+		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("12455");
+		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
+		participantDTOList.add(participantDTO);
+		this.requestInput.setParticipants(participantDTOList);
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
@@ -260,6 +268,19 @@ public class RBVDR302Test {
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLifeTest...");
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setExternalSimulationId(null);
+
+		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("12455");
+		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
+		identityDocumentDTO.setDocumentNumber("10447852");
+		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
+		documentTypeDTO.setId("DNI");
+		identityDocumentDTO.setDocumentType(documentTypeDTO);
+		participantDTO.setIdentityDocument(identityDocumentDTO);
+		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
+		participantDTOList.add(participantDTO);
+
+		this.requestInput.setParticipants(participantDTOList);
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
@@ -326,6 +347,11 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setListRefunds(generateRefunds0PercentageInput());
 		this.requestInput.getProduct().setPlans(null);
+		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("12455");
+		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
+		participantDTOList.add(participantDTO);
+		this.requestInput.setParticipants(participantDTOList);
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
@@ -374,6 +400,11 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setListRefunds(generateRefunds125PercentageInput());
 		this.requestInput.getProduct().setPlans(null);
+		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("12455");
+		List<ParticipantDTO> participantDTOList =  new ArrayList<>();
+		participantDTOList.add(participantDTO);
+		this.requestInput.setParticipants(participantDTOList);
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 

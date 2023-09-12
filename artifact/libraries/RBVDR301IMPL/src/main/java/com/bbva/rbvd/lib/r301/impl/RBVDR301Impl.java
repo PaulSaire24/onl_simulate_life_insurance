@@ -204,6 +204,8 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService END *****");
 		return output;
 	}
+
+
 	//Crea las cabeceras Http
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();

@@ -43,7 +43,7 @@ public class QuotationRimac {
         return simulationBo;
     }
 
-    public static InsuranceLifeSimulationBO mapInRequestRimacDynamicLife(LifeSimulationDTO input, BigDecimal sumCumulus,String productName){
+    public static InsuranceLifeSimulationBO mapInRequestRimacDynamicLife(LifeSimulationDTO input, BigDecimal sumCumulus,String productName, boolean isParticipant){
         InsuranceLifeSimulationBO requestRimac = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
@@ -59,9 +59,16 @@ public class QuotationRimac {
         payload.setDatosParticulares(datosParticulares);
 
         AseguradoBO asegurado = new AseguradoBO();
-        asegurado.setTipoDocumento(input.getHolder().getIdentityDocument().getDocumentType().getId());
-        asegurado.setNumeroDocumento(input.getHolder().getIdentityDocument().getDocumentNumber());
-        payload.setAsegurado(asegurado);
+        if(isParticipant){
+            asegurado.setTipoDocumento(input.getParticipants().get(0).getIdentityDocument().getId());
+            asegurado.setNumeroDocumento(input.getParticipants().get(0).getIdentityDocument().getDocumentNumber());
+            payload.setAsegurado(asegurado);
+        }else {
+            asegurado.setTipoDocumento(input.getHolder().getIdentityDocument().getDocumentType().getId());
+            asegurado.setNumeroDocumento(input.getHolder().getIdentityDocument().getDocumentNumber());
+            payload.setAsegurado(asegurado);
+        }
+
 
         requestRimac.setPayload(payload);
         return requestRimac;

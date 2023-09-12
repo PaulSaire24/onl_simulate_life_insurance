@@ -18,6 +18,8 @@ public class PayloadConfig {
     private LifeSimulationDTO input;
     private PayloadProperties properties;
 
+    private boolean isParticipant;
+
 
     public List<InsuranceProductModalityDAO> getListInsuranceProductModalityDAO() {
         return listInsuranceProductModalityDAO;
@@ -61,6 +63,14 @@ public class PayloadConfig {
         this.properties = properties;
     }
 
+    public boolean isParticipant() {
+        return isParticipant;
+    }
+
+    public void setParticipant(boolean participant) {
+        isParticipant = participant;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PayloadConfig{");
@@ -70,6 +80,7 @@ public class PayloadConfig {
         sb.append(", listInsuranceProductModalityDAO=").append(listInsuranceProductModalityDAO);
         sb.append(", input=").append(input);
         sb.append(", properties=").append(properties);
+        sb.append(", participant=").append(isParticipant);
         sb.append('}');
         return sb.toString();
     }

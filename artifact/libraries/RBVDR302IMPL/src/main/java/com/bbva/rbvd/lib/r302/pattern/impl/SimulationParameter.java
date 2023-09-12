@@ -62,6 +62,11 @@ public class SimulationParameter implements PreSimulation {
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
 		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
+		//validation by participant
+		if(Objects.nonNull(input.getParticipants().get(0).getId())){
+			customerResponse = this.getCustomer(input.getParticipants().get(0).getId());
+			payloadConfig.setParticipant(true);
+		}
 
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
 				this.getModalities(this.getModalitiesSelected(input), productInformation.getInsuranceProductId(), input.getSaleChannelId());
