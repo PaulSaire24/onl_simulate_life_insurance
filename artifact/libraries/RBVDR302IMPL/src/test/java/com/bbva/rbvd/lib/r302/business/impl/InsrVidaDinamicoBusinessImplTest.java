@@ -8,14 +8,12 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
@@ -132,7 +130,8 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "",
                 customerList,
-                BigDecimal.valueOf(1)
+                BigDecimal.valueOf(1),
+                false
                 );
     }
 
@@ -149,7 +148,8 @@ public class InsrVidaDinamicoBusinessImplTest{
                 requestInput,
                 "VIDADINAMICO",
                 customerList,
-                BigDecimal.valueOf(1)
+                BigDecimal.valueOf(1),
+                false
                 );
     }
 

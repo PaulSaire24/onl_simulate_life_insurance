@@ -29,12 +29,16 @@ public class ModifyQuotationRimac {
     private ModifyQuotationRimac() {
     }
 
-    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input, CustomerListASO responseListCustomers, BigDecimal cumulo){
+    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input, CustomerListASO responseListCustomers, BigDecimal cumulo, boolean isParticipant){
         InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
         List<DatoParticularBO> datoParticularBOList = new ArrayList<>();
-        datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
+        if(isParticipant){
+            datoParticularBOList.add(getDatoParticularEdadAsegurado(input));
+        }else{
+            datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
+        }
         datoParticularBOList.add(getSumaAseguradaCoberturaFallecimiento(input));
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
@@ -46,9 +50,13 @@ public class ModifyQuotationRimac {
         return simulationBo;
     }
 
-    public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
+    public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers, boolean isParticipant){
 
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
+        if(isParticipant){
+            rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(input));
+        }else{
+            rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
+        }
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
@@ -124,6 +132,13 @@ public class ModifyQuotationRimac {
         datos.setCodigo("");
         datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
 
+        return datos;
+    }
+    private static DatoParticularBO getDatoParticularEdadAsegurado(LifeSimulationDTO input) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
+        datos.setCodigo("");
+        datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
         return datos;
     }
 

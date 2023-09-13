@@ -16,7 +16,6 @@ import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
-import com.bbva.rbvd.lib.r302.impl.util.MockResponse;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
@@ -47,12 +46,12 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     public InsuranceLifeSimulationBO executeQuotationRimacService(
-            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo) {
+            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo, boolean isParticipant) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName);
-        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO);
+        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName,isParticipant);
+        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO,isParticipant);
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
@@ -67,10 +66,10 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
 
     public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo){
+            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo, boolean isParticipant){
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo);
+        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo,isParticipant);
         requestRimac.getPayload().setProducto(businessName);
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(input));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
@@ -98,14 +97,16 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus()
+                    payloadConfig.getSumCumulus(),
+                    payloadConfig.isParticipant()
                     );
         }else{
             responseRimac = this.executeModifyQuotationRimacService(
                     payloadConfig.getInput(),
                     payloadConfig.getProductInformation().getInsuranceBusinessName(),
                     payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus()
+                    payloadConfig.getSumCumulus(),
+                    payloadConfig.isParticipant()
             );
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);

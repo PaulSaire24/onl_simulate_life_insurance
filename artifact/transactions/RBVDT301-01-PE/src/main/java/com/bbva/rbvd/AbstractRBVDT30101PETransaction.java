@@ -76,6 +76,13 @@ public abstract class AbstractRBVDT30101PETransaction extends AbstractTransactio
 	}
 
 	/**
+	 * Return value for input parameter isEndorsed
+	 */
+	protected Boolean getIsendorsed(){
+		return (Boolean)this.getParameter("isEndorsed");
+	}
+
+	/**
 	 * Set value for InsuranceProductDTO output parameter product
 	 */
 	protected void setProduct(final InsuranceProductDTO field){
@@ -136,5 +143,12 @@ public abstract class AbstractRBVDT30101PETransaction extends AbstractTransactio
 	 */
 	protected void setParticipants(final List<ParticipantDTO> field){
 		this.addParameter("participants", field);
+	}
+
+	/**
+	 * Set value for Boolean output parameter isEndorsed
+	 */
+	protected void setIsendorsed(final Boolean field){
+		this.addParameter("isEndorsed", field);
 	}
 }
