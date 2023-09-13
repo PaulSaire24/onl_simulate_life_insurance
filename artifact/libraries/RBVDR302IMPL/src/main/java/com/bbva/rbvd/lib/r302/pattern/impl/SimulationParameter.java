@@ -62,7 +62,7 @@ public class SimulationParameter implements PreSimulation {
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
 		CustomerListASO customerResponse = null;
-		if(!Objects.nonNull(input.getParticipants()) && !Objects.nonNull(input.getParticipants().get(0))){
+		if(!Objects.nonNull(input.getParticipants())){
 			LOGGER.info("***** SimulationParameter: participan is null *****");
 			customerResponse = this.getCustomer(input.getHolder().getId());
 		}else{
