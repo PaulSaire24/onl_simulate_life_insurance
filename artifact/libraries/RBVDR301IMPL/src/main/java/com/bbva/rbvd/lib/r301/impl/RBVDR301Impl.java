@@ -114,6 +114,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		try {
 			responseList = this.internalApiConnector.getForObject(PISDProperties.ID_API_CUSTOMER_INFORMATION.getValue(), CustomerListASO.class, pathParams);
+			LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Custumer body: {}",responseList);
 			if (responseList != null) {
 				LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Response body: {}",
 						getRequestJson(responseList.getData().get(0)));

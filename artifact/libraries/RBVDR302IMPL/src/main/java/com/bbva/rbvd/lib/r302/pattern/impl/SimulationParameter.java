@@ -65,6 +65,7 @@ public class SimulationParameter implements PreSimulation {
 		if(!Objects.nonNull(input.getParticipants())){
 			LOGGER.info("***** SimulationParameter: participan is null *****");
 			customerResponse = this.getCustomer(input.getHolder().getId());
+			LOGGER.info("***** SimulationParameter: customerResponse {} *****",customerResponse);
 		}else{
 			LOGGER.info("***** SimulationParameter: participan is not null *****");
 			payloadConfig.setParticipant(true);
@@ -167,6 +168,7 @@ public class SimulationParameter implements PreSimulation {
 
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
+		LOGGER.info("***** SimulationParameter CustomerListASO {} *****",customer);
 
 		LOGGER.info("***** SimulationParameter getCustomer END *****");
 
