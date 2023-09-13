@@ -11,6 +11,8 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.springframework.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,6 +24,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ModifyQuotationRimac {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModifyQuotationRimac.class);
 
     private static final String REFUNDS_UNITTYPE_PERCENTAGE = "PERCENTAGE";
 
@@ -35,8 +39,10 @@ public class ModifyQuotationRimac {
 
         List<DatoParticularBO> datoParticularBOList = new ArrayList<>();
         if(isParticipant){
+            LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is participant *****");
             datoParticularBOList.add(getDatoParticularEdadAsegurado(input));
         }else{
+            LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is not participant *****");
             datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
         }
         datoParticularBOList.add(getSumaAseguradaCoberturaFallecimiento(input));
@@ -53,8 +59,10 @@ public class ModifyQuotationRimac {
     public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers, boolean isParticipant){
 
         if(isParticipant){
+            LOGGER.info("***** addFieldsDatoParticulares - is participant *****");
             rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(input));
         }else{
+            LOGGER.info("***** addFieldsDatoParticulares - is not participant *****");
             rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
         }
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
@@ -130,6 +138,7 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
+        LOGGER.info("***** getDatoParticularEdadAsegurado - CustomerListASO.getBirthDate {} *****",responseListCustomers.getData().get(0).getBirthData().getBirthDate());
         datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
 
         return datos;
@@ -138,6 +147,7 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
+        LOGGER.info("***** getDatoParticularEdadAsegurado - Participant.getBirthDate {} *****",input.getParticipants().get(0).getBirthDate());
         datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
         return datos;
     }
