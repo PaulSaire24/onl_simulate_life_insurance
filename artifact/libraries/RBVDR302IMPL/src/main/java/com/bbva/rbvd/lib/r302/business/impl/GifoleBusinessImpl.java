@@ -62,7 +62,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
     private static final String EMPTY_VALUE = "";
     private static final String NOT_FOUND_EMAIL= "No se encontro correo";
-    private static final String NOT_FOUND_PHOME= "No se encontro celular";
+    private static final String NOT_FOUND_PHOME= "No celular";
 
 
     private ApplicationConfigurationService applicationConfigurationService;
@@ -161,7 +161,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             ContactDetailASO phoneContactDetailASO = new ContactDetailASO();
 
             ContactASO phonecontactASO = new ContactASO();
-            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse("No se encontro celular"));
+            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME));
             phonecontactASO.setContactType(CONTACT_DETAIL_MOBILE_TYPE_GIFOLE);
             phoneContactDetailASO.setContact(phonecontactASO);
 
@@ -174,7 +174,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
             ContactASO emailcontactASO = new ContactASO();
 
-            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse("No se encontro correo"));
+            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL));
             emailcontactASO.setContactType(CONTACT_DETAIL_EMAIL_TYPE);
             emailContactDetailASO.setContact(emailcontactASO);
 
@@ -284,7 +284,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
                 new com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO();
 
         GenericAmountASO premiumAmount = new GenericAmountASO();
-        if (installmentPlanDto.size() >= 1 && installmentPlanDto.get(0).getPaymentAmount() != null) {
+        if (!installmentPlanDto.isEmpty() && installmentPlanDto.get(0).getPaymentAmount() != null) {
 
             premiumAmount.setAmount(installmentPlanDto.get(0).getPaymentAmount().getAmount());
             premiumAmount.setCurrency(installmentPlanDto.get(0).getPaymentAmount().getCurrency());
@@ -315,11 +315,12 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         holder.setFirstName(EMPTY_VALUE);
         holder.setLastName(EMPTY_VALUE);
         holder.setContactDetails(new ArrayList<>());
-        holder.getContactDetails().add(getContactDetail(EMPTY_VALUE, CONTACT_DETAIL_EMAIL_TYPE));
-        holder.getContactDetails().add(getContactDetail(EMPTY_VALUE, CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
+        holder.getContactDetails().add(getContactDetail(NOT_FOUND_EMAIL, CONTACT_DETAIL_EMAIL_TYPE));
+        holder.getContactDetails().add(getContactDetail(NOT_FOUND_PHOME, CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
         validationUtil.docValidationForGifoleDynamic(EMPTY_VALUE, EMPTY_VALUE, holder, response);
         holder.setHasBankAccount(false);
         holder.setHasCreditCard(false);
+        holder.setIsDataTreatment(false);
 
         com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO good = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO();
 
@@ -330,7 +331,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         if (Objects.nonNull(response.getHolder())) {
             holder.setFirstName(response.getHolder().getFirstName());
             holder.setLastName(response.getHolder().getLastName());
-            holder.setIsDataTreatment(Objects.nonNull(response.getHolder().getIsDataTreatment()) ? response.getHolder().getIsDataTreatment() : false);
+        }
+
+        if(Objects.nonNull(response.getIsDataTreatment())){
+            holder.setIsDataTreatment(response.getIsDataTreatment());
         }
 
         if (Objects.nonNull(responseListCustomers)) {
