@@ -16,6 +16,7 @@ import com.bbva.pisd.dto.insurance.aso.gifole.ContactASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.BankASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.BranchASO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
+import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.BusinessAgentASO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.GenericAmountASO;
@@ -58,6 +59,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     private static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
+
+    private static final String EMPTY_VALUE = "";
+    private static final String NOT_FOUND_EMAIL= "No se encontro correo";
+    private static final String NOT_FOUND_PHOME= "No se encontro celular";
 
 
     private ApplicationConfigurationService applicationConfigurationService;
@@ -239,7 +244,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
 
 
-    public com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO createGifoleAsoDynamic(LifeSimulationDTO response, CustomerListASO responseListCustomers){
+    public com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO createGifoleAsoDynamic(LifeSimulationDTO response, CustomerListASO responseListCustomers) {
 
         com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO gifoleInsuranceRequest =
                 new com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO();
@@ -279,7 +284,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
                 new com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO();
 
         GenericAmountASO premiumAmount = new GenericAmountASO();
-        if(installmentPlanDto.size() >= 1 && installmentPlanDto.get(0).getPaymentAmount() !=  null){
+        if (installmentPlanDto.size() >= 1 && installmentPlanDto.get(0).getPaymentAmount() != null) {
 
             premiumAmount.setAmount(installmentPlanDto.get(0).getPaymentAmount().getAmount());
             premiumAmount.setCurrency(installmentPlanDto.get(0).getPaymentAmount().getCurrency());
@@ -302,15 +307,33 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         totalPremiumAmount.setAmount(planDTO.getTotalInstallment().getAmount());
         totalPremiumAmount.setCurrency(planDTO.getTotalInstallment().getCurrency());
 
+        ValidationUtil validationUtil = new ValidationUtil();
 
         com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
                 new com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO();
         holder.setIsBankCustomer(true);
-        holder.setIsDataTreatment(true);
+        holder.setFirstName(EMPTY_VALUE);
+        holder.setLastName(EMPTY_VALUE);
+        holder.setContactDetails(new ArrayList<>());
+        holder.getContactDetails().add(getContactDetail(EMPTY_VALUE, CONTACT_DETAIL_EMAIL_TYPE));
+        holder.getContactDetails().add(getContactDetail(EMPTY_VALUE, CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
+        validationUtil.docValidationForGifoleDynamic(EMPTY_VALUE, EMPTY_VALUE, holder, response);
+        holder.setHasBankAccount(false);
+        holder.setHasCreditCard(false);
 
-        if(Objects.nonNull(responseListCustomers)){
+        com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO good = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO();
 
-            ValidationUtil validationUtil = new ValidationUtil();
+        com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO goodDetail = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO();
+        goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
+        good.setGoodDetail(goodDetail);
+
+        if (Objects.nonNull(response.getHolder())) {
+            holder.setFirstName(response.getHolder().getFirstName());
+            holder.setLastName(response.getHolder().getLastName());
+            holder.setIsDataTreatment(Objects.nonNull(response.getHolder().getIsDataTreatment()) ? response.getHolder().getIsDataTreatment() : false);
+        }
+
+        if (Objects.nonNull(responseListCustomers)) {
 
             CustomerBO customer = responseListCustomers.getData().get(0);
             holder.setFirstName(validationUtil.validateSN(customer.getFirstName()));
@@ -322,51 +345,18 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             Optional<ContactDetailsBO> phoneContact = contactDetails.stream()
                     .filter(phone -> CONTACT_DETAIL_MOBILE_TYPE.equals(phone.getContactType().getId())).findFirst();
 
-            com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO phoneContactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
-
-            com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO phonecontactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
-            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse("No se encontro celular"));
-            phonecontactASO.setContactType(CONTACT_DETAIL_MOBILE_TYPE_GIFOLE);
-            phoneContactDetailASO.setContact(phonecontactASO);
-
-            contactDetailASOS.add(phoneContactDetailASO);
-
-
             Optional<ContactDetailsBO> emailContact = contactDetails.stream()
                     .filter(email -> CONTACT_DETAIL_EMAIL_TYPE.equals(email.getContactType().getId())).findFirst();
 
-            com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO emailContactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
-
-            com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO emailcontactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
-
-            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse("No se encontro correo"));
-            emailcontactASO.setContactType(CONTACT_DETAIL_EMAIL_TYPE);
-            emailContactDetailASO.setContact(emailcontactASO);
-
-            contactDetailASOS.add(emailContactDetailASO);
+            contactDetailASOS.add(getContactDetail(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL), CONTACT_DETAIL_EMAIL_TYPE));
+            contactDetailASOS.add(getContactDetail(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME), CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
 
             holder.setContactDetails(contactDetailASOS);
 
-            validationUtil.docValidationForGifoleDynamic(customer.getIdentityDocuments().get(0),holder,response);
+            IdentityDocumentsBO documentsBO = customer.getIdentityDocuments().get(0);
+            validationUtil.docValidationForGifoleDynamic(documentsBO.getDocumentNumber(), documentsBO.getDocumentType().getId(), holder, response);
 
-            response.getHolder().setFirstName(holder.getFirstName());
-            response.getHolder().setLastName(holder.getLastName());
-            response.getHolder().setFullName(holder.getFirstName().concat(" ").concat(holder.getLastName()));
-
-        } else if(response.getHolder() != null) {
-
-            response.getHolder().setFirstName(response.getHolder().getFirstName());
-            response.getHolder().setLastName(response.getHolder().getLastName());
-            response.getHolder().setFullName(response.getHolder().getFullName());
-
-        } else{
-            response.getHolder().setFirstName("");
-            response.getHolder().setLastName("");
-            response.getHolder().setFullName("");
         }
-
-        holder.setHasBankAccount(false);
-        holder.setHasCreditCard(false);
 
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
@@ -380,8 +370,27 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
+        gifoleInsuranceRequest.setGood(good);
 
         return gifoleInsuranceRequest;
+    }
+
+    public com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO getContactDetail(String contactValue, String contactType) {
+        com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO contactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
+        com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO contactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
+        contactASO.setContactType(contactType);
+        switch (contactType){
+            case CONTACT_DETAIL_EMAIL_TYPE:
+                contactASO.setAddress(contactValue);
+                break;
+            case CONTACT_DETAIL_MOBILE_TYPE_GIFOLE:
+                contactASO.setPhoneNumber(contactValue);
+                break;
+            default:
+                break;
+        }
+        contactDetailASO.setContact(contactASO);
+        return contactDetailASO;
     }
 
 }

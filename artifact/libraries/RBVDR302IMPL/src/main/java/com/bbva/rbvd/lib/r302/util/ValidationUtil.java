@@ -59,19 +59,16 @@ public class ValidationUtil {
     }
 
 
-    public void docValidationForGifoleDynamic(IdentityDocumentsBO customerInfo, com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder, LifeSimulationDTO response){
+    public void docValidationForGifoleDynamic(String documentNumber, String documentType, com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder, LifeSimulationDTO response){
         com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO identityDocument = new com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO();
-        GenericTypeASO documentType = new GenericTypeASO();
-        String docNumber = customerInfo.getDocumentNumber();
-        documentType.setId(customerInfo.getDocumentType().getId());
-        identityDocument.setDocumentType(documentType);
+        GenericTypeASO documentTypeAso = new GenericTypeASO();
+        documentTypeAso.setId(documentType);
+        identityDocument.setDocumentType(documentTypeAso);
+        identityDocument.setDocumentNumber(documentNumber);
 
-        identityDocument.setDocumentNumber(response.getHolder().getIdentityDocument().getDocumentNumber());
-        if (Objects.isNull(response.getHolder().getIdentityDocument().getDocumentNumber())) {
-            identityDocument.setDocumentNumber(docNumber);
-        } else {
-            identityDocument.setDocumentNumber(
-                    response.getHolder().getIdentityDocument().getDocumentNumber());
+        if (Objects.nonNull(response.getHolder()) && Objects.nonNull(response.getHolder().getIdentityDocument())) {
+            identityDocument.setDocumentNumber(response.getHolder().getIdentityDocument().getDocumentNumber());
+            identityDocument.getDocumentType().setId(response.getHolder().getIdentityDocument().getDocumentType().getId());
         }
         holder.setIdentityDocument(identityDocument);
     }
