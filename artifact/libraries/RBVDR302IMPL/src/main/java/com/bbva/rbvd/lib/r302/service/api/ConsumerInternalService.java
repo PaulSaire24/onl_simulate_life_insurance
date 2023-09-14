@@ -4,9 +4,11 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConsumerInternalService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerInternalService.class);
     private final RBVDR301 rbvdR301;
 
     public ConsumerInternalService(RBVDR301 rbvdR301) {
@@ -23,6 +25,9 @@ public class ConsumerInternalService {
     }
 
 
-    public CustomerListASO callListCustomerResponse(String customerId){ return this.rbvdR301.executeCallListCustomerResponse(customerId);}
+    public CustomerListASO callListCustomerResponse(String customerId){
+        LOGGER.info("***** callListCustomerResponse: {} *****",this.rbvdR301.executeCallListCustomerResponse(customerId));
+        return this.rbvdR301.executeCallListCustomerResponse(customerId);
+    }
 
 }

@@ -62,6 +62,7 @@ public class SimulationParameter implements PreSimulation {
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
 		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
+		LOGGER.info("***** SimulationParameter customerResponse: {} *****",customerResponse);
 
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
 				this.getModalities(this.getModalitiesSelected(input), productInformation.getInsuranceProductId(), input.getSaleChannelId());
@@ -160,7 +161,7 @@ public class SimulationParameter implements PreSimulation {
 
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
-
+		LOGGER.info("***** SimulationParameter customer: {} *****",customer);
 		LOGGER.info("***** SimulationParameter getCustomer END *****");
 
 		return customer;
