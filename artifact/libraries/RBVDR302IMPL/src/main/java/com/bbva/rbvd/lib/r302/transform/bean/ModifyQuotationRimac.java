@@ -5,6 +5,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -51,6 +52,13 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getCumuloCliente(cumulo));
         datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
+
+        FinanciamientoBO financiamientoBO = new FinanciamientoBO();
+        financiamientoBO.setFrecuencia("M");
+        financiamientoBO.setNumCuota(12L);
+        List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
+        financiamientoBOList.add(financiamientoBO);
+        payload.setFinanciamiento(financiamientoBOList);
 
         simulationBo.setPayload(payload);
         return simulationBo;

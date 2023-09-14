@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
@@ -59,6 +60,12 @@ public class QuotationRimac {
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         datosParticulares.add(datos);
         payload.setDatosParticulares(datosParticulares);
+        FinanciamientoBO financiamientoBO = new FinanciamientoBO();
+        financiamientoBO.setFrecuencia("M");
+        financiamientoBO.setNumCuota(12L);
+        List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
+        financiamientoBOList.add(financiamientoBO);
+        payload.setFinanciamiento(financiamientoBOList);
 
         AseguradoBO asegurado = new AseguradoBO();
         if(isParticipant){
