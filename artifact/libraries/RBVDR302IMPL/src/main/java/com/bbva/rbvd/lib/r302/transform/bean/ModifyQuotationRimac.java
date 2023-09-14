@@ -138,11 +138,10 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
-        LOGGER.info("***** getDatoParticularEdadAsegurado - CustomerListASO.getBirthDate {} *****",responseListCustomers.getData().get(0).getBirthData().getBirthDate());
-        if(Objects.nonNull(responseListCustomers)){
+        if(responseListCustomers != null){
             datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
         }else{
-            datos.setValor("32");
+            datos.setValor("35"); //por validar
         }
 
         return datos;
