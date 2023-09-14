@@ -106,7 +106,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	public CustomerListASO executeCallListCustomerResponse(String customerId) {
 		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse START *****");
-
+		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse customerId {} *****",customerId);
 		Map<String, Object> pathParams = new HashMap<>();
 		pathParams.put("customerId", customerId);
 
