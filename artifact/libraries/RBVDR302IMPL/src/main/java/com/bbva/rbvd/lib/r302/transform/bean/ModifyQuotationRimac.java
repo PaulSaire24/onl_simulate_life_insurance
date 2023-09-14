@@ -139,7 +139,11 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         LOGGER.info("***** getDatoParticularEdadAsegurado - CustomerListASO.getBirthDate {} *****",responseListCustomers.getData().get(0).getBirthData().getBirthDate());
-        datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+        if(Objects.nonNull(responseListCustomers)){
+            datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+        }else{
+            datos.setValor("32");
+        }
 
         return datos;
     }
@@ -148,7 +152,12 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         LOGGER.info("***** getDatoParticularEdadAsegurado - Participant.getBirthDate {} *****",input.getParticipants().get(0).getBirthDate());
-        datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
+        if(Objects.nonNull(input)){
+            datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
+        }else{
+            datos.setValor("32");
+        }
+
         return datos;
     }
 
