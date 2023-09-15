@@ -27,6 +27,7 @@ import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.singletonMap;
 
@@ -39,6 +40,9 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	//ejecuta la simulación del servicio Rímac
 	@Override
 	public InsuranceLifeSimulationBO executeSimulationRimacService(final InsuranceLifeSimulationBO payload, String traceId) {
+		if(Objects.nonNull(payload.getPayload())){
+			LOGGER.info("***** RBVDR301Impl - executeSimulationRimacService ***** Request body: {}", payload.getPayload().getAsegurado().getTipoDocumento());
+		}
 
 		String requestJson = getRequestJson(payload);
 
