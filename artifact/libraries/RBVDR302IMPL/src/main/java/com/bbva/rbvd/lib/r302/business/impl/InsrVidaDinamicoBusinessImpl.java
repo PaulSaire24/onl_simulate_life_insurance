@@ -142,7 +142,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
-
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response.isEndorsed());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
     }
