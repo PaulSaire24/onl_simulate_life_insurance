@@ -35,13 +35,13 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setListRefunds(this.getRefunds());
 		lifeSimulationDTO.setTerm(this.getTerm());
 		lifeSimulationDTO.setParticipants(this.getParticipants());
+		lifeSimulationDTO.setEndorsed(this.getIsendorsed());
 		lifeSimulationDTO.setSaleChannelId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE));
 		lifeSimulationDTO.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setTraceId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
 		lifeSimulationDTO.setAap((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.AAP));
-		lifeSimulationDTO.setParticipants(this.getParticipants());
-		lifeSimulationDTO.setEndorsed(this.getIsendorsed());
+
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
 		if(nonNull(response)) {
@@ -54,6 +54,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 			this.setTerm(response.getTerm());
 			this.setInsurancelimits(response.getInsuranceLimits());
 			this.setParticipants(response.getParticipants());
+			this.setIsendorsed(response.isEndorsed());
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
 			this.setSeverity(Severity.ENR);

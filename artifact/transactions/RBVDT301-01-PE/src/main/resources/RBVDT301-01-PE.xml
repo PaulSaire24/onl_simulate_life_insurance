@@ -82,10 +82,10 @@
 					</dto>
 					<parameter order="2" name="documentNumber" mandatory="1" type="String" size="30"/>
 				</dto>
-				<parameter order="9" name="birthDate" mandatory="1" type="String" size="10"/>
+				<parameter order="9" name="birthDate" mandatory="0" type="Date (YYYY-MM-DD)" size="0"/>
 			</dto>
 		</list>
-		<parameter order="9" name="isEndorsed" mandatory="0" type="Boolean" size="0"/>
+		<parameter order="9" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsIn>
 	<paramsOut>
 		<dto order="1" name="product" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO" artifactId="RBVDC301">
@@ -226,9 +226,10 @@
 					</dto>
 					<parameter order="2" name="documentNumber" mandatory="1" type="String" size="30"/>
 				</dto>
+				<parameter order="9" name="birthDate" mandatory="0" type="Date (YYYY-MM-DD)" size="0"/>
 			</dto>
 		</list>
-		<parameter order="10" name="isEndorsed" mandatory="0" type="Boolean" size="0"/>
+		<parameter order="10" name="isEndorsed" mandatory="1" type="Boolean" size="0"/>
 	</paramsOut>
 	<description>Trx done for life simulation</description>
 </transaction>

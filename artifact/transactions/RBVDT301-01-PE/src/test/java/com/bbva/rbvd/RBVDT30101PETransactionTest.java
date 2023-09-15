@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.lib.r302.RBVDR302;
 import org.junit.Assert;
 import org.junit.Before;
@@ -83,6 +85,20 @@ public class RBVDT30101PETransactionTest {
 		mockData = MockData.getInstance();
 	}
 
+	private List<ParticipantDTO> createParticipants(){
+		List<ParticipantDTO> participants = new ArrayList<>();
+		ParticipantDTO participnt1 = new ParticipantDTO();
+		participnt1.setId("89485832");
+		participnt1.setName("Peter");
+		participants.add(participnt1);
+		return participants;
+	}
+
+	private TermDTO createTerm(){
+		TermDTO term = new TermDTO();
+		term.setNumber(5);
+		return term;
+	}
 
 	@Test
 	public void testNotNull() throws IOException {
@@ -91,6 +107,9 @@ public class RBVDT30101PETransactionTest {
 		assertNotNull(this.transaction);
 
 		LifeSimulationDTO life = mockData.getInsuranceSimulationResponse();
+		life.setParticipants(createParticipants());
+		life.setTerm(createTerm());
+		life.setEndorsed(false);
 
 		when(rbvdr302.executeGetSimulation(anyObject())).thenReturn(life);
 		Assert.assertNotNull(this.transaction);
