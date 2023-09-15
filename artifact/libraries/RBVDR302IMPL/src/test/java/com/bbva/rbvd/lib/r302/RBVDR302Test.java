@@ -182,7 +182,7 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
-		participantDTO.setBirthDate("2023-08-28");
+		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
@@ -328,7 +328,7 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
-		participantDTO.setBirthDate("2023-08-28");
+		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
@@ -411,7 +411,7 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
-		participantDTO.setBirthDate("2023-08-28");
+		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
@@ -472,7 +472,7 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
-		participantDTO.setBirthDate("2023-08-28");
+		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);

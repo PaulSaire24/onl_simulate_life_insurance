@@ -5,7 +5,6 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -17,11 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModifyQuotationRimac {
@@ -145,7 +142,7 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         if(responseListCustomers != null){
-            datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+            //datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
         }else{
             datos.setValor("35"); //por validar
         }
@@ -161,9 +158,9 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    private static String calculateYeardOldCustomer(String birthDate){
+    private static String calculateYeardOldCustomer(Date birthDate){
         LocalDate hoy = LocalDate.now();
-        LocalDate nacimiento = LocalDate.parse(birthDate);
+        LocalDate nacimiento = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         long years = ChronoUnit.YEARS.between(nacimiento, hoy);
 
         return Long.toString(years);
