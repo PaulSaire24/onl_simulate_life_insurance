@@ -70,7 +70,7 @@ public class ModifyQuotationRimac {
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso(input));
     }
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
@@ -81,11 +81,15 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    private static DatoParticularBO getDatoParticularIndEndoso() {
+    private static DatoParticularBO getDatoParticularIndEndoso(LifeSimulationDTO input) {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
-        datos.setValor("N");
+        if(input.isEndorsed()){
+            datos.setValor("S");
+        }else{
+            datos.setValor("N");
+        }
         return datos;
     }
 
