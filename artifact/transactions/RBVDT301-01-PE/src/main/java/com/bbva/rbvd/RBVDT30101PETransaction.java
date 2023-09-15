@@ -8,6 +8,8 @@ import com.bbva.rbvd.lib.r302.RBVDR302;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import static java.util.Objects.nonNull;
 
 /**
@@ -35,13 +37,13 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setListRefunds(this.getRefunds());
 		lifeSimulationDTO.setTerm(this.getTerm());
 		lifeSimulationDTO.setParticipants(this.getParticipants());
-		lifeSimulationDTO.setEndorsed(this.getIsendorsed());
 		lifeSimulationDTO.setSaleChannelId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE));
 		lifeSimulationDTO.setCreationUser((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setTraceId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
 		lifeSimulationDTO.setAap((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.AAP));
-
+		lifeSimulationDTO.setParticipants(this.getParticipants());
+		lifeSimulationDTO.setEndorsed(this.getIsendorsed());
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
 		if(nonNull(response)) {
