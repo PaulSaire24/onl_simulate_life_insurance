@@ -87,8 +87,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig);
-
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig.toString());
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
 

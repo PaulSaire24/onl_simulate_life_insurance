@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +106,6 @@ public class RBVDT30101PETransactionTest {
 		assertNotNull(this.transaction);
 
 		when(rbvdr302.executeGetSimulation(anyObject())).thenReturn(null);
-
 		this.transaction.execute();
 
 		assertEquals(Severity.ENR, this.transaction.getSeverity());
