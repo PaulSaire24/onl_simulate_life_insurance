@@ -120,7 +120,7 @@ public class InsrVidaDinamicoBusinessImplTest{
     @Test(expected = BusinessException.class)
     public void executeQuotationRimacServiceResultNull() {
     //given
-
+        this.requestInput.setEndorsed(true);
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).
                 thenReturn(null);
@@ -138,7 +138,7 @@ public class InsrVidaDinamicoBusinessImplTest{
     @Test(expected = BusinessException.class)
     public void executeModifyQuotationRimacServiceResultNull() {
         //given
-
+        this.requestInput.setEndorsed(true);
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         //when(rbvdR301.executeSimulationModificationRimacService(Mockito.anyObject(),Mockito.anyString(),Mockito.anyString())).
         //        thenReturn(null);
@@ -177,13 +177,14 @@ public class InsrVidaDinamicoBusinessImplTest{
         TermDTO termDTO = new TermDTO();
         termDTO.setNumber(10);
         requestInput.setTerm(termDTO);
+        requestInput.setEndorsed(true);
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMinima(new BigDecimal(1000));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMaxima(new BigDecimal(2000));
 
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-
+        payloadConfig.setInput(requestInput);
         PayloadStore validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
 
         Assert.assertNotNull(validation);

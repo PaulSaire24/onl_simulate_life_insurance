@@ -61,7 +61,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 			this.setTerm(response.getTerm());
 			this.setInsurancelimits(response.getInsuranceLimits());
 			this.setParticipants(response.getParticipants());
-			this.setIsendorsed(response.isEndorsed());
+			this.setIsendorsed(response.getEndorsed());
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
 			this.setSeverity(Severity.ENR);

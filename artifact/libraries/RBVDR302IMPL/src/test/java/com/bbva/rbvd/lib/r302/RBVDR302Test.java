@@ -321,7 +321,7 @@ public class RBVDR302Test {
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLifeTest...");
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setExternalSimulationId(null);
-
+		this.requestInput.setEndorsed(true);
 		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
 		documentTypeDTO.setId("DNI");
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
@@ -404,7 +404,7 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setListRefunds(generateRefunds0PercentageInput());
 		this.requestInput.getProduct().setPlans(null);
-
+		this.requestInput.setEndorsed(true);
 		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
 		documentTypeDTO.setId("DNI");
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
@@ -465,7 +465,7 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setListRefunds(generateRefunds125PercentageInput());
 		this.requestInput.getProduct().setPlans(null);
-
+		this.requestInput.setEndorsed(true);
 		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
 		documentTypeDTO.setId("DNI");
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
