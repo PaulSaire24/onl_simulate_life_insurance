@@ -53,12 +53,6 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getDatoParticularIndEndoso());
         payload.setDatosParticulares(datoParticularBOList);
 
-        FinanciamientoBO financiamientoBO = new FinanciamientoBO();
-        financiamientoBO.setFrecuencia("M");
-        financiamientoBO.setNumCuota(12L);
-        List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
-        financiamientoBOList.add(financiamientoBO);
-        payload.setFinanciamiento(financiamientoBOList);
 
         simulationBo.setPayload(payload);
         return simulationBo;

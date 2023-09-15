@@ -334,6 +334,9 @@ public class RBVDR302Test {
 		participantDTOList.add(participantDTO);
 		this.requestInput.setParticipants(participantDTOList);
 
+
+
+
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
@@ -364,6 +367,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+
 		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
 
 		/*

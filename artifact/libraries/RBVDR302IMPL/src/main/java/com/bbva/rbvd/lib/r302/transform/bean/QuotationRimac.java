@@ -60,13 +60,6 @@ public class QuotationRimac {
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         datosParticulares.add(datos);
         payload.setDatosParticulares(datosParticulares);
-        FinanciamientoBO financiamientoBO = new FinanciamientoBO();
-        financiamientoBO.setFrecuencia("M");
-        financiamientoBO.setNumCuota(12L);
-        List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
-        financiamientoBOList.add(financiamientoBO);
-        payload.setFinanciamiento(financiamientoBOList);
-
         AseguradoBO asegurado = new AseguradoBO();
         if(isParticipant){
             asegurado.setTipoDocumento(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
