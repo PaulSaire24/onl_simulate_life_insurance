@@ -50,7 +50,7 @@ public class ModifyQuotationRimac {
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
         datoParticularBOList.add(getCumuloCliente(cumulo));
-        datoParticularBOList.add(getDatoParticularIndEndoso());
+        datoParticularBOList.add(getDatoParticularIndEndoso(input));
         payload.setDatosParticulares(datoParticularBOList);
 
 
