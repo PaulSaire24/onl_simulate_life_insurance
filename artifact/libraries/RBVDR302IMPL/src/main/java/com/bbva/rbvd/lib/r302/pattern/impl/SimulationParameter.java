@@ -54,7 +54,7 @@ public class SimulationParameter implements PreSimulation {
 	@Override
 	public PayloadConfig getConfig(LifeSimulationDTO input) {
 		LOGGER.info("***** SimulationParameter getConfig START *****");
-		LOGGER.info("***** SimulationParameter getConfig - input : {} *****",input);
+		LOGGER.info("***** SimulationParameter getConfig - input : {} *****",input);//DNI
 		
 		PayloadConfig payloadConfig = new PayloadConfig();
 
@@ -88,7 +88,7 @@ public class SimulationParameter implements PreSimulation {
 		payloadConfig.setInput(input);
 		payloadConfig.setProperties(properties);
 
-		LOGGER.info("***** SimulationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);
+		LOGGER.info("***** SimulationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);//L
 
 		return payloadConfig;
 	}
@@ -112,7 +112,11 @@ public class SimulationParameter implements PreSimulation {
 		LOGGER.info("***** SimulationParameter getProperties START *****");
 
 		PayloadProperties properties = new PayloadProperties();
-		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
+		if(!Objects.nonNull(input.getParticipants())){
+			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
+		}else{
+			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
+		}
 		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
 
 		String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
