@@ -59,6 +59,7 @@ public class SimulationParameter implements PreSimulation {
 		PayloadConfig payloadConfig = new PayloadConfig();
 
 		PayloadProperties properties = this.getProperties(input);
+		LOGGER.info("***** SimulationParameter getConfig - properties : {} *****",properties);
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
 		CustomerListASO customerResponse = null;
@@ -79,7 +80,7 @@ public class SimulationParameter implements PreSimulation {
 
 		this.getTierToUpdateRequest(input);
 
-		input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
+		setDocumentType(input,properties);
 
 		payloadConfig.setProductInformation(productInformation);
 		payloadConfig.setCustomerListASO(customerResponse);
@@ -91,6 +92,15 @@ public class SimulationParameter implements PreSimulation {
 		LOGGER.info("***** SimulationParameter getConfig - END  payloadConfig: {} *****",payloadConfig);//L
 
 		return payloadConfig;
+	}
+
+	public void setDocumentType(LifeSimulationDTO input,PayloadProperties properties){
+
+		if(Objects.nonNull(input.getParticipants())){
+			input.getParticipants().get(0).getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
+		}else{
+			input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
+		}
 	}
 
 	private String getModalitiesSelected(LifeSimulationDTO input){
@@ -112,11 +122,14 @@ public class SimulationParameter implements PreSimulation {
 		LOGGER.info("***** SimulationParameter getProperties START *****");
 
 		PayloadProperties properties = new PayloadProperties();
-		if(!Objects.nonNull(input.getParticipants())){
-			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
-		}else{
+
+		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
+		if(Objects.nonNull(input.getParticipants())){
+			LOGGER.info("***** SimulationParameter getProperties participant es nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
+			LOGGER.info("***** SimulationParameter getProperties participant documentType {} *****",this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 		}
+
 		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
 
 		String segmentoLifePlan1 = applicationConfigurationService.getProperty("segmentoLifePlan1");
