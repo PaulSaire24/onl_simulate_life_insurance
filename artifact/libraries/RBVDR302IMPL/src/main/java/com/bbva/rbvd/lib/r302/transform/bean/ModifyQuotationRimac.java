@@ -82,7 +82,7 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
-        if(input.getEndorsed()){
+        if(input.isEndorsed()){
             datos.setValor("S");
         }else{
             datos.setValor("N");
