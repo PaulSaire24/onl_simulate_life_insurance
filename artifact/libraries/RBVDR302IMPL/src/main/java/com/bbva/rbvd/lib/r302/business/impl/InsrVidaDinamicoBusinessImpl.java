@@ -112,17 +112,26 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         //construccion de respuesta trx
         response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
-
+        String documentTypeId = getDocumentTypeId(payloadConfig.getInput());
         //guardar en bd
         return new PayloadStore(
                 payloadConfig.getInput().getCreationUser(),
                 payloadConfig.getInput().getUserAudit(),
                 responseRimac,
                 response,
-                payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId(),
+                documentTypeId,
                 payloadConfig.getProductInformation()
         );
 
+    }
+
+    public String getDocumentTypeId(LifeSimulationDTO input){
+        input.getHolder().getIdentityDocument().getDocumentType().getId();
+        if(Objects.nonNull(input.getParticipants())){
+            return input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId();
+        }else{
+            return input.getHolder().getIdentityDocument().getDocumentType().getId();
+        }
     }
 
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {

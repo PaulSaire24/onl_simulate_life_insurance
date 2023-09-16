@@ -95,10 +95,10 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	public void setDocumentType(LifeSimulationDTO input,PayloadProperties properties){
-
-		input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
 		if(Objects.nonNull(input.getParticipants())){
 			input.getParticipants().get(0).getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
+		}else{
+			input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
 		}
 	}
 
