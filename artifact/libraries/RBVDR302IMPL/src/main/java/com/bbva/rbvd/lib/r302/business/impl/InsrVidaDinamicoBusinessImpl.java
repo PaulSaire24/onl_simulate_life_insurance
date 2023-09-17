@@ -126,7 +126,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     public String getDocumentTypeId(LifeSimulationDTO input){
-        input.getHolder().getIdentityDocument().getDocumentType().getId();
         if(Objects.nonNull(input.getParticipants())){
             return input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId();
         }else{

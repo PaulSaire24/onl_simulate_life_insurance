@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.bbva.rbvd.lib.r302.util.ValidationUtil.validateParticipant;
+
 public class SimulationVidaDinamico extends SimulationDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
 
@@ -36,6 +38,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		validatePlanWithRefundPercentage(input);
 
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
+		validateParticipant(input,payloadConfig);
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
