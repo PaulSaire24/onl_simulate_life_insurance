@@ -69,7 +69,7 @@ public class SimulationParameter implements PreSimulation {
 		List<InsuranceProductModalityDAO> insuranceProductModalityDAOList =
 				this.getModalities(this.getModalitiesSelected(input), productInformation.getInsuranceProductId(), input.getSaleChannelId());
 
-		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input.getHolder().getId());
+		BigDecimal cumulo = this.getCumulos(productInformation.getInsuranceProductId(), input);
 
 		this.getTierToUpdateRequest(input);
 
@@ -118,7 +118,7 @@ public class SimulationParameter implements PreSimulation {
 		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
 		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
 		if(Objects.nonNull(input.getParticipants())){
-			LOGGER.info("***** SimulationParameter getProperties participant es nulo *****");
+			LOGGER.info("***** SimulationParameter getProperties participant es no nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 			properties.setDocumentTypeIdAsText(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
 			LOGGER.info("***** SimulationParameter getProperties participant documentType {} *****",this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
@@ -160,12 +160,13 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 
-	public BigDecimal getCumulos(BigDecimal insuranceProductId, String customerId) {
+	public BigDecimal getCumulos(BigDecimal insuranceProductId, LifeSimulationDTO input) {
 
 		LOGGER.info("***** SimulationParameter getCumulos START - insuranceProductId: {} *****",insuranceProductId);
-		LOGGER.info("***** SimulationParameter getCumulos START - customerId: {} *****",customerId);
 
 		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
+		String customerId = input.getParticipants()==null? input.getHolder().getId():input.getParticipants().get(0).getId();
+		LOGGER.info("***** SimulationParameter getCumulos START - customerId: {} *****",customerId);
 		BigDecimal cumulus = contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
 
 		LOGGER.info("***** SimulationParameter getCumulos END - cumulus: {} *****",cumulus);
