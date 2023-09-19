@@ -53,9 +53,10 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		}
 
 		//Actualizacion tipo documento en salida trx
-		payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 		if(Objects.nonNull(input.getParticipants())){
 			payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+		}else{
+			payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
 		}
 
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
