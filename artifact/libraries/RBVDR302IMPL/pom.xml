@@ -89,6 +89,11 @@
 			<artifactId>PISDR350</artifactId>
 			<version>0.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bbva.rbvd</groupId>
+			<artifactId>RBVDR044</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
