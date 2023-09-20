@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -142,13 +144,29 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         if(responseListCustomers != null){
-            //datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+            Date fechaCustomer = ParseFecha(responseListCustomers.getData().get(0).getBirthData().getBirthDate());
+            datos.setValor(calculateYeardOldCustomer(fechaCustomer));
         }else{
             datos.setValor("35"); //por validar
         }
 
         return datos;
     }
+
+    public static Date ParseFecha(String fecha) {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaDate = null;
+        try {
+            fechaDate = formato.parse(fecha);
+        }
+        catch (ParseException ex)
+        {
+            LOGGER.info("***** ParseFecha - error parse ***** {}",ex.getMessage());
+        }
+        return fechaDate;
+    }
+
+
     private static DatoParticularBO getDatoParticularEdadAsegurado(LifeSimulationDTO input) {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
