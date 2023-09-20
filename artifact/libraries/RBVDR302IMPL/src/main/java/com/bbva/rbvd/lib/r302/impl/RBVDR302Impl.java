@@ -37,11 +37,11 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			simulation = new SimulationVidaDinamico(
 					new SimulationParameter(this.pisdR350, this.rbvdR301, this.applicationConfigurationService),
-					new SimulationStore(this.pisdR350)
+					new SimulationStore(this.pisdR350), this.rbvdR044
 			);
 
 			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
-			 response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
+			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 		}
 
 		//inicio
