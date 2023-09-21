@@ -26,6 +26,9 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.NO_CONSTANT;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.YES_CONSTANT;
+
 public class ModifyQuotationRimac {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModifyQuotationRimac.class);
@@ -88,9 +91,9 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
         if(input.isEndorsed()){
-            datos.setValor("S");
+            datos.setValor(YES_CONSTANT);
         }else{
-            datos.setValor("N");
+            datos.setValor(NO_CONSTANT);
         }
         return datos;
     }
