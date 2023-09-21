@@ -166,7 +166,6 @@ public class SimulationParameter implements PreSimulation {
 
 		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
 		String customerId = input.getParticipants()==null? input.getHolder().getId():input.getParticipants().get(0).getId();
-		LOGGER.info("***** SimulationParameter getCumulos START - customerId: {} *****",customerId);
 		BigDecimal cumulus = contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
 
 		LOGGER.info("***** SimulationParameter getCumulos END - cumulus: {} *****",cumulus);
@@ -178,7 +177,6 @@ public class SimulationParameter implements PreSimulation {
 	public CustomerListASO getCustomer(String customerId) {
 
 		LOGGER.info("***** SimulationParameter getCustomer START *****");
-		LOGGER.info("***** SimulationParameter customerId {} *****", customerId);
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
 		LOGGER.info("***** SimulationParameter CustomerListASO {} *****",customer);

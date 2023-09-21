@@ -52,7 +52,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName,isParticipant);
         ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO,isParticipant);
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac.getPayload().getAsegurado().getTipoDocumento());
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | responseRimac: {} *****",responseRimac);
@@ -87,7 +87,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig.toString());
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig);
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
 
@@ -150,7 +150,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response.isEndorsed());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
     }

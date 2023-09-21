@@ -26,7 +26,6 @@ public class ConsumerInternalService {
 
 
     public CustomerListASO callListCustomerResponse(String customerId){
-        LOGGER.info("***** callListCustomerResponse customerId {} *****", customerId);
         return this.rbvdR301.executeCallListCustomerResponse(customerId);}
 
 }

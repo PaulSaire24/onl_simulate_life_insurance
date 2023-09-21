@@ -40,9 +40,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	//ejecuta la simulación del servicio Rímac
 	@Override
 	public InsuranceLifeSimulationBO executeSimulationRimacService(final InsuranceLifeSimulationBO payload, String traceId) {
-		if(Objects.nonNull(payload.getPayload())){
-			LOGGER.info("***** RBVDR301Impl - executeSimulationRimacService ***** Request body: {}", payload.getPayload().getAsegurado().getTipoDocumento());
-		}
 
 		String requestJson = getRequestJson(payload);
 
@@ -110,7 +107,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	public CustomerListASO executeCallListCustomerResponse(String customerId) {
 		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse START *****");
-		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse customerId {} *****",customerId);
 		Map<String, Object> pathParams = new HashMap<>();
 		pathParams.put("customerId", customerId);
 

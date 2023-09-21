@@ -19,7 +19,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ModifyQuotationRimac {
@@ -161,7 +165,6 @@ public class ModifyQuotationRimac {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
-        LOGGER.info("***** getDatoParticularEdadAsegurado - Participant.getBirthDate {} *****",input.getParticipants().get(0).getBirthDate());
         datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
         return datos;
     }
