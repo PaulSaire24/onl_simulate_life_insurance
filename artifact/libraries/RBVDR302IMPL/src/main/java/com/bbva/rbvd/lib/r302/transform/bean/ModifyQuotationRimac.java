@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -142,8 +143,7 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         if(responseListCustomers != null){
-            //Date fechaCustomer = ParseFecha(responseListCustomers.getData().get(0).getBirthData().getBirthDate());
-            //datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+            datos.setValor(calculateYeardOldCustomer(ParseFecha(responseListCustomers.getData().get(0).getBirthData().getBirthDate())));
         }else{
             datos.setValor("35"); //por validar
         }
@@ -151,14 +151,11 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    /*public static Date ParseFecha(String fecha) throws ParseException {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaDate = null;
-            fechaDate = formato.parse(fecha);
-
-        return fechaDate;
-    }*/
-
+    public static Date ParseFecha(String fecha) {
+        LocalDate lc = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        ZoneId localZone = ZoneId.of("America/Lima");
+        return Date.from(lc.atStartOfDay(localZone).toInstant());
+    }
 
     private static DatoParticularBO getDatoParticularEdadAsegurado(LifeSimulationDTO input) {
         DatoParticularBO datos = new DatoParticularBO();
