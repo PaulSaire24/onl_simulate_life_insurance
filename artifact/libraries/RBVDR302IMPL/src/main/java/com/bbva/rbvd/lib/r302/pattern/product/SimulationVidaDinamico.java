@@ -23,7 +23,10 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.bbva.rbvd.lib.r302.util.ValidationUtil.validateParticipant;
 
 public class SimulationVidaDinamico extends SimulationDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
@@ -42,6 +45,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		validatePlanWithRefundPercentage(input);
 
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
+		validateParticipant(input,payloadConfig);
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
@@ -55,7 +59,12 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		}
 
 		//Actualizacion tipo documento en salida trx
-		payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+		if(Objects.nonNull(input.getParticipants())){
+			payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+		}else{
+			payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
+		}
+
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
 
 

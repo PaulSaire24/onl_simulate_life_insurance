@@ -8,6 +8,8 @@ import com.bbva.rbvd.lib.r302.RBVDR302;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import static java.util.Objects.nonNull;
 
 /**
@@ -40,6 +42,12 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setUserAudit((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.USERCODE));
 		lifeSimulationDTO.setTraceId((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.REQUESTID));
 		lifeSimulationDTO.setAap((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.AAP));
+		if(!Objects.nonNull(this.getIsendorsed())){
+			lifeSimulationDTO.setEndorsed(false);
+		}else{
+			lifeSimulationDTO.setEndorsed(this.getIsendorsed());
+		}
+
 
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
@@ -53,6 +61,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 			this.setTerm(response.getTerm());
 			this.setInsurancelimits(response.getInsuranceLimits());
 			this.setParticipants(response.getParticipants());
+			this.setIsendorsed(response.isEndorsed());
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
 			this.setSeverity(Severity.ENR);

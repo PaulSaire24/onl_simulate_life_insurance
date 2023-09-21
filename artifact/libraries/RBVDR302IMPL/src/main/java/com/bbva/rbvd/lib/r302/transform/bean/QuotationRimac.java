@@ -1,11 +1,14 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class QuotationRimac {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuotationRimac.class);
     private QuotationRimac(){}
 
     public static InsuranceLifeSimulationBO mapInRequestRimacEasyyesLife(LifeSimulationDTO input, BigDecimal sumCumulus){
@@ -43,7 +46,7 @@ public class QuotationRimac {
         return simulationBo;
     }
 
-    public static InsuranceLifeSimulationBO mapInRequestRimacDynamicLife(LifeSimulationDTO input, BigDecimal sumCumulus,String productName){
+    public static InsuranceLifeSimulationBO mapInRequestRimacDynamicLife(LifeSimulationDTO input, BigDecimal sumCumulus,String productName, boolean isParticipant){
         InsuranceLifeSimulationBO requestRimac = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
@@ -57,10 +60,14 @@ public class QuotationRimac {
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         datosParticulares.add(datos);
         payload.setDatosParticulares(datosParticulares);
-
         AseguradoBO asegurado = new AseguradoBO();
-        asegurado.setTipoDocumento(input.getHolder().getIdentityDocument().getDocumentType().getId());
-        asegurado.setNumeroDocumento(input.getHolder().getIdentityDocument().getDocumentNumber());
+        if(isParticipant){
+            asegurado.setTipoDocumento(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
+            asegurado.setNumeroDocumento(input.getParticipants().get(0).getIdentityDocument().getDocumentNumber());
+        }else{
+            asegurado.setTipoDocumento(input.getHolder().getIdentityDocument().getDocumentType().getId());
+            asegurado.setNumeroDocumento(input.getHolder().getIdentityDocument().getDocumentNumber());
+        }
         payload.setAsegurado(asegurado);
 
         requestRimac.setPayload(payload);

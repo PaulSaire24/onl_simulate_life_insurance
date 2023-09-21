@@ -10,7 +10,10 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
+import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class ValidationUtil {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationUtil.class);
+
     public static List<InsuranceProductModalityDAO> validateQueryInsuranceProductModality(Map<String, Object> responseQueryInsuranceProductModality) {
         List<Map<String, Object>> rows =
                 (List<Map<String, Object>>) responseQueryInsuranceProductModality.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue());
@@ -29,6 +34,14 @@ public class ValidationUtil {
             throw RBVDValidation.build(RBVDErrors.WRONG_PLAN_CODES);
         }
         return rows.stream().map(InsuranceProductModalityBean::createInsuranceProductModalityDAO).collect(toList());
+    }
+
+    public static void validateParticipant(LifeSimulationDTO input, PayloadConfig payloadConfig){
+
+        if(Objects.nonNull(input.getParticipants())){
+            LOGGER.info("***** SimulationParameter: participan is not null *****");
+            payloadConfig.setParticipant(true);
+        }
     }
 
 

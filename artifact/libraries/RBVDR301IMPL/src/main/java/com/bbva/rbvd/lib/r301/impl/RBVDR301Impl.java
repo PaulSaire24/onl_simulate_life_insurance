@@ -27,6 +27,7 @@ import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.singletonMap;
 
@@ -106,7 +107,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	public CustomerListASO executeCallListCustomerResponse(String customerId) {
 		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse START *****");
-
 		Map<String, Object> pathParams = new HashMap<>();
 		pathParams.put("customerId", customerId);
 
@@ -114,6 +114,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		try {
 			responseList = this.internalApiConnector.getForObject(PISDProperties.ID_API_CUSTOMER_INFORMATION.getValue(), CustomerListASO.class, pathParams);
+			LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Custumer body: {}",responseList);
 			if (responseList != null) {
 				LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Response body: {}",
 						getRequestJson(responseList.getData().get(0)));

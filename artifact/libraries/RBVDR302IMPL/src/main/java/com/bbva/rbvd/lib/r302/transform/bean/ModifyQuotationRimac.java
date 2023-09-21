@@ -11,17 +11,27 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.springframework.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.NO_CONSTANT;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.YES_CONSTANT;
+
 public class ModifyQuotationRimac {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModifyQuotationRimac.class);
 
     private static final String REFUNDS_UNITTYPE_PERCENTAGE = "PERCENTAGE";
 
@@ -29,30 +39,43 @@ public class ModifyQuotationRimac {
     private ModifyQuotationRimac() {
     }
 
-    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input, CustomerListASO responseListCustomers, BigDecimal cumulo){
+    public static InsuranceLifeSimulationBO mapInRequestRimacLifeModifyQuotation(LifeSimulationDTO input, CustomerListASO responseListCustomers, BigDecimal cumulo, boolean isParticipant){
         InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
         List<DatoParticularBO> datoParticularBOList = new ArrayList<>();
-        datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
+        if(isParticipant){
+            LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is participant *****");
+            datoParticularBOList.add(getDatoParticularEdadAsegurado(input));
+        }else{
+            LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is not participant *****");
+            datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));
+        }
         datoParticularBOList.add(getSumaAseguradaCoberturaFallecimiento(input));
         datoParticularBOList.add(getDatoParticularPeriodoAnios(input));
         datoParticularBOList.add(getDatoParticularPorcentajeDevolucion(input));
         datoParticularBOList.add(getCumuloCliente(cumulo));
-        datoParticularBOList.add(getDatoParticularIndEndoso());
+        datoParticularBOList.add(getDatoParticularIndEndoso(input));
         payload.setDatosParticulares(datoParticularBOList);
+
 
         simulationBo.setPayload(payload);
         return simulationBo;
     }
 
-    public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers){
+    public static void addFieldsDatoParticulares(InsuranceLifeSimulationBO rimacRequest, LifeSimulationDTO input, CustomerListASO responseListCustomers, boolean isParticipant){
 
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
+        if(isParticipant){
+            LOGGER.info("***** addFieldsDatoParticulares - is participant *****");
+            rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(input));
+        }else{
+            LOGGER.info("***** addFieldsDatoParticulares - is not participant *****");
+            rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularEdadAsegurado(responseListCustomers));
+        }
         rimacRequest.getPayload().getDatosParticulares().add(getSumaAseguradaCoberturaFallecimiento(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPeriodoAnios(input));
         rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularPorcentajeDevolucion(input));
-        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso());
+        rimacRequest.getPayload().getDatosParticulares().add(getDatoParticularIndEndoso(input));
     }
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
@@ -63,11 +86,15 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    private static DatoParticularBO getDatoParticularIndEndoso() {
+    private static DatoParticularBO getDatoParticularIndEndoso(LifeSimulationDTO input) {
         DatoParticularBO datos = new DatoParticularBO();
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
-        datos.setValor("N");
+        if(input.isEndorsed()){
+            datos.setValor(YES_CONSTANT);
+        }else{
+            datos.setValor(NO_CONSTANT);
+        }
         return datos;
     }
 
@@ -123,7 +150,7 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
         datos.setCodigo("");
         if(responseListCustomers != null){
-            datos.setValor(calculateYeardOldCustomer(responseListCustomers.getData().get(0).getBirthData().getBirthDate()));
+            datos.setValor(calculateYeardOldCustomer(ParseFecha(responseListCustomers.getData().get(0).getBirthData().getBirthDate())));
         }else{
             datos.setValor("35"); //por validar
         }
@@ -131,9 +158,23 @@ public class ModifyQuotationRimac {
         return datos;
     }
 
-    private static String calculateYeardOldCustomer(String birthDate){
+    public static Date ParseFecha(String fecha) {
+        LocalDate lc = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        ZoneId localZone = ZoneId.of("America/Lima");
+        return Date.from(lc.atStartOfDay(localZone).toInstant());
+    }
+
+    private static DatoParticularBO getDatoParticularEdadAsegurado(LifeSimulationDTO input) {
+        DatoParticularBO datos = new DatoParticularBO();
+        datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_EDAD_ASEGURADO.getValue());
+        datos.setCodigo("");
+        datos.setValor(calculateYeardOldCustomer(input.getParticipants().get(0).getBirthDate()));
+        return datos;
+    }
+
+    private static String calculateYeardOldCustomer(Date birthDate){
         LocalDate hoy = LocalDate.now();
-        LocalDate nacimiento = LocalDate.parse(birthDate);
+        LocalDate nacimiento = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         long years = ChronoUnit.YEARS.between(nacimiento, hoy);
 
         return Long.toString(years);
