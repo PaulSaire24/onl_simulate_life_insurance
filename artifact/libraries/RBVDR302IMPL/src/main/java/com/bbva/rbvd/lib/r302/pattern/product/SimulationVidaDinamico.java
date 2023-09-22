@@ -69,8 +69,10 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 
 
 		//LLAMADA A GIFOLE!
-		IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301, applicationConfigurationService);
-		iGifoleBusiness.callGifoleDynamicService(payloadStore.getResponse(), payloadConfig.getCustomerListASO(), this.rbvdr044);
+		if(ValidationUtil.isFirstCalled(simulationId)){
+			IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301, applicationConfigurationService);
+			iGifoleBusiness.callGifoleDynamicService(payloadStore.getResponse(), payloadConfig.getCustomerListASO(), this.rbvdr044);
+		}
 
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() END *****");
 
