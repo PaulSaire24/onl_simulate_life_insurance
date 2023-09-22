@@ -71,8 +71,8 @@
 					<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO" artifactId="RBVDC301">
 						<dto order="1" name="contact" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO" artifactId="RBVDC301">
 							<parameter order="1" name="contactDetailType" mandatory="1" type="String" size="10"/>
-							<parameter order="2" name="number" mandatory="1" type="String" size="40"/>
-							<parameter order="3" name="address" mandatory="1" type="String" size="100"/>
+							<parameter order="2" name="number" mandatory="0" type="String" size="40"/>
+							<parameter order="3" name="address" mandatory="0" type="String" size="100"/>
 						</dto>
 					</dto>
 				</list>
@@ -215,8 +215,8 @@
 					<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO" artifactId="RBVDC301">
 						<dto order="1" name="contact" mandatory="1" package="com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO" artifactId="RBVDC301">
 							<parameter order="1" name="contactDetailType" mandatory="1" type="String" size="10"/>
-							<parameter order="2" name="number" mandatory="1" type="String" size="40"/>
-							<parameter order="3" name="address" mandatory="1" type="String" size="100"/>
+							<parameter order="2" name="number" mandatory="0" type="String" size="40"/>
+							<parameter order="3" name="address" mandatory="0" type="String" size="100"/>
 						</dto>
 					</dto>
 				</list>
