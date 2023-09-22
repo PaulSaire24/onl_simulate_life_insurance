@@ -23,4 +23,6 @@ public interface RBVDR301 {
 
 	TierASO executeGetTierService(String holderId);
 
+	CustomerListASO executeGetListCustomerHost(String customerId);
+
 }

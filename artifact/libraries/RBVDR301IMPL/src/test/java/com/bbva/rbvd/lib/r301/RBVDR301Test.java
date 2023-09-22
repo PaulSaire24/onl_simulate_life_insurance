@@ -7,6 +7,11 @@ import com.bbva.elara.domain.transaction.ThreadContext;
 import javax.annotation.Resource;
 
 import com.bbva.elara.utility.api.connector.APIConnector;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALW2;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALW5;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALWU;
+import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
+import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 
@@ -40,6 +45,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -62,6 +68,8 @@ public class RBVDR301Test {
 	private APIConnector internalApiConnector;
 
 	private PISDR014 pisdr014;
+
+	private PBTQR002 pbtqR002;
 
 	private MockData mockData;
 
@@ -116,6 +124,9 @@ public class RBVDR301Test {
 
 		pisdr014 = mock(PISDR014.class);
 		rbvdr301Impl.setPisdR014(pisdr014);
+
+		pbtqR002 = mock(PBTQR002.class);
+		rbvdr301Impl.setPbtqR002(pbtqR002);
 
 		gifoleInsReqAso = new GifoleInsuranceRequestASO();
 
@@ -298,6 +309,29 @@ public class RBVDR301Test {
 
 		this.rbvdr301Impl.executeSimulationModificationRimacService(
 				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");
+	}
+
+	@Test
+	public void executeGetListCustomerHostOk() {
+		LOGGER.info("RBVDR301Test - Executing executeRegisterAdditionalCustomerResponseOK...");
+
+		PEWUResponse responseHost = new PEWUResponse();
+
+		PEMSALWU data = new PEMSALWU();
+		data.setTdoi("L");
+		data.setSexo("M");
+		data.setContact("123123123");
+		data.setContac2("123123123");
+		data.setContac3("123123123");
+		responseHost.setPemsalwu(data);
+		responseHost.setPemsalw5(new PEMSALW5());
+		responseHost.setHostAdviceCode(null);
+		when(pbtqR002.executeSearchInHostByCustomerId("00000000"))
+				.thenReturn(responseHost);
+
+		CustomerListASO validation = rbvdr301Impl.executeGetListCustomerHost("00000000");
+		assertNotNull(validation);
+		assertFalse(validation.getData().isEmpty());
 	}
 
 }

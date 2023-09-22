@@ -89,6 +89,11 @@
 			<artifactId>PISDR014</artifactId>
 			<version>0.10.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bbva.pbtq</groupId>
+			<artifactId>PBTQR002</artifactId>
+			<version>0.1.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

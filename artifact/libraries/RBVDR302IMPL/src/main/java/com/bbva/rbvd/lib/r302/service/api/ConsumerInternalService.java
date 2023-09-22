@@ -26,6 +26,7 @@ public class ConsumerInternalService {
 
 
     public CustomerListASO callListCustomerResponse(String customerId){
-        return this.rbvdR301.executeCallListCustomerResponse(customerId);}
+        return this.rbvdR301.executeGetListCustomerHost(customerId);
+    }
 
 }
