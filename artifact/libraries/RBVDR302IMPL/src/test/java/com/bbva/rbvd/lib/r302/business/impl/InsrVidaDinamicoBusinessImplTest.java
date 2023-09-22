@@ -121,36 +121,44 @@ public class InsrVidaDinamicoBusinessImplTest{
     public void executeQuotationRimacServiceResultNull() {
     //given
         this.requestInput.setEndorsed(true);
+
+        PayloadConfig payloadConfig1 = new PayloadConfig();
+        payloadConfig1.setInput(requestInput);
+        ProductInformationDAO productInformationDAO = new ProductInformationDAO();
+        productInformationDAO.setInsuranceBusinessName("");
+        payloadConfig1.setProductInformation(productInformationDAO);
+        payloadConfig1.setCustomerListASO(customerList);
+        payloadConfig1.setSumCumulus(BigDecimal.valueOf(1));
+        payloadConfig1.setParticipant(false);
+
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).
                 thenReturn(null);
 
     //when
-        InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeQuotationRimacService(
-                requestInput,
-                "",
-                customerList,
-                BigDecimal.valueOf(1),
-                false
-                );
+        InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeQuotationRimacService(payloadConfig1);
     }
 
     @Test(expected = BusinessException.class)
     public void executeModifyQuotationRimacServiceResultNull() {
         //given
         this.requestInput.setEndorsed(true);
+
+        PayloadConfig payloadConfig1 = new PayloadConfig();
+        payloadConfig1.setInput(requestInput);
+        ProductInformationDAO productInformationDAO = new ProductInformationDAO();
+        productInformationDAO.setInsuranceBusinessName("VIDADINAMICO");
+        payloadConfig1.setProductInformation(productInformationDAO);
+        payloadConfig1.setCustomerListASO(customerList);
+        payloadConfig1.setSumCumulus(BigDecimal.valueOf(1));
+        payloadConfig1.setParticipant(false);
+
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         //when(rbvdR301.executeSimulationModificationRimacService(Mockito.anyObject(),Mockito.anyString(),Mockito.anyString())).
         //        thenReturn(null);
 
         //when
-        InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeModifyQuotationRimacService(
-                requestInput,
-                "VIDADINAMICO",
-                customerList,
-                BigDecimal.valueOf(1),
-                false
-                );
+        InsuranceLifeSimulationBO result = insrVidaDinamicoBusiness.executeModifyQuotationRimacService(payloadConfig1);
     }
 
     @Test

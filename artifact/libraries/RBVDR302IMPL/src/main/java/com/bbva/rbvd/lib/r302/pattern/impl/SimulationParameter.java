@@ -88,7 +88,7 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	public void setDocumentType(LifeSimulationDTO input,PayloadProperties properties){
-		if(Objects.nonNull(input.getParticipants())){
+		if(!CollectionUtils.isEmpty(input.getParticipants())){
 			input.getParticipants().get(0).getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
 		}else{
 			input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
@@ -117,7 +117,7 @@ public class SimulationParameter implements PreSimulation {
 
 		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
 		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
-		if(Objects.nonNull(input.getParticipants())){
+		if(!CollectionUtils.isEmpty(input.getParticipants())){
 			LOGGER.info("***** SimulationParameter getProperties participant es no nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 			properties.setDocumentTypeIdAsText(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
