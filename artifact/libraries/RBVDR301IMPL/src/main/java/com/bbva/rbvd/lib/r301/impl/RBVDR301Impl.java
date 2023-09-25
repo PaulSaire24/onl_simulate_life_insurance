@@ -1,10 +1,14 @@
 package com.bbva.rbvd.lib.r301.impl;
 
+import com.bbva.ksmk.dto.caas.CredentialsDTO;
+import com.bbva.ksmk.dto.caas.InputDTO;
+import com.bbva.ksmk.dto.caas.OutputDTO;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
+import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.*;
@@ -25,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestClientException;
 
 import javax.ws.rs.HttpMethod;
@@ -131,6 +136,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return responseList;
 	}
 
+	@Override
 	public CustomerListASO executeGetListCustomerHost(String customerId){
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer Start *****");
 		PEWUResponse result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
@@ -156,17 +162,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			identityDocumentsBO.setDocumentType(new DocumentTypeBO());
 
 			/* map document type host ? yes*/
-			switch (result.getPemsalwu().getTdoi()) {
-				case "L":
-					identityDocumentsBO.getDocumentType().setId("DNI");
-					break;
-				case "R":
-					identityDocumentsBO.getDocumentType().setId("RUC");
-					break;
-				default:
-					identityDocumentsBO.getDocumentType().setId(result.getPemsalwu().getTdoi());
-					break;
-			}
+			identityDocumentsBO.getDocumentType().setId(this.applicationConfigurationService.getProperty(result.getPemsalwu().getTdoi()));
 
 			identityDocumentsBO.setExpirationDate(result.getPemsalwu().getFechav());
 			customer.setIdentityDocuments(Collections.singletonList(identityDocumentsBO));
@@ -270,6 +266,29 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService ***** Response: {}", output);
 		LOGGER.info("***** RBVDR301Impl - executeCryptoService END *****");
 		return output;
+	}
+
+	public CryptoASO executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
+		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted START *****");
+		String appName = "apx-pe";
+		String password = "";
+		String credExtraParams = "user=KSMK;country=PE";
+		String inputContext = "operation=DO;type=customerId;origin=ASO;endpoint=ASO;securityLevel=5"; //provided by security
+		List<InputDTO> listDecodedCredential = new ArrayList<>();
+
+		listDecodedCredential.add(new InputDTO(Base64.getEncoder().encodeToString(cryptoASO.getStream().getBytes()), "B64URL"));
+
+		List<OutputDTO> listEncodedCredentials = ksmkR002.execute(listDecodedCredential, "", inputContext, new CredentialsDTO(appName, password, credExtraParams));
+		if (Objects.nonNull(listEncodedCredentials) && !CollectionUtils.isEmpty(listEncodedCredentials)) {
+			LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted ***** encoded: {}", listEncodedCredentials );
+			cryptoASO.setData(new CryptoDataASO());
+			cryptoASO.getData().setDocument(listEncodedCredentials.get(0).getData());
+			LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted END *****: cryptoAso: {}", cryptoASO);
+			return cryptoASO;
+		}
+		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted END with error *****");
+
+		return null;
 	}
 
 	//Ejecuta para obtener el servicio Tier

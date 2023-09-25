@@ -25,4 +25,6 @@ public interface RBVDR301 {
 
 	CustomerListASO executeGetListCustomerHost(String customerId);
 
+	CryptoASO executeGetCustomerIdEncrypted(CryptoASO cryptoASO);
+
 }

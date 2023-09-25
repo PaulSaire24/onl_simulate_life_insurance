@@ -66,7 +66,7 @@ public class SimulationParameterTest {
     public void getTierToUpdateRequestNull() throws IOException {
 
         LifeSimulationDTO input = mockData.getInsuranceSimulationRequest();
-        when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+        when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
         tier.getData().get(0).setSegments(null);
         when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
         SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,applicationConfigurationService);

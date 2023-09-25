@@ -17,7 +17,7 @@ public class ConsumerInternalService {
 
 
     public CryptoASO callCryptoService(String customerID) {
-        return this.rbvdR301.executeCryptoService(new CryptoASO(customerID));
+        return this.rbvdR301.executeGetCustomerIdEncrypted(new CryptoASO(customerID));
     }
 
     public TierASO callGetTierService(String document) {

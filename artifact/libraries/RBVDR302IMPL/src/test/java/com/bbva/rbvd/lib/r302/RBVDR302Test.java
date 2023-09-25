@@ -215,7 +215,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
@@ -275,7 +275,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
@@ -361,7 +361,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -441,7 +441,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -502,7 +502,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);

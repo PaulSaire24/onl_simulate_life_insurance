@@ -4,6 +4,7 @@ import com.bbva.elara.configuration.manager.application.ApplicationConfiguration
 import com.bbva.elara.library.AbstractLibrary;
 import com.bbva.elara.utility.api.connector.APIConnector;
 import com.bbva.elara.utility.api.connector.APIConnectorBuilder;
+import com.bbva.ksmk.lib.r002.KSMKR002;
 import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.lib.r014.PISDR014;
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -27,6 +28,8 @@ public abstract class RBVDR301Abstract extends AbstractLibrary implements RBVDR3
 	protected MockService mockService;
 
 	protected PBTQR002 pbtqR002;
+
+	protected KSMKR002 ksmkR002;
 
 	/**
 	* @param applicationConfigurationService the this.applicationConfigurationService to set
@@ -68,6 +71,13 @@ public abstract class RBVDR301Abstract extends AbstractLibrary implements RBVDR3
 	*/
 	public void setPbtqR002(PBTQR002 pbtqR002) {
 		this.pbtqR002 = pbtqR002;
+	}
+
+	/**
+	 * @param ksmkR002 the this.ksmkR002 to set
+	 */
+	public void setKsmkR002(KSMKR002 ksmkR002) {
+		this.ksmkR002 = ksmkR002;
 	}
 
 	public void setMockService(MockService mockService) { this.mockService = mockService; }

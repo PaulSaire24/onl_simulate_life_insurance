@@ -7,6 +7,8 @@ import com.bbva.elara.domain.transaction.ThreadContext;
 import javax.annotation.Resource;
 
 import com.bbva.elara.utility.api.connector.APIConnector;
+import com.bbva.ksmk.dto.caas.OutputDTO;
+import com.bbva.ksmk.lib.r002.KSMKR002;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALW2;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALW5;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALWU;
@@ -45,7 +47,9 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -70,6 +74,8 @@ public class RBVDR301Test {
 	private PISDR014 pisdr014;
 
 	private PBTQR002 pbtqR002;
+
+	private KSMKR002 ksmkr002;
 
 	private MockData mockData;
 
@@ -127,6 +133,9 @@ public class RBVDR301Test {
 
 		pbtqR002 = mock(PBTQR002.class);
 		rbvdr301Impl.setPbtqR002(pbtqR002);
+
+		ksmkr002 = mock(KSMKR002.class);
+		rbvdr301Impl.setKsmkR002(ksmkr002);
 
 		gifoleInsReqAso = new GifoleInsuranceRequestASO();
 
@@ -328,10 +337,49 @@ public class RBVDR301Test {
 		responseHost.setHostAdviceCode(null);
 		when(pbtqR002.executeSearchInHostByCustomerId("00000000"))
 				.thenReturn(responseHost);
+		when(applicationConfigurationService.getProperty(anyString())).thenReturn("DNI");
 
 		CustomerListASO validation = rbvdr301Impl.executeGetListCustomerHost("00000000");
 		assertNotNull(validation);
 		assertFalse(validation.getData().isEmpty());
+	}
+
+	@Test
+	public void executeGetListCustomerHostWithAdvise() {
+		LOGGER.info("RBVDR301Test - Executing executeGetListCustomerHostWithAdvise...");
+
+		PEWUResponse responseHost = new PEWUResponse();
+		responseHost.setHostAdviceCode("code");
+		responseHost.setHostMessage("some error");
+		when(pbtqR002.executeSearchInHostByCustomerId("00000000"))
+				.thenReturn(responseHost);
+
+		CustomerListASO validation = rbvdr301Impl.executeGetListCustomerHost("00000000");
+		assertNull(validation);
+	}
+
+	@Test
+	public void executeGetCustomerIdEncryptedOk(){
+		LOGGER.info("RBVDR301Test - Executing executeGetCustomerIdEncryptedOk...");
+		OutputDTO outputDTO = new OutputDTO();
+		outputDTO.setData("encrypted customer id");
+		outputDTO.setCodification("PLAIN");
+		outputDTO.setExtraParams("extra params");
+
+		when(ksmkr002.execute(anyList(), anyString(), anyString(), anyObject())).thenReturn(Collections.singletonList(outputDTO));
+
+		CryptoASO cryptoASO = new CryptoASO("customerId");
+		cryptoASO = rbvdr301Impl.executeGetCustomerIdEncrypted(cryptoASO);
+		assertNotNull(cryptoASO);
+	}
+
+	@Test
+	public void executeGetCustomerIdEncryptedNull(){
+		LOGGER.info("RBVDR301Test - Executing executeGetCustomerIdEncryptedNull...");
+		when(ksmkr002.execute(anyList(), anyString(), anyString(), anyObject())).thenReturn(Collections.emptyList());
+		CryptoASO cryptoASO = new CryptoASO("customerId");
+		cryptoASO = rbvdr301Impl.executeGetCustomerIdEncrypted(cryptoASO);
+		assertNull(cryptoASO);
 	}
 
 }
