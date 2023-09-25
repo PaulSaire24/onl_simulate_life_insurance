@@ -45,16 +45,16 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         this.applicationConfigurationService = applicationConfigurationService;
     }
 
-    public InsuranceLifeSimulationBO executeQuotationRimacService(
-            LifeSimulationDTO input, String businessName, CustomerListASO customerListASO, BigDecimal cumulo, boolean isParticipant) {
+    public InsuranceLifeSimulationBO executeQuotationRimacService(PayloadConfig payloadConfig) {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(input,cumulo,businessName,isParticipant);
-        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,input,customerListASO,isParticipant);
+        InsuranceLifeSimulationBO requestRimac = QuotationRimac.mapInRequestRimacDynamicLife(
+                payloadConfig.getInput(),payloadConfig.getSumCumulus(),payloadConfig.getProductInformation().getInsuranceBusinessName(),payloadConfig.isParticipant());
+        ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,payloadConfig.getInput(),payloadConfig.getCustomerListASO(),payloadConfig.isParticipant());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,input.getTraceId());
+        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,payloadConfig.getInput().getTraceId());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | responseRimac: {} *****",responseRimac);
 
         if(Objects.isNull(responseRimac)){
@@ -65,16 +65,17 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
 
-    public InsuranceLifeSimulationBO executeModifyQuotationRimacService(
-            LifeSimulationDTO input,String businessName,CustomerListASO customerListASO,BigDecimal cumulo, boolean isParticipant){
+    public InsuranceLifeSimulationBO executeModifyQuotationRimacService(PayloadConfig payloadConfig){
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService START *****");
 
-        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(input,customerListASO,cumulo,isParticipant);
-        requestRimac.getPayload().setProducto(businessName);
-        requestRimac.getPayload().setCoberturas(getAddtionalCoverages(input));
+        InsuranceLifeSimulationBO requestRimac = ModifyQuotationRimac.mapInRequestRimacLifeModifyQuotation(payloadConfig.getInput(),
+                payloadConfig.getCustomerListASO(),payloadConfig.getSumCumulus(),payloadConfig.isParticipant());
+        requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
+        requestRimac.getPayload().setCoberturas(getAddtionalCoverages(payloadConfig.getInput()));
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,input.getExternalSimulationId(),input.getTraceId());
+        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,
+                payloadConfig.getInput().getExternalSimulationId(),payloadConfig.getInput().getTraceId());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | responseRimac: {} *****",responseRimac);
 
@@ -92,21 +93,9 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         InsuranceLifeSimulationBO responseRimac = null;
 
         if(ValidationUtil.isFirstCalled(payloadConfig.getInput().getExternalSimulationId())) {
-            responseRimac = this.executeQuotationRimacService(
-                    payloadConfig.getInput(),
-                    payloadConfig.getProductInformation().getInsuranceBusinessName(),
-                    payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    payloadConfig.isParticipant()
-                    );
+            responseRimac = this.executeQuotationRimacService(payloadConfig);
         }else{
-            responseRimac = this.executeModifyQuotationRimacService(
-                    payloadConfig.getInput(),
-                    payloadConfig.getProductInformation().getInsuranceBusinessName(),
-                    payloadConfig.getCustomerListASO(),
-                    payloadConfig.getSumCumulus(),
-                    payloadConfig.isParticipant()
-            );
+            responseRimac = this.executeModifyQuotationRimacService(payloadConfig);
         }
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);
 
@@ -114,19 +103,19 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
         String documentTypeId = getDocumentTypeId(payloadConfig.getInput());
         //guardar en bd
-        return new PayloadStore(
-                payloadConfig.getInput().getCreationUser(),
-                payloadConfig.getInput().getUserAudit(),
-                responseRimac,
-                response,
-                documentTypeId,
-                payloadConfig.getProductInformation()
-        );
 
+        PayloadStore payloadStore = new PayloadStore();
+        payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
+        payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
+        payloadStore.setResponseRimac(responseRimac);
+        payloadStore.setResponse(response);
+        payloadStore.setDocumentTypeId(documentTypeId);
+        payloadStore.setProductInformation(payloadConfig.getProductInformation());
+        return payloadStore;
     }
 
     public String getDocumentTypeId(LifeSimulationDTO input){
-        if(Objects.nonNull(input.getParticipants())){
+        if(!CollectionUtils.isEmpty(input.getParticipants())){
             return input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId();
         }else{
             return input.getHolder().getIdentityDocument().getDocumentType().getId();

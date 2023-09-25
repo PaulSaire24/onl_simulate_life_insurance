@@ -88,7 +88,7 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 	public void setDocumentType(LifeSimulationDTO input,PayloadProperties properties){
-		if(Objects.nonNull(input.getParticipants())){
+		if(!CollectionUtils.isEmpty(input.getParticipants())){
 			input.getParticipants().get(0).getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
 		}else{
 			input.getHolder().getIdentityDocument().getDocumentType().setId(properties.getDocumentTypeId());
@@ -117,7 +117,7 @@ public class SimulationParameter implements PreSimulation {
 
 		properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getHolder().getIdentityDocument().getDocumentType().getId()));
 		properties.setDocumentTypeIdAsText(input.getHolder().getIdentityDocument().getDocumentType().getId());
-		if(Objects.nonNull(input.getParticipants())){
+		if(!CollectionUtils.isEmpty(input.getParticipants())){
 			LOGGER.info("***** SimulationParameter getProperties participant es no nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 			properties.setDocumentTypeIdAsText(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
@@ -165,7 +165,7 @@ public class SimulationParameter implements PreSimulation {
 		LOGGER.info("***** SimulationParameter getCumulos START - insuranceProductId: {} *****",insuranceProductId);
 
 		IContractDAO contractDAO = new ContractDAOImpl(this.pisdR350);
-		String customerId = input.getParticipants()==null? input.getHolder().getId():input.getParticipants().get(0).getId();
+		String customerId = CollectionUtils.isEmpty(input.getParticipants())? input.getHolder().getId():input.getParticipants().get(0).getId();
 		BigDecimal cumulus = contractDAO.getInsuranceAmountDAO(insuranceProductId, customerId);
 
 		LOGGER.info("***** SimulationParameter getCumulos END - cumulus: {} *****",cumulus);
