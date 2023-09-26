@@ -75,16 +75,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(payloadConfig.getInput()));
 
-        if(!CollectionUtils.isEmpty(payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans())){
-            List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
-            FinanciamientoBO financiamientoBO = new FinanciamientoBO();
-            String totalNumberInstallments = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
-            financiamientoBO.setNumCuota(Long.valueOf(totalNumberInstallments));
-            String frecuencia = this.applicationConfigurationService.getProperty(payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
-            financiamientoBO.setFrecuencia(frecuencia);
-            financiamientoBOList.add(financiamientoBO);
-            requestRimac.getPayload().setFinanciamiento(financiamientoBOList);
-        }
+        validateConstructionInstallmenPlan(payloadConfig.getInput(),requestRimac);
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
@@ -111,7 +102,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }else{
             responseRimac = this.executeModifyQuotationRimacService(payloadConfig);
         }
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac.getPayload());
 
         //construccion de respuesta trx
         response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
@@ -133,6 +124,19 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             return input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId();
         }else{
             return input.getHolder().getIdentityDocument().getDocumentType().getId();
+        }
+    }
+    public void validateConstructionInstallmenPlan(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
+
+        if(!CollectionUtils.isEmpty(input.getProduct().getPlans()) && !CollectionUtils.isEmpty(input.getProduct().getPlans().get(0).getInstallmentPlans())){
+            List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
+            FinanciamientoBO financiamientoBO = new FinanciamientoBO();
+            String totalNumberInstallments = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setNumCuota(Long.valueOf(totalNumberInstallments));
+            String frecuencia = this.applicationConfigurationService.getProperty(input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setFrecuencia(frecuencia);
+            financiamientoBOList.add(financiamientoBO);
+            requestRimac.getPayload().setFinanciamiento(financiamientoBOList);
         }
     }
 

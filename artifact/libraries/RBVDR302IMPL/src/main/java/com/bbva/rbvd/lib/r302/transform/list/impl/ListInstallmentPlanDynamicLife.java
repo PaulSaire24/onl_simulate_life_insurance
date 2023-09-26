@@ -34,6 +34,8 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
     private static final Logger LOGGER = LoggerFactory.getLogger(ListInstallmentPlanDynamicLife.class);
 
     private final ApplicationConfigurationService applicationConfigurationService;
+    private static final String COVERAGE_ID ="_COVERAGE_ID";
+    private static final String COVERAGE_NAME ="_COVERAGE_ID";
 
     public ListInstallmentPlanDynamicLife(ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;
@@ -182,26 +184,14 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
-        switch(coverage.getCondicion()) {
-            case "INC":
-                coverageTypeDTO.setId(RBVDProperties.ID_INCLUDED_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_INCLUDED_COVERAGE.getValue());
-                break;
-            case "OBL":
-                coverageTypeDTO.setId(RBVDProperties.ID_MANDATORY_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_MANDATORY_COVERAGE.getValue());
-                break;
-            case "OPC":
-                coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
-                break;
-            case "BLO":
-                coverageTypeDTO.setId(ConstantsUtil.COVERAGE_TYPE_ID_BLOCKED);
-                coverageTypeDTO.setName(ConstantsUtil.COVERAGE_TYPE_NAME_BLOCKED);
-                break;
-            default:
-                break;
+
+        if(Objects.nonNull(this.applicationConfigurationService.getProperty(coverage.getCondicion()+COVERAGE_ID))){
+            coverageTypeDTO.setId(this.applicationConfigurationService.getProperty(coverage.getCondicion()+COVERAGE_ID));
+            coverageTypeDTO.setName(this.applicationConfigurationService.getProperty(coverage.getCondicion()+COVERAGE_NAME));
+        }else{
+            coverageTypeDTO.setId("");
         }
+
         return coverageTypeDTO;
     }
 
