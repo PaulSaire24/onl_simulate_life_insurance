@@ -17,5 +17,6 @@ public class ConstantsUtil {
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
     public static final String COVERAGE_TYPE_ID_BLOCKED = "INSURANCE_AMOUNT_BLOCKED";
     public static final String COVERAGE_TYPE_NAME_BLOCKED = "BLOQUEADO";
+    public static final String CUOTA = "CUOTA";
 
 }

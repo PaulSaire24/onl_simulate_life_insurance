@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +74,18 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getCustomerListASO(),payloadConfig.getSumCumulus(),payloadConfig.isParticipant());
         requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(payloadConfig.getInput()));
+
+        if(!CollectionUtils.isEmpty(payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans())){
+            List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
+            FinanciamientoBO financiamientoBO = new FinanciamientoBO();
+            String totalNumberInstallments = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setNumCuota(Long.valueOf(totalNumberInstallments));
+            String frecuencia = this.applicationConfigurationService.getProperty(payloadConfig.getInput().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setFrecuencia(frecuencia);
+            financiamientoBOList.add(financiamientoBO);
+            requestRimac.getPayload().setFinanciamiento(financiamientoBOList);
+        }
+
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,
