@@ -8,6 +8,7 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.ProductASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
@@ -15,10 +16,7 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
-import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -41,6 +39,7 @@ import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 
 import java.math.BigDecimal;
@@ -464,7 +463,7 @@ public class RBVDR302Test {
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLife_PLAN2Test...");
 		this.requestInput.getProduct().setId("841");
 		this.requestInput.setListRefunds(generateRefunds125PercentageInput());
-		this.requestInput.getProduct().setPlans(null);
+
 		this.requestInput.setEndorsed(true);
 		DocumentTypeDTO documentTypeDTO = new DocumentTypeDTO();
 		documentTypeDTO.setId("DNI");
@@ -476,10 +475,32 @@ public class RBVDR302Test {
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
+		//input.getProduct().getPlans()-----input.getProduct().getPlans().get(0).getInstallmentPlans()
+		InsuranceProductDTO product = new InsuranceProductDTO();
+		List<InsurancePlanDTO> plansList = new ArrayList<>();
+		InsurancePlanDTO plans = new InsurancePlanDTO();
+		List<InstallmentsDTO> installmentsDTOList = new ArrayList<>();
+		InstallmentsDTO installmentsDTO = new InstallmentsDTO();
+		installmentsDTO.setPaymentsTotalNumber(45L);
+		PeriodDTO periodDTO = new PeriodDTO();
+		periodDTO.setId("L");
+		installmentsDTO.setPeriod(periodDTO);
+		installmentsDTOList.add(installmentsDTO);
+		plans.setInstallmentPlans(installmentsDTOList);
+		plansList.add(plans);
+
+		/*product.setPlans(plansList);*/
+		this.requestInput.getProduct().setPlans(plansList);
+
 		this.requestInput.setParticipants(participantDTOList);
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+		if(!CollectionUtils.isEmpty(requestInput.getProduct().getPlans()) && !CollectionUtils.isEmpty(requestInput.getProduct().getPlans().get(0).getInstallmentPlans())){
+			when(applicationConfigurationService.getProperty(anyString())).thenReturn("15");
+		}else{
+			when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
+		}
+
 
 		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(841));
