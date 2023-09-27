@@ -16,5 +16,7 @@ public class ConstantsUtil {
     public static final String DATO_PARTICULAR_CUMULO_CLIENTE = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
     public static final String CUOTA = "CUOTA";
+    public static final String COVERAGE_ID ="_COVERAGE_ID";
+    public static final String COVERAGE_NAME ="_COVERAGE_ID";
 
 }
