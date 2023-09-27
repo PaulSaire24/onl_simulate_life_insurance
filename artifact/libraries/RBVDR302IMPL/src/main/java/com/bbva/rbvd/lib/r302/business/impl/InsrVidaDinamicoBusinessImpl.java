@@ -131,7 +131,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
             FinanciamientoBO financiamientoBO = new FinanciamientoBO();
             String totalNumberInstallments = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
-            financiamientoBO.setNumCuota(Long.valueOf(totalNumberInstallments));
+            financiamientoBO.setNumeroCuotas(Long.valueOf(totalNumberInstallments));
             String frecuencia = this.applicationConfigurationService.getProperty(input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
             financiamientoBO.setFrecuencia(frecuencia);
             financiamientoBOList.add(financiamientoBO);
