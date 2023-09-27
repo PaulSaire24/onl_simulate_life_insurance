@@ -15,7 +15,11 @@ public class ConstantsUtil {
     public static final String CURRENCY_CODE_PEN = "PEN";
     public static final String DATO_PARTICULAR_CUMULO_CLIENTE = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
-    public static final String COVERAGE_TYPE_ID_BLOCKED = "INSURANCE_AMOUNT_BLOCKED";
-    public static final String COVERAGE_TYPE_NAME_BLOCKED = "BLOQUEADO";
+    public static final String CUOTA = "CUOTA";
+    public static final String COVERAGE_ID ="_COVERAGE_ID";
+    public static final String COVERAGE_NAME ="_COVERAGE_NAME";
+    public static final Long DEFAULT_NUM_CUOTAS = 1L;
+    public static final String DEFAULT_FRECUENCIA ="A";
+
 
 }
