@@ -182,10 +182,11 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
-
-        if(!StringUtils.isBlank(this.applicationConfigurationService.getProperty(coverage.getCondicion()+ConstantsUtil.COVERAGE_ID))){
-            coverageTypeDTO.setId(this.applicationConfigurationService.getProperty(coverage.getCondicion()+ConstantsUtil.COVERAGE_ID));
-            coverageTypeDTO.setName(this.applicationConfigurationService.getProperty(coverage.getCondicion()+ConstantsUtil.COVERAGE_NAME));
+        String coverageId = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_ID));
+        String coverageName = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_NAME));
+        if(!StringUtils.isBlank(coverageId) && !StringUtils.isBlank(coverageName)){
+            coverageTypeDTO.setId(coverageId);
+            coverageTypeDTO.setName(coverageName);
         }else{
             coverageTypeDTO.setId("");
             coverageTypeDTO.setName("");
