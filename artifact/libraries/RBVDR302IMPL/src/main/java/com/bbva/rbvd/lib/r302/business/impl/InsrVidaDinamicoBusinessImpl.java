@@ -1,12 +1,12 @@
 package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +73,9 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getCustomerListASO(),payloadConfig.getSumCumulus(),payloadConfig.isParticipant());
         requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(payloadConfig.getInput()));
+
+        validateConstructionInstallmenPlan(payloadConfig.getInput(),requestRimac);
+
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
         InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,
@@ -88,7 +92,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig.toString());
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
 
@@ -97,7 +101,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }else{
             responseRimac = this.executeModifyQuotationRimacService(payloadConfig);
         }
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  responseRimac: {} *****",responseRimac.getPayload());
 
         //construccion de respuesta trx
         response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
@@ -120,6 +124,21 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }else{
             return input.getHolder().getIdentityDocument().getDocumentType().getId();
         }
+    }
+    public void validateConstructionInstallmenPlan(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
+        List<FinanciamientoBO> financiamiento = new ArrayList<>();
+        FinanciamientoBO financiamientoBO = new FinanciamientoBO();
+        if(!CollectionUtils.isEmpty(input.getProduct().getPlans()) && !CollectionUtils.isEmpty(input.getProduct().getPlans().get(0).getInstallmentPlans())){
+            String numeroCuotas = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setNumeroCuotas(Long.valueOf(numeroCuotas));
+            String frecuencia = this.applicationConfigurationService.getProperty(input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setFrecuencia(frecuencia);
+        }else{
+            financiamientoBO.setNumeroCuotas(ConstantsUtil.DEFAULT_NUM_CUOTAS);
+            financiamientoBO.setFrecuencia(ConstantsUtil.DEFAULT_FRECUENCIA);
+        }
+        financiamiento.add(financiamientoBO);
+        requestRimac.getPayload().setFinanciamiento(financiamiento);
     }
 
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {

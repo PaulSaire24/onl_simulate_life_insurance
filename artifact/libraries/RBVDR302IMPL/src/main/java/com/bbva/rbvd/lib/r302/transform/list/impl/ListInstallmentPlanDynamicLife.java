@@ -17,9 +17,9 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,26 +182,16 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
-        switch(coverage.getCondicion()) {
-            case "INC":
-                coverageTypeDTO.setId(RBVDProperties.ID_INCLUDED_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_INCLUDED_COVERAGE.getValue());
-                break;
-            case "OBL":
-                coverageTypeDTO.setId(RBVDProperties.ID_MANDATORY_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_MANDATORY_COVERAGE.getValue());
-                break;
-            case "OPC":
-                coverageTypeDTO.setId(RBVDProperties.ID_OPTIONAL_COVERAGE.getValue());
-                coverageTypeDTO.setName(RBVDProperties.NAME_OPTIONAL_COVERAGE.getValue());
-                break;
-            case "BLO":
-                coverageTypeDTO.setId(ConstantsUtil.COVERAGE_TYPE_ID_BLOCKED);
-                coverageTypeDTO.setName(ConstantsUtil.COVERAGE_TYPE_NAME_BLOCKED);
-                break;
-            default:
-                break;
+        String coverageId = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_ID));
+        String coverageName = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_NAME));
+        if(!StringUtils.isBlank(coverageId) && !StringUtils.isBlank(coverageName)){
+            coverageTypeDTO.setId(coverageId);
+            coverageTypeDTO.setName(coverageName);
+        }else{
+            coverageTypeDTO.setId("");
+            coverageTypeDTO.setName("");
         }
+
         return coverageTypeDTO;
     }
 
