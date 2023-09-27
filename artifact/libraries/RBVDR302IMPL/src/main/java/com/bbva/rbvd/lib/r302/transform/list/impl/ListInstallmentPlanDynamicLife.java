@@ -188,6 +188,7 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
             coverageTypeDTO.setName(this.applicationConfigurationService.getProperty(coverage.getCondicion()+ConstantsUtil.COVERAGE_NAME));
         }else{
             coverageTypeDTO.setId("");
+            coverageTypeDTO.setName("");
         }
 
         return coverageTypeDTO;
