@@ -128,14 +128,14 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     public void validateConstructionInstallmenPlan(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
 
         if(!CollectionUtils.isEmpty(input.getProduct().getPlans()) && !CollectionUtils.isEmpty(input.getProduct().getPlans().get(0).getInstallmentPlans())){
-            List<FinanciamientoBO> financiamientoBOList = new ArrayList<>();
+            List<FinanciamientoBO> financiamiento = new ArrayList<>();
             FinanciamientoBO financiamientoBO = new FinanciamientoBO();
-            String totalNumberInstallments = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
-            financiamientoBO.setNumeroCuotas(Long.valueOf(totalNumberInstallments));
+            String numeroCuotas = this.applicationConfigurationService.getProperty(ConstantsUtil.CUOTA + input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            financiamientoBO.setNumeroCuotas(Long.valueOf(numeroCuotas));
             String frecuencia = this.applicationConfigurationService.getProperty(input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
             financiamientoBO.setFrecuencia(frecuencia);
-            financiamientoBOList.add(financiamientoBO);
-            requestRimac.getPayload().setFinanciamiento(financiamientoBOList);
+            financiamiento.add(financiamientoBO);
+            requestRimac.getPayload().setFinanciamiento(financiamiento);
         }
     }
 
