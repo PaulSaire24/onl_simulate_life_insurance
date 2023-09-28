@@ -14,6 +14,7 @@ import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class ValidationUtil {
 
     public static void validateParticipant(LifeSimulationDTO input, PayloadConfig payloadConfig){
 
-        if(Objects.nonNull(input.getParticipants())){
+        if(!CollectionUtils.isEmpty(input.getParticipants())){
             LOGGER.info("***** SimulationParameter: participan is not null *****");
             payloadConfig.setParticipant(true);
         }
