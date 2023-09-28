@@ -49,7 +49,13 @@ import org.springframework.util.CollectionUtils;
 
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -173,7 +179,7 @@ public class RBVDR302Test {
 		crypto.setData(data);
 		tier = mockDTO.getTierMockResponse();
 
-		//seguroEasyYes = new InsrEasyYesBusinessImpl(this.rbvdr301,this.applicationConfigurationService);
+
 
 	}
 
@@ -189,9 +195,8 @@ public class RBVDR302Test {
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -332,12 +337,12 @@ public class RBVDR302Test {
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
+
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 
 
@@ -418,9 +423,8 @@ public class RBVDR302Test {
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -479,9 +483,7 @@ public class RBVDR302Test {
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		//input.getProduct().getPlans()-----input.getProduct().getPlans().get(0).getInstallmentPlans()
+
 		InsuranceProductDTO product = new InsuranceProductDTO();
 		List<InsurancePlanDTO> plansList = new ArrayList<>();
 		InsurancePlanDTO plans = new InsurancePlanDTO();
@@ -498,7 +500,7 @@ public class RBVDR302Test {
 		/*product.setPlans(plansList);*/
 		this.requestInput.getProduct().setPlans(plansList);
 
-		this.requestInput.setParticipants(participantDTOList);
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		if(!CollectionUtils.isEmpty(requestInput.getProduct().getPlans()) && !CollectionUtils.isEmpty(requestInput.getProduct().getPlans().get(0).getInstallmentPlans())){

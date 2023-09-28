@@ -11,7 +11,13 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
-import com.bbva.pisd.dto.insurance.bo.*;
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.CountryBO;
+import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
+import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
+import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
+import com.bbva.pisd.dto.insurance.bo.GenderBO;
+import com.bbva.pisd.dto.insurance.bo.DocumentTypeBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.utils.PISDErrors;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
@@ -20,6 +26,7 @@ import com.bbva.pisd.dto.insurance.utils.PISDValidation;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
+import com.bbva.rbvd.lib.r301.impl.util.Constans;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +41,13 @@ import org.springframework.web.client.RestClientException;
 
 import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Base64;
 
 import static java.util.Collections.singletonMap;
 
@@ -270,10 +283,10 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	public CryptoASO executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
 		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted START *****");
-		String appName = "apx-pe";
-		String password = "";
-		String credExtraParams = "user=KSMK;country=PE";
-		String inputContext = "operation=DO;type=customerId;origin=ASO;endpoint=ASO;securityLevel=5"; //provided by security
+		String appName = this.applicationConfigurationService.getProperty(Constans.APP_NAME);
+		String password =  "";
+		String credExtraParams = this.applicationConfigurationService.getProperty(Constans.CRE_EXTRA_PARAMS);
+		String inputContext = this.applicationConfigurationService.getProperty(Constans.INPUT_TEXT_SECURITY);  //provided by security
 		List<InputDTO> listDecodedCredential = new ArrayList<>();
 
 		listDecodedCredential.add(new InputDTO(Base64.getEncoder().encodeToString(cryptoASO.getStream().getBytes()), "B64URL"));

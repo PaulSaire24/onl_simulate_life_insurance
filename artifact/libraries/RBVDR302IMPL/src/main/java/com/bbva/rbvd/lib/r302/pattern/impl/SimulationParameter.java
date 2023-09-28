@@ -121,7 +121,6 @@ public class SimulationParameter implements PreSimulation {
 			LOGGER.info("***** SimulationParameter getProperties participant es no nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 			properties.setDocumentTypeIdAsText(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
-			LOGGER.info("***** SimulationParameter getProperties participant documentType {} *****",this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 		}
 
 
