@@ -284,7 +284,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	public CryptoASO executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
 		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted START *****");
 		String appName = this.applicationConfigurationService.getProperty(Constans.APP_NAME);
-		String password =  "";
+		String password =  Constans.OAUTH_TOKEN;
 		String credExtraParams = this.applicationConfigurationService.getProperty(Constans.CRE_EXTRA_PARAMS);
 		String inputContext = this.applicationConfigurationService.getProperty(Constans.INPUT_TEXT_SECURITY);  //provided by security
 		List<InputDTO> listDecodedCredential = new ArrayList<>();
