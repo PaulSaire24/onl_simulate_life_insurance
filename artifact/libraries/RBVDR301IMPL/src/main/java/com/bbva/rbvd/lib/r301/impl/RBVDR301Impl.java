@@ -8,7 +8,6 @@ import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
-import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
@@ -154,6 +153,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	@Override
 	public CustomerBO executeGetCustomer(String customerId){
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer Start *****");
+		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer customerId {} *****",customerId);
 		PEWUResponse result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer  ***** Response Host: {}", result);
 
