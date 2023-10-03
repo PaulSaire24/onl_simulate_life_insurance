@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -32,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -111,6 +113,16 @@ public class InsrVidaDinamicoBusinessImplTest{
         CustomerBO customerBO = new CustomerBO();
         List<CustomerBO> data = new ArrayList<>();
         customerBO.setBirthData(birthDataBO);
+
+        customerBO.setFirstName("4hthth");
+        customerBO.setLastName("4hthth");
+        customerBO.setSecondLastName("4hthth");
+        com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO identityDocument = new com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO();
+        com.bbva.pisd.dto.insurance.bo.DocumentTypeBO documentType = new com.bbva.pisd.dto.insurance.bo.DocumentTypeBO();
+        documentType.setId("DNI");
+        identityDocument.setDocumentType(documentType);
+        customerBO.setIdentityDocuments(Collections.singletonList(identityDocument));
+
         data.add(customerBO);
         CustomerListASO customerListASO = new CustomerListASO();
         customerListASO.setData(data);

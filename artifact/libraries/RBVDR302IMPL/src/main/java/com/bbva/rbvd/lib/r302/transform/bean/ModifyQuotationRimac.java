@@ -47,6 +47,7 @@ public class ModifyQuotationRimac {
         if(isParticipant){
             LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is participant *****");
             datoParticularBOList.add(getDatoParticularEdadAsegurado(input));
+
         }else{
             LOGGER.info("***** mapInRequestRimacLifeModifyQuotation - is not participant *****");
             datoParticularBOList.add(getDatoParticularEdadAsegurado(responseListCustomers));

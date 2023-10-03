@@ -7,6 +7,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
+import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
@@ -73,7 +74,9 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 payloadConfig.getCustomerListASO(),payloadConfig.getSumCumulus(),payloadConfig.isParticipant());
         requestRimac.getPayload().setProducto(payloadConfig.getProductInformation().getInsuranceBusinessName());
         requestRimac.getPayload().setCoberturas(getAddtionalCoverages(payloadConfig.getInput()));
-
+        //asegurado
+        requestRimac.getPayload().setAsegurado(aseguradoRequestRimac(payloadConfig));
+        //financiamiento
         validateConstructionInstallmenPlan(payloadConfig.getInput(),requestRimac);
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
@@ -139,6 +142,27 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }
         financiamiento.add(financiamientoBO);
         requestRimac.getPayload().setFinanciamiento(financiamiento);
+    }
+
+    public AseguradoBO aseguradoRequestRimac (PayloadConfig plaPayloadConfig){
+        AseguradoBO asegurado = new AseguradoBO();
+
+        if(plaPayloadConfig.isParticipant()){
+            asegurado.setTipoDocumento(plaPayloadConfig.getInput().getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
+            asegurado.setNumeroDocumento(plaPayloadConfig.getInput().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
+            String fullName = plaPayloadConfig.getInput().getParticipants().get(0).getFirstName().concat(" "+plaPayloadConfig.getInput().getParticipants().get(0).getMiddleName());
+            asegurado.setNombres(fullName);
+            asegurado.setApePaterno(plaPayloadConfig.getInput().getParticipants().get(0).getLastName());
+            asegurado.setApeMaterno(plaPayloadConfig.getInput().getParticipants().get(0).getSecondLastName());
+        }else{
+            String tipoDocument = this.applicationConfigurationService.getProperty(plaPayloadConfig.getCustomerListASO().getData().get(0).getIdentityDocuments().get(0).getDocumentType().getId());
+            asegurado.setTipoDocumento(tipoDocument);
+            asegurado.setNumeroDocumento(plaPayloadConfig.getCustomerListASO().getData().get(0).getIdentityDocuments().get(0).getDocumentNumber());
+            asegurado.setNombres(plaPayloadConfig.getCustomerListASO().getData().get(0).getFirstName());
+            asegurado.setApePaterno(plaPayloadConfig.getCustomerListASO().getData().get(0).getLastName());
+            asegurado.setApeMaterno(plaPayloadConfig.getCustomerListASO().getData().get(0).getSecondLastName());
+        }
+        return asegurado;
     }
 
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
