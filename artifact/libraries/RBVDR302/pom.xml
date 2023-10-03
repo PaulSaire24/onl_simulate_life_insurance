@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd.dto.lifeinsrc</groupId>
 			<artifactId>RBVDC301</artifactId>
-			<version>0.7.2</version>
+			<version>0.7.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bbva.pisd.dto.insurance</groupId>

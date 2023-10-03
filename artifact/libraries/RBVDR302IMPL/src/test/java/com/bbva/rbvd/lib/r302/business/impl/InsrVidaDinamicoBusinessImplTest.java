@@ -4,10 +4,7 @@ import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
@@ -23,15 +20,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -111,6 +107,16 @@ public class InsrVidaDinamicoBusinessImplTest{
         CustomerBO customerBO = new CustomerBO();
         List<CustomerBO> data = new ArrayList<>();
         customerBO.setBirthData(birthDataBO);
+
+        customerBO.setFirstName("4hthth");
+        customerBO.setLastName("4hthth");
+        customerBO.setSecondLastName("4hthth");
+        com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO identityDocument = new com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO();
+        com.bbva.pisd.dto.insurance.bo.DocumentTypeBO documentType = new com.bbva.pisd.dto.insurance.bo.DocumentTypeBO();
+        documentType.setId("DNI");
+        identityDocument.setDocumentType(documentType);
+        customerBO.setIdentityDocuments(Collections.singletonList(identityDocument));
+
         data.add(customerBO);
         CustomerListASO customerListASO = new CustomerListASO();
         customerListASO.setData(data);
