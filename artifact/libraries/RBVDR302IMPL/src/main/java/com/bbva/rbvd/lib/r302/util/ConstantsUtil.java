@@ -20,4 +20,5 @@ public class ConstantsUtil {
     public static final String COVERAGE_NAME ="_COVERAGE_NAME";
     public static final Long DEFAULT_NUM_CUOTAS = 1L;
     public static final String DEFAULT_FRECUENCIA ="A";
+
 }

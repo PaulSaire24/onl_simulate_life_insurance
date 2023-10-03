@@ -224,8 +224,8 @@ public class SimulationParameter implements PreSimulation {
 		TierASO responseTierASO = null;
 		if (Objects.isNull(input.getTier())) {
 			LOGGER.info("Invoking Service ASO Tier");
-			CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
-			responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
+			String responseCrypto = consumerInternalService.callCryptoService(input.getHolder().getId());
+			responseTierASO = consumerInternalService.callGetTierService(responseCrypto);
 		}
 		LOGGER.info("***** SimulationParameter - validateTier ***** Response: {}", responseTierASO);
 		LOGGER.info("***** SimulationParameter - validateTier END *****");

@@ -9,7 +9,6 @@ import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +65,7 @@ public class SimulationParameterTest {
     public void getTierToUpdateRequestNull() throws IOException {
 
         LifeSimulationDTO input = mockData.getInsuranceSimulationRequest();
-        when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn(crypto);
+        when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
         tier.getData().get(0).setSegments(null);
         when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
         SimulationParameter simulationParameter = new SimulationParameter(pisdR350,rbvdr301,applicationConfigurationService);

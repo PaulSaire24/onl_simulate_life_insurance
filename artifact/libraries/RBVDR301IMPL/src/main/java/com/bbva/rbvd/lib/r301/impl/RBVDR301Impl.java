@@ -11,15 +11,15 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoDataASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.utils.PISDErrors;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
 import com.bbva.pisd.dto.insurance.utils.PISDValidation;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
-import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerListAsoBean;
+import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerBOBean;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
 import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;
 import org.slf4j.Logger;
@@ -47,6 +47,12 @@ import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.OAUTH_TOKEN
 import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.CRE_EXTRA_PARAMS;
 import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.INPUT_TEXT_SECURITY;
 import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.B64URL;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.AUTHORIZATION;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.APPLICATION;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.JSON;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.AMZ_DATE;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.API_KEY;
+import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.TRACE_ID;
 
 public class RBVDR301Impl extends RBVDR301Abstract {
 
@@ -146,14 +152,14 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	}
 
 	@Override
-	public CustomerListASO executeGetListCustomerHost(String customerId){
+	public CustomerBO executeGetCustomer(String customerId){
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer Start *****");
 		PEWUResponse result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer  ***** Response Host: {}", result);
 
 		if( Objects.isNull(result.getHostAdviceCode()) || result.getHostAdviceCode().isEmpty()){
-			CustomerListAsoBean customerListAsoBean = new CustomerListAsoBean(this.applicationConfigurationService);
-			return customerListAsoBean.mapperCustomerListAso(result);
+			CustomerBOBean customerListAsoBean = new CustomerBOBean(this.applicationConfigurationService);
+			return customerListAsoBean.mapperCustomer(result);
 		}
 		this.addAdviceWithDescription(result.getHostAdviceCode(), result.getHostMessage());
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer ***** with error: {}", result.getHostMessage());
@@ -210,7 +216,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return output;
 	}
 
-	public CryptoASO executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
+	public String executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
 		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted START *****");
 		String appName = this.applicationConfigurationService.getProperty(APP_NAME);
 		String password =  OAUTH_TOKEN;
@@ -222,9 +228,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		List<OutputDTO> listEncodedCredentials = ksmkR002.execute(listDecodedCredential, "", inputContext, new CredentialsDTO(appName, password, credExtraParams));
 		if (Objects.nonNull(listEncodedCredentials) && !CollectionUtils.isEmpty(listEncodedCredentials)) {
-			cryptoASO.setData(new CryptoDataASO());
-			cryptoASO.getData().setDocument(listEncodedCredentials.get(0).getData());
-			return cryptoASO;
+			return listEncodedCredentials.get(0).getData();
 		}
 		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted END with error *****");
 
@@ -260,19 +264,19 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	//Crea las cabeceras Http
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType("application","json", StandardCharsets.UTF_8);
+		MediaType mediaType = new MediaType(APPLICATION,JSON, StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
 		return headers;
 	}
 	//Crea las cabeceras AWS de Http
 	private HttpHeaders createHttpHeadersAWS(SignatureAWS signature) {
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
+		MediaType mediaType = new MediaType(APPLICATION, JSON, StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
-		headers.set(RBVDConstants.AUTHORIZATION, signature.getAuthorization());
-		headers.set("X-Amz-Date", signature.getxAmzDate());
-		headers.set("x-api-key", signature.getxApiKey());
-		headers.set("traceId", signature.getTraceId());
+		headers.set(AUTHORIZATION, signature.getAuthorization());
+		headers.set(AMZ_DATE, signature.getxAmzDate());
+		headers.set(API_KEY, signature.getxApiKey());
+		headers.set(TRACE_ID, signature.getTraceId());
 		return headers;
 	}
 }

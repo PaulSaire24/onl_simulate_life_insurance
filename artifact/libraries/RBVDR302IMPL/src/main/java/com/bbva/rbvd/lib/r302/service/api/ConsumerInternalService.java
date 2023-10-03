@@ -3,9 +3,12 @@ package com.bbva.rbvd.lib.r302.service.api;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
 
 public class ConsumerInternalService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerInternalService.class);
@@ -16,7 +19,7 @@ public class ConsumerInternalService {
     }
 
 
-    public CryptoASO callCryptoService(String customerID) {
+    public String callCryptoService(String customerID) {
         return this.rbvdR301.executeGetCustomerIdEncrypted(new CryptoASO(customerID));
     }
 
@@ -26,7 +29,10 @@ public class ConsumerInternalService {
 
 
     public CustomerListASO callListCustomerResponse(String customerId){
-        return this.rbvdR301.executeGetListCustomerHost(customerId);
+        CustomerBO customer = this.rbvdR301.executeGetCustomer(customerId);
+        CustomerListASO customerList = new CustomerListASO();
+        customerList.setData(Collections.singletonList(customer));
+        return customerList;
     }
 
 }
