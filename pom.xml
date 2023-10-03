@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>onl_simulate_life_insurance</artifactId>
 	<groupId>com.bbva.rbvd</groupId>
-	<version>0.9.4</version>
+	<version>0.9.5</version>
 	<packaging>pom</packaging>
 	<name>onl_simulate_life_insurance</name>
 	<description>Deployment unit onl_simulate_life_insurance of uuaa rbvd</description>
