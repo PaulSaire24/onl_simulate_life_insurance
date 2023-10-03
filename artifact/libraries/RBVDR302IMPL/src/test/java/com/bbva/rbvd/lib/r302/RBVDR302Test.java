@@ -55,13 +55,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
-/*@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-		"classpath:/META-INF/spring/RBVDR302-app.xml",
-		"classpath:/META-INF/spring/RBVDR302-app-test.xml",
-		"classpath:/META-INF/spring/RBVDR302-arc.xml",
-		"classpath:/META-INF/spring/RBVDR302-arc-test.xml" })
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)*/
 @RunWith(MockitoJUnitRunner.class)
 public class RBVDR302Test {
 
@@ -82,8 +75,6 @@ public class RBVDR302Test {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Test.class);
 
 	private InsuranceLifeSimulationBO responseRimac;
-
-	//private MapperHelper mapperHelper;
 
 	private InsuranceLifeSimulationBO requestRimac;
 
@@ -125,26 +116,14 @@ public class RBVDR302Test {
 
 		mockData = MockData.getInstance();
 
-		//applicationConfigurationService = mock(ApplicationConfigurationService.class);
-		//rbvdr301 = mock(RBVDR301.class);
-		//pisdR350 = mock(PISDR350.class);
 
-		//rbvdR302.setRbvdR301(rbvdr301);
-		//rbvdR302.setApplicationConfigurationService(applicationConfigurationService);
-		//rbvdR302.setPisdR350(pisdR350);
 
 		responseRimac = mockData.getInsuranceRimacSimulationResponse();
 		requestRimac = mockData.getInsuranceRimacSimulationRequest();
 		requestInput = mockData.getInsuranceSimulationRequest();
 
-		//mapperHelper = mock(MapperHelper.class);
-		//rbvdR302.setMapperHelper(mapperHelper);
 
 		input = new LifeSimulationDTO();
-
-		//responseQueryGetProductInformation = mock(Map.class);
-
-
 
 		when(this.applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
 
@@ -373,23 +352,6 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
 
-		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
-
-		/*
-		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
-		Map<String, Object> uniqueExample = new HashMap<>();
-		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
-		responseConsiderations.add(uniqueExample);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(responseConsiderations);*/
-
-		//when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		//when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-		/*responseQuerySumCumulus = new ArrayMap<>();
-
-		//when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);*/
 
 		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
@@ -398,7 +360,6 @@ public class RBVDR302Test {
 		assertNotNull(response);
 
 		Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(anyString(), anyMap());
-		//Mockito.verify(rbvdr301,Mockito.times(1)).executeSimulationRimacService(anyObject(),anyString());
 
 	}
 
@@ -417,6 +378,10 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
+		participantDTO.setFirstName("gh");
+		participantDTO.setMiddleName("gh");
+		participantDTO.setLastName("gh");
+		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
@@ -478,6 +443,10 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
+		participantDTO.setFirstName("gh");
+		participantDTO.setMiddleName("gh");
+		participantDTO.setLastName("gh");
+		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 		List<ParticipantDTO> participantDTOList = new ArrayList<>();
 		participantDTOList.add(participantDTO);
@@ -557,230 +526,5 @@ public class RBVDR302Test {
 		customerListASO.setData(data);
 		return customerListASO;
 	}
-/*
-	@Test
-	public void executeGetGenerateFalseTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateFalseTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("false");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-
-		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
-		Map<String, Object> uniqueExample = new HashMap<>();
-		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
-		responseConsiderations.add(uniqueExample);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(responseConsiderations);
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNotNull(validation);
-	}
-
-	@Test
-	public void executeGetGenerateInsertSimulationFailTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateInsertSimulationFailTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(0);
-		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
-		Map<String, Object> uniqueExample = new HashMap<>();
-		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
-		responseConsiderations.add(uniqueExample);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(responseConsiderations);
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetGenerateGiFoleFalseTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateGiFoleFalseTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("false");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(new ArrayList<>());
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
-		requestInput.setTier(new TierDTO());
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetNoSaveSimulationTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetNoSaveSimulationTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(0);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetGenerateModalityNullTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateModalityNullTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		responseQuerySumCumulus = new ArrayMap<>();
-		List<Map<String, Object>> listResponses = new ArrayList<>();
-		responseQuerySumCumulus.put("dtoInsurance", listResponses);
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(null);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetGenerateProductNullTest(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateProductNullTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(null);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetGeneratePlansSimulationFailTest() {
-		LOGGER.info("RBVDR302Test - Executing executeGetGeneratePlansSimulationFailTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(0);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetRimacNullExceptionTest() throws IOException {
-		LOGGER.info("RBVDR302Test - Executing executeGetRimacNullExceptionTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
-
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test(expected = Exception.class)
-	public void executeGetGenerateExceptionTest() throws IOException {
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateExceptionTest...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(null);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(null);
-
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeGetGenerateTest_DynamicLife(){
-		LOGGER.info("RBVDR302Test - Executing executeGetGenerateTest_DynamicLife...");
-		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-		when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
-		when(pisdR350.executeGetASingleRow(RBVDProperties.QUERY_GET_PRODUCT_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryGetProductInformation);
-		responseQuerySumCumulus = new ArrayMap<>();
-		List<Map<String, Object>> listResponse = new ArrayList<>();
-		Map<String, Object> response = new HashMap<>();
-		response.put("INSURED_AMOUNT", new BigDecimal(187.2));
-		listResponse.add(response);
-		responseQuerySumCumulus.put("dtoInsurance", listResponse);
-
-		requestRimac.getPayload().setProducto("VIDADINAMICO");
-		requestInput.getProduct().setId("841");
-
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).thenReturn(responseQuerySumCumulus);
-		when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
-		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
-
-		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		when(pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(executeInsertSingleRow);
-		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
-		Map<String, Object> uniqueExample = new HashMap<>();
-		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
-		responseConsiderations.add(uniqueExample);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(responseConsiderations);
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);
-		LifeSimulationDTO validation = this.rbvdR302.executeGetSimulation(requestInput);
-
-		assertNotNull(validation);
-	}
-	*/
 
 }

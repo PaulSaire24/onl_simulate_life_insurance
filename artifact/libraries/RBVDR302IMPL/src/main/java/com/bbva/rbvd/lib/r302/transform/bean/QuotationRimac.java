@@ -1,7 +1,6 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.DatoParticularBO;
-import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
