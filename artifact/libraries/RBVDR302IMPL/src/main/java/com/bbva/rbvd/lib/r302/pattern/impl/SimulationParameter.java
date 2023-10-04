@@ -121,7 +121,6 @@ public class SimulationParameter implements PreSimulation {
 			LOGGER.info("***** SimulationParameter getProperties participant es no nulo *****");
 			properties.setDocumentTypeId(this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 			properties.setDocumentTypeIdAsText(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
-			LOGGER.info("***** SimulationParameter getProperties participant documentType {} *****",this.applicationConfigurationService.getProperty(input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId()));
 		}
 
 
@@ -178,6 +177,7 @@ public class SimulationParameter implements PreSimulation {
 
 		LOGGER.info("***** SimulationParameter getCustomer START *****");
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
+		LOGGER.info("***** SimulationParameter customerId {} *****",customerId);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
 		LOGGER.info("***** SimulationParameter CustomerListASO {} *****",customer);
 
@@ -225,8 +225,8 @@ public class SimulationParameter implements PreSimulation {
 		TierASO responseTierASO = null;
 		if (Objects.isNull(input.getTier())) {
 			LOGGER.info("Invoking Service ASO Tier");
-			CryptoASO crypto = consumerInternalService.callCryptoService(input.getHolder().getId());
-			responseTierASO = consumerInternalService.callGetTierService(crypto.getData().getDocument());
+			String responseCrypto = consumerInternalService.callCryptoService(input.getHolder().getId());
+			responseTierASO = consumerInternalService.callGetTierService(responseCrypto);
 		}
 		LOGGER.info("***** SimulationParameter - validateTier ***** Response: {}", responseTierASO);
 		LOGGER.info("***** SimulationParameter - validateTier END *****");
