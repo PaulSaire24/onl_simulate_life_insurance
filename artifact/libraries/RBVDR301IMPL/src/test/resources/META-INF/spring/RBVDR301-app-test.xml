@@ -4,4 +4,10 @@
 	<bean id="pisdR014" class="org.mockito.Mockito" factory-method="mock">
 		<constructor-arg value="com.bbva.pisd.lib.r014.PISDR014"/>
 	</bean>
+	<bean id="pbtqR002" class="org.mockito.Mockito" factory-method="mock">
+		<constructor-arg value="com.bbva.pbtq.lib.r002.PBTQR002"/>
+	</bean>
+	<bean id="ksmkR002" class="org.mockito.Mockito" factory-method="mock">
+		<constructor-arg value="com.bbva.ksmk.lib.r002.KSMKR002"/>
+	</bean>
 </beans>

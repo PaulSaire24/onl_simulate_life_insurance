@@ -49,7 +49,13 @@ import org.springframework.util.CollectionUtils;
 
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -87,7 +93,6 @@ public class RBVDR302Test {
 	@Mock
 	private PISDR350 pisdR350;
 
-	private CryptoASO crypto;
 
 	private TierASO tier;
 
@@ -116,12 +121,9 @@ public class RBVDR302Test {
 
 		mockData = MockData.getInstance();
 
-
-
 		responseRimac = mockData.getInsuranceRimacSimulationResponse();
 		requestRimac = mockData.getInsuranceRimacSimulationRequest();
 		requestInput = mockData.getInsuranceSimulationRequest();
-
 
 		input = new LifeSimulationDTO();
 
@@ -147,13 +149,7 @@ public class RBVDR302Test {
 		executeInsertSingleRow = 1;
 
 		mockDTO = MockDTO.getInstance();
-		crypto = new CryptoASO();
-		CryptoDataASO data = new CryptoDataASO();
-		crypto.setData(data);
 		tier = mockDTO.getTierMockResponse();
-
-		//seguroEasyYes = new InsrEasyYesBusinessImpl(this.rbvdr301,this.applicationConfigurationService);
-
 	}
 
 	@Test
@@ -168,9 +164,8 @@ public class RBVDR302Test {
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -199,26 +194,10 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-		//when(this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSRNC_SIMLT_PRD.getValue(), new HashMap<>())).thenReturn(1);
-
-		/*when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
-		List<Map<String, Object>> responseConsiderations = new ArrayList<>();
-		Map<String, Object> uniqueExample = new HashMap<>();
-		uniqueExample.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_MODALITY_TYPE.getValue(), "01");
-		responseConsiderations.add(uniqueExample);
-		when(responseQueryConsiderations.get(RBVDProperties.KEY_OF_INSRC_LIST_RESPONSES.getValue())).
-				thenReturn(responseConsiderations);*/
-
-		//when(pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_PRODUCT_MODALITIES_INFORMATION.getValue(), new HashMap<>())).thenReturn(responseQueryConsiderations);
-		/*responseQuerySumCumulus = new ArrayMap<>();
-
-		//when(QuotationRimac.mapInRequestRimacLife(anyObject(), anyObject())).thenReturn(requestRimac);
-		//when(seguroEasyYes.createGifoleASO(anyObject(), anyObject())).thenReturn(gifoleInsReqAso);
-		when(this.rbvdr301.executeGifolelifeService(anyObject())).thenReturn(201);*/
 
 		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
@@ -259,7 +238,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
@@ -311,12 +290,12 @@ public class RBVDR302Test {
 		IdentityDocumentDTO identityDocumentDTO = new IdentityDocumentDTO();
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
+
 		ParticipantDTO participantDTO = new ParticipantDTO();
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 
 
@@ -345,13 +324,12 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-
 
 		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
@@ -383,9 +361,8 @@ public class RBVDR302Test {
 		participantDTO.setLastName("gh");
 		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		this.requestInput.setParticipants(participantDTOList);
+
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -411,7 +388,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
@@ -448,9 +425,7 @@ public class RBVDR302Test {
 		participantDTO.setLastName("gh");
 		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
-		List<ParticipantDTO> participantDTOList = new ArrayList<>();
-		participantDTOList.add(participantDTO);
-		//input.getProduct().getPlans()-----input.getProduct().getPlans().get(0).getInstallmentPlans()
+
 		InsuranceProductDTO product = new InsuranceProductDTO();
 		List<InsurancePlanDTO> plansList = new ArrayList<>();
 		InsurancePlanDTO plans = new InsurancePlanDTO();
@@ -467,7 +442,7 @@ public class RBVDR302Test {
 		/*product.setPlans(plansList);*/
 		this.requestInput.getProduct().setPlans(plansList);
 
-		this.requestInput.setParticipants(participantDTOList);
+		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		if(!CollectionUtils.isEmpty(requestInput.getProduct().getPlans()) && !CollectionUtils.isEmpty(requestInput.getProduct().getPlans().get(0).getInstallmentPlans())){
@@ -498,7 +473,7 @@ public class RBVDR302Test {
 		when(pisdR350.executeGetListASingleRow(anyString(), anyMap()))
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
-		when(this.rbvdr301.executeCryptoService(anyObject())).thenReturn(crypto);
+		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
