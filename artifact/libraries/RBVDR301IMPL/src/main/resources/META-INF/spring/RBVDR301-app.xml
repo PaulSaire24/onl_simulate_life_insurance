@@ -3,10 +3,12 @@
 		http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 	<bean id="rbvdR301" class="com.bbva.rbvd.lib.r301.impl.RBVDR301Impl" parent="rbvdR301Abstract">
 		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
-		<property name="mockService" ref="mockService" />
+		<property name="mockService" ref="mockService"/>
 		<property name="pisdR014" ref="pisdR014"/>
+		<property name="pbtqR002" ref="pbtqR002"/>
+		<property name="ksmkR002" ref="ksmkR002"/>
 	</bean>
 	<bean id="mockService" class="com.bbva.rbvd.mock.MockService">
-		<property name="applicationConfigurationService" ref="applicationConfigurationService" />
+		<property name="applicationConfigurationService" ref="applicationConfigurationService"/>
 	</bean>
 </beans>

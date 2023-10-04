@@ -6,6 +6,7 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 
 public interface RBVDR301 {
@@ -22,5 +23,9 @@ public interface RBVDR301 {
 	CryptoASO executeCryptoService(CryptoASO input);
 
 	TierASO executeGetTierService(String holderId);
+
+	CustomerBO executeGetCustomer(String customerId);
+
+	String executeGetCustomerIdEncrypted(CryptoASO cryptoASO);
 
 }

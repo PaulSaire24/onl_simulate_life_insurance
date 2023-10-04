@@ -23,7 +23,6 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.bbva.rbvd.lib.r302.util.ValidationUtil.validateParticipant;

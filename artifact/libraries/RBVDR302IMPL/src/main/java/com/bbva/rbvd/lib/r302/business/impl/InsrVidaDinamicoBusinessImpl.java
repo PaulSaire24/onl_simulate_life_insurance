@@ -14,6 +14,7 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.service.api.ConsumerExternalService;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
@@ -56,7 +57,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         ModifyQuotationRimac.addFieldsDatoParticulares(requestRimac,payloadConfig.getInput(),payloadConfig.getCustomerListASO(),payloadConfig.isParticipant());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationRimacService(requestRimac,payloadConfig.getInput().getTraceId());
+        ConsumerExternalService consumerExternalService = new ConsumerExternalService(this.rbvdR301);
+        InsuranceLifeSimulationBO responseRimac = consumerExternalService.executeSimulationRimacService(requestRimac,payloadConfig.getInput().getTraceId());
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeQuotationRimacService | responseRimac: {} *****",responseRimac);
 
         if(Objects.isNull(responseRimac)){
@@ -81,7 +83,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | requestRimac: {} *****",requestRimac);
 
-        InsuranceLifeSimulationBO responseRimac = this.rbvdR301.executeSimulationModificationRimacService(requestRimac,
+        ConsumerExternalService consumerExternalService = new ConsumerExternalService(this.rbvdR301);
+        InsuranceLifeSimulationBO responseRimac = consumerExternalService.executeSimulationModificationRimacService(requestRimac,
                 payloadConfig.getInput().getExternalSimulationId(),payloadConfig.getInput().getTraceId());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - executeModifyQuotationRimacService | responseRimac: {} *****",responseRimac);
