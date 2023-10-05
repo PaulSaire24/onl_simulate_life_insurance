@@ -153,7 +153,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	@Override
 	public CustomerBO executeGetCustomer(String customerId){
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer Start *****");
-		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer customerId {} *****",customerId);
 		PEWUResponse result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer  ***** Response Host: {}", result);
 
