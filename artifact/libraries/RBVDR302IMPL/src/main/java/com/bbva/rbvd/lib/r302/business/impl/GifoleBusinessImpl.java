@@ -337,8 +337,6 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         }
 
         if(!CollectionUtils.isEmpty(response.getParticipants())){
-            holder.setFirstName(response.getParticipants().get(0).getFirstName());
-            holder.setLastName(response.getParticipants().get(0).getLastName());
             holder.setIsBankCustomer(true);
             if(StringUtils.isEmpty(response.getParticipants().get(0).getId())){
                 holder.setIsBankCustomer(false);

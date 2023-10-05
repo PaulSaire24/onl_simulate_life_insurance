@@ -153,8 +153,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         if(plaPayloadConfig.isParticipant()){
             asegurado.setTipoDocumento(plaPayloadConfig.getInput().getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
             asegurado.setNumeroDocumento(plaPayloadConfig.getInput().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
-            String fullName = plaPayloadConfig.getInput().getParticipants().get(0).getFirstName().concat(" "+plaPayloadConfig.getInput().getParticipants().get(0).getMiddleName());
-            asegurado.setNombres(fullName);
+            asegurado.setNombres(plaPayloadConfig.getInput().getParticipants().get(0).getFirstName());
             asegurado.setApePaterno(plaPayloadConfig.getInput().getParticipants().get(0).getLastName());
             asegurado.setApeMaterno(plaPayloadConfig.getInput().getParticipants().get(0).getSecondLastName());
         }else{
