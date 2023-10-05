@@ -29,12 +29,14 @@ import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -311,7 +313,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
                 new com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO();
-        holder.setIsBankCustomer(true);
+
         holder.setFirstName(EMPTY_VALUE);
         holder.setLastName(EMPTY_VALUE);
         holder.setContactDetails(new ArrayList<>());
@@ -331,7 +333,16 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         if (Objects.nonNull(response.getHolder())) {
             holder.setFirstName(response.getHolder().getFirstName());
             holder.setLastName(response.getHolder().getLastName());
+            holder.setIsBankCustomer(true);
         }
+
+        if(!CollectionUtils.isEmpty(response.getParticipants())){
+            holder.setIsBankCustomer(true);
+            if(StringUtils.isEmpty(response.getParticipants().get(0).getId())){
+                holder.setIsBankCustomer(false);
+            }
+        }
+
 
         if(Objects.nonNull(response.getIsDataTreatment())){
             holder.setIsDataTreatment(response.getIsDataTreatment());

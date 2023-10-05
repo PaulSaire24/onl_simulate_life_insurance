@@ -177,7 +177,6 @@ public class SimulationParameter implements PreSimulation {
 
 		LOGGER.info("***** SimulationParameter getCustomer START *****");
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
-		LOGGER.info("***** SimulationParameter customerId {} *****",customerId);
 		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
 		LOGGER.info("***** SimulationParameter CustomerListASO {} *****",customer);
 
