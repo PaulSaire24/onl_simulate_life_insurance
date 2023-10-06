@@ -28,11 +28,16 @@ public class ConsumerInternalService {
     }
 
 
-    public CustomerListASO callListCustomerResponse(String customerId){
-        CustomerBO customer = this.rbvdR301.executeGetCustomer(customerId);
-        CustomerListASO customerList = new CustomerListASO();
-        customerList.setData(Collections.singletonList(customer));
-        return customerList;
+    public CustomerListASO callListCustomerResponse(String customerId ,String chanelCode){
+        CustomerBO customer = new CustomerBO();
+        if(chanelCode.equals("NC")){
+            return this.rbvdR301.executeCallListCustomerResponse(customerId);
+        }else{
+            customer = this.rbvdR301.executeGetCustomer(customerId);
+            CustomerListASO customerList = new CustomerListASO();
+            customerList.setData(Collections.singletonList(customer));
+            return customerList;
+        }
     }
 
 }

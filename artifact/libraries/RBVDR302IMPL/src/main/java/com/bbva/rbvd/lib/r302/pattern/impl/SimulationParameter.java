@@ -62,7 +62,7 @@ public class SimulationParameter implements PreSimulation {
 		LOGGER.info("***** SimulationParameter getConfig - properties : {} *****",properties);
 		ProductInformationDAO productInformation = this.getProduct(input.getProduct().getId());
 
-		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId());
+		CustomerListASO customerResponse = this.getCustomer(input.getHolder().getId(),input.getSaleChannelId());
 		LOGGER.info("***** SimulationParameter: customerResponse {} *****",customerResponse);
 
 
@@ -173,11 +173,11 @@ public class SimulationParameter implements PreSimulation {
 	}
 
 
-	public CustomerListASO getCustomer(String customerId) {
+	public CustomerListASO getCustomer(String customerId, String chanelCode) {
 
 		LOGGER.info("***** SimulationParameter getCustomer START *****");
 		ConsumerInternalService consumer = new ConsumerInternalService(rbvdR301);
-		CustomerListASO customer = consumer.callListCustomerResponse(customerId);
+		CustomerListASO customer = consumer.callListCustomerResponse(customerId,chanelCode);
 		LOGGER.info("***** SimulationParameter CustomerListASO {} *****",customer);
 
 		LOGGER.info("***** SimulationParameter getCustomer END *****");

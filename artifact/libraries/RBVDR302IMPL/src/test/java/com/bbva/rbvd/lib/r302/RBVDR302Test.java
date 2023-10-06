@@ -164,6 +164,7 @@ public class RBVDR302Test {
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
+		this.requestInput.setSaleChannelId("PC");
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -210,6 +211,7 @@ public class RBVDR302Test {
 	@Test
 	public void executeTestParticipantNull() {
 		this.requestInput.getProduct().setId("840");
+		this.requestInput.setSaleChannelId("NC");
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -294,10 +296,7 @@ public class RBVDR302Test {
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
-
-
-
-
+		this.requestInput.setSaleChannelId("NC");
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
@@ -361,6 +360,7 @@ public class RBVDR302Test {
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
+		this.requestInput.setSaleChannelId("NC");
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -437,10 +437,10 @@ public class RBVDR302Test {
 		plans.setInstallmentPlans(installmentsDTOList);
 		plansList.add(plans);
 
-		/*product.setPlans(plansList);*/
 		this.requestInput.getProduct().setPlans(plansList);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
+		this.requestInput.setSaleChannelId("NC");
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		if(!CollectionUtils.isEmpty(requestInput.getProduct().getPlans()) && !CollectionUtils.isEmpty(requestInput.getProduct().getPlans().get(0).getInstallmentPlans())){
