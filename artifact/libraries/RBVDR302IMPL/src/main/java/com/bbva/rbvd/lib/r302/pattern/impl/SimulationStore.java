@@ -2,6 +2,7 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
@@ -10,8 +11,10 @@ import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.InsuranceSimulationDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.SimulationProductDAOImpl;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationParticipanBean;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationParticipantMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import com.bbva.rbvd.lib.r302.util.ConvertUtil;
 import org.slf4j.Logger;
@@ -86,5 +89,13 @@ public class SimulationStore implements PostSimulation {
 		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 	}
 
-
+	public void saveParticipantInformation(PayloadStore payloadStore,BigDecimal insuranceSimulationId){
+		LOGGER.info("***** SimulationStore - saveParticipantInformation START - arguments: payloadStore {} *****",payloadStore);
+		SimulationParticipantDAO simulationParticipant = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
+									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId());
+		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
+		Map<String, Object>  = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
+		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
+		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
+	}
 }

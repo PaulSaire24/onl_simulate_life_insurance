@@ -34,4 +34,11 @@ public class InsuranceSimulationDAOImpl implements IInsuranceSimulationDAO {
             throw RBVDValidation.build(RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
         }
     }
+
+    public void getInsertSimulationParticipant(Map<String, Object> argumentForSaveParticipant){
+        int idNewSimulation = this.pisdR350.executeInsertSingleRow(RBVDProperties.QUERY_INSERT_PARTICIPANT_SIMULATION.getValue(),argumentForSaveParticipant);
+            if(idNewSimulation != 1){
+                throw RBVDValidation.build(RBVDErrors.INSERTION_ERROR_IN_SIMULATION_TABLE);
+            }
+    }
 }
