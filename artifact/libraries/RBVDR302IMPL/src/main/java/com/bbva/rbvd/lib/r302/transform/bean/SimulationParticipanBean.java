@@ -6,10 +6,11 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import java.math.BigDecimal;
 
 public class SimulationParticipanBean {
-    public SimulationParticipanBean() {
+
+    private SimulationParticipanBean() {
     }
 
-    public static SimulationParticipantDAO createSimulationParticipant (BigDecimal insuranceSimulationId, LifeSimulationDTO insuranceSimulationDTO,String creationUser, String userAudit, BigDecimal productId){
+    public static SimulationParticipantDAO createSimulationParticipant (BigDecimal insuranceSimulationId, LifeSimulationDTO insuranceSimulationDTO, String creationUser, String userAudit, BigDecimal productId){
         SimulationParticipantDAO simulationParticipant = new SimulationParticipantDAO();
         simulationParticipant.setInsuranceSimulationId(insuranceSimulationId);
         simulationParticipant.setInsuranceProductId(productId);
