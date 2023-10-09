@@ -50,7 +50,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getLastName());
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
             arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),toISO8601(simulationParticipant.getResponse().getParticipants().get(0).getBirthDate()));
-            if(Objects.nonNull(simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().size()>=1)) {
+            if(simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().size()>=1) {
                 LOGGER.info("arguments mayor a 1");
                 arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(), simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
             }else{
