@@ -23,8 +23,8 @@ public class SimulationParticipantMap {
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),null);
         arguments.put(RBVDProperties.FIELD_INSURED_AMOUNT.getValue(),simulationParticipant.getResponse().getInsuredAmount().getAmount());
         if(!CollectionUtils.isEmpty(simulationParticipant.getResponse().getProduct().getPlans())
-                && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getTotalInstallment())
-                && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getTotalInstallment().getPeriod())){
+                && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans())
+                && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod())){
 
             arguments.put(RBVDProperties.FIELD_PERIOD_TYPE.getValue(),simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
             arguments.put(RBVDProperties.FIELD_PERIOD_NUMBER.getValue(),null);
@@ -63,12 +63,12 @@ public class SimulationParticipantMap {
         arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),null);
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),null);
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getCreationUser());
-        arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getUserAudit());
+        arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),simulationParticipant.getUserAudit());
         return arguments;
     }
 
     public static LocalDateTime toISO8601(Date date) {
-        if(!Objects.nonNull(date)){
+        if(Objects.isNull(date)){
             return null;
         }
         return date.toInstant().atZone(ZONE_ID).toLocalDateTime();

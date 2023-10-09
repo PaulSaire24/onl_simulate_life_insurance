@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -15,6 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,13 +56,30 @@ public class SimulationStoreTest {
         //given
         Map<String,Object> map = new HashMap<>();
         map.put("PISD.SELECT_INSURANCE_SIMULATION_ID_LIFE",new HashMap<>());
+
+        payloadStore.setResponse(new LifeSimulationDTO());
+        payloadStore.getResponse().setInsuredAmount(new InsuredAmountDTO());
+        payloadStore.getResponse().getInsuredAmount().setAmount(BigDecimal.valueOf(455));
+        payloadStore.getResponse().setHolder(new HolderDTO());
+        payloadStore.getResponse().getHolder().setId("45555");
+        payloadStore.getResponse().getHolder().setIdentityDocument(new IdentityDocumentDTO());
+        payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentType(new DocumentTypeDTO());
+        payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId("45454");
+        payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentNumber("45555");
+        payloadStore.getResponse().setProduct(new InsuranceProductDTO());
+
+        InstallmentsDTO installments = new InstallmentsDTO();
+        installments.setPeriod(new PeriodDTO());
+        installments.getPeriod().setId("fr");
+        InsurancePlanDTO insurancePlan = new InsurancePlanDTO();
+        insurancePlan.setInstallmentPlans(Collections.singletonList(installments));
+        payloadStore.getResponse().getProduct().setPlans(Collections.singletonList(insurancePlan));
+
+
         when(this.pisdR350.executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(),new HashMap<>())).thenReturn(map);
         when(this.pisdR350.executeInsertSingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(1);
-        //simulation = new SimulationStore(pisdR350);
-        //BigDecimal resul = simulation.getInsuranceSimulationId();
-        //when
+
         simulation.end(payloadStore);
-        //then
         Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeGetASingleRow(RBVDProperties.QUERY_SELECT_INSURANCE_SIMULATION_ID.getValue(), new HashMap<>());
     }
 

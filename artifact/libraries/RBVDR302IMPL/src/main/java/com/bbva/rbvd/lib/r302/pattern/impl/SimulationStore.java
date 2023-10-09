@@ -38,6 +38,7 @@ public class SimulationStore implements PostSimulation {
 		BigDecimal nextId = this.getInsuranceSimulationId();
 		this.saveSimulation(payloadStore, nextId);
 		this.saveSimulationProd(payloadStore,nextId);
+		this.saveParticipantInformation(payloadStore,nextId);
 	}
 
 
@@ -94,8 +95,9 @@ public class SimulationStore implements PostSimulation {
 		SimulationParticipantDAO simulationParticipant = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
 									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId());
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
-		Map<String, Object>  = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
+		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
+		insuranceSimulationDao.getInsertSimulationParticipant(argumentForSaveParticipant);
 	}
 }

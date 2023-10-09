@@ -24,8 +24,7 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.*;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -163,6 +162,19 @@ public class RBVDR302Test {
 		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
+		participantDTO.setParticipantType(new ParticipantTypeDTO());
+		participantDTO.getParticipantType().setId("455");
+		ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+		contractDetail.setContact(new ContactDTO());
+		contractDetail.getContact().setAddress("4555");
+		ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+		contractDetail2.setContact(new ContactDTO());
+		contractDetail2.getContact().setAddress("@gmail.com");
+		List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+		contractDetailsList.add(contractDetail);
+		contractDetailsList.add(contractDetail2);
+		participantDTO.setContactDetails(contractDetailsList);
+
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
@@ -293,10 +305,20 @@ public class RBVDR302Test {
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
+		participantDTO.setParticipantType(new ParticipantTypeDTO());
+		participantDTO.getParticipantType().setId("455");
+		ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+		contractDetail.setContact(new ContactDTO());
+		contractDetail.getContact().setAddress("4555");
+		ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+		contractDetail2.setContact(new ContactDTO());
+		contractDetail2.getContact().setAddress("@gmail.com");
+		List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+		contractDetailsList.add(contractDetail);
+		contractDetailsList.add(contractDetail2);
+		participantDTO.setContactDetails(contractDetailsList);
+
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
-
-
-
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
