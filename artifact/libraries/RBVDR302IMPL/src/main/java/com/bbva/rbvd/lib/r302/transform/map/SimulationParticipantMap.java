@@ -25,7 +25,6 @@ public class SimulationParticipantMap {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),simulationParticipant.getInsuranceSimulationId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),simulationParticipant.getInsuranceProductId());
-        arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),null);
         arguments.put(RBVDProperties.FIELD_INSURED_AMOUNT.getValue(),simulationParticipant.getResponse().getInsuredAmount().getAmount());
         if(!CollectionUtils.isEmpty(simulationParticipant.getResponse().getProduct().getPlans())
                 && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans())
@@ -39,7 +38,7 @@ public class SimulationParticipantMap {
         }
         if(!CollectionUtils.isEmpty(simulationParticipant.getResponse().getListRefunds())){
             arguments.put(RBVDProperties.FIELD_REFUND_PER.getValue(),simulationParticipant.getResponse().getListRefunds().get(0).getUnit().getPercentage());
-            arguments.put(RBVDProperties.FIELD_PREMIUM_CURRENCY_ID.getValue(),null);
+            arguments.put(RBVDProperties.FIELD_CURRENCY_ID.getValue(),null);
         }
         arguments.put(RBVDProperties.FIELD_TOTAL_RETURN_AMOUNT.getValue(),null);
 
