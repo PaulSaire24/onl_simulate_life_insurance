@@ -2,6 +2,9 @@ package com.bbva.rbvd.lib.r302.transform.map;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -13,10 +16,12 @@ import java.util.Date;
 
 
 public class SimulationParticipantMap {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParticipantMap.class);
 
     private SimulationParticipantMap() {super();}
     private static final ZoneId ZONE_ID = ZoneId.of("GMT");
     public static Map<String, Object> createArgumentsForSaveParticipant(SimulationParticipantDAO simulationParticipant){
+        LOGGER.info("SimulationParticipantMap start - createArgumentsForSaveParticipant");
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),simulationParticipant.getInsuranceSimulationId());
         arguments.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),simulationParticipant.getInsuranceProductId());
@@ -45,7 +50,8 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getLastName());
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
             arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),toISO8601(simulationParticipant.getResponse().getParticipants().get(0).getBirthDate()));
-            if(Objects.nonNull(simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1))) {
+            if(Objects.nonNull(simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().size()>=1)) {
+                LOGGER.info("arguments mayor a 1");
                 arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(), simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
             }else{
                 arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),null);
@@ -64,6 +70,7 @@ public class SimulationParticipantMap {
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),null);
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getCreationUser());
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),simulationParticipant.getUserAudit());
+        LOGGER.info("SimulationParticipantMap end");
         return arguments;
     }
 
