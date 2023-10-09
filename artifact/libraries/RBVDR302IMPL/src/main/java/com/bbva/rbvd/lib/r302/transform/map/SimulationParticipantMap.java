@@ -2,24 +2,20 @@ package com.bbva.rbvd.lib.r302.transform.map;
 
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Date;
 
 
 public class SimulationParticipantMap {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParticipantMap.class);
 
     private SimulationParticipantMap() {super();}
-    private static final ZoneId ZONE_ID = ZoneId.of("GMT");
+
     public static Map<String, Object> createArgumentsForSaveParticipant(SimulationParticipantDAO simulationParticipant){
         LOGGER.info("SimulationParticipantMap start - createArgumentsForSaveParticipant");
         Map<String, Object> arguments = new HashMap<>();
@@ -29,8 +25,20 @@ public class SimulationParticipantMap {
         if(!CollectionUtils.isEmpty(simulationParticipant.getResponse().getProduct().getPlans())
                 && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans())
                 && Objects.nonNull(simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod())){
+            String periodType = "";
 
-            arguments.put(RBVDProperties.FIELD_PERIOD_TYPE.getValue(),simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+            switch (simulationParticipant.getResponse().getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId()){
+                case "MONTHLY":
+                    periodType = "M";
+                    break;
+                case "ANNUAL":
+                    periodType = "A";
+                    break;
+                default:
+                    periodType = "";
+                    break;
+            }
+            arguments.put(RBVDProperties.FIELD_PERIOD_TYPE.getValue(),periodType);
             arguments.put(RBVDProperties.FIELD_PERIOD_NUMBER.getValue(),null);
         }else {
             arguments.put(RBVDProperties.FIELD_PERIOD_TYPE.getValue(), null);
@@ -48,7 +56,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getFirstName());
             arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getLastName());
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
-            arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),toISO8601(simulationParticipant.getResponse().getParticipants().get(0).getBirthDate()));
+            arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getBirthDate());
             if(simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().size()>=2) {
                 LOGGER.info("arguments mayor a 1");
                 arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(), simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
@@ -73,10 +81,4 @@ public class SimulationParticipantMap {
         return arguments;
     }
 
-    public static LocalDateTime toISO8601(Date date) {
-        if(Objects.isNull(date)){
-            return null;
-        }
-        return date.toInstant().atZone(ZONE_ID).toLocalDateTime();
-    }
 }
