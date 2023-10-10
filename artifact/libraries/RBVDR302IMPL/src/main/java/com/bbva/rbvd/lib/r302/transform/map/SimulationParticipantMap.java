@@ -34,7 +34,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_TOTAL_RETURN_AMOUNT.getValue(),simulationParticipant.getResponse().getListRefunds().get(1).getUnit().getAmount());
         }
         if(!CollectionUtils.isEmpty(simulationParticipant.getResponse().getParticipants())){
-            arguments.put(RBVDProperties.FIELD_INSURED_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getParticipantType().getId());
+            arguments.put(RBVDProperties.FIELD_INSURED_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getId());
             arguments.put(RBVDProperties.FIELD_CUSTOMER_DOCUMENT_TYPE.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
             arguments.put(RBVDProperties.FIELD_INSURED_CUSTOMER_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getFirstName());
             arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getLastName());
@@ -43,9 +43,11 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
             arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
 
-            if(simulationParticipant.getResponse().getParticipants().get(0).getId().length()==15){
-                arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.NO_CONSTANT);
-            }else if (StringUtils.isEmpty(simulationParticipant.getResponse().getParticipants().get(0).getId())) {
+            if(StringUtils.isNotEmpty(simulationParticipant.getResponse().getParticipants().get(0).getId())){
+                if(simulationParticipant.getResponse().getParticipants().get(0).getId().length()==15){
+                    arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.NO_CONSTANT);
+                }
+            }else{
                 arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),null);
                 arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.NO_CONSTANT);
             }
@@ -63,6 +65,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_CLIENT_LAST_NAME.getValue(),simulationParticipant.getResponse().getHolder().getLastName());
             arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(),simulationParticipant.getResponse().getHolder().getIdentityDocument().getDocumentNumber());
             arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),null);
+            arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),null);
             arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
         }
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getCreationUser());
