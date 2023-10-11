@@ -66,6 +66,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(),simulationParticipant.getResponse().getHolder().getIdentityDocument().getDocumentNumber());
             arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),null);
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),null);
+            arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),null);
             arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
         }
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getCreationUser());

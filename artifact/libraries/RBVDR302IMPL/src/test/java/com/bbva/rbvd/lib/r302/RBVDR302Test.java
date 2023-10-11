@@ -24,16 +24,12 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.InsuranceProductModalityDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.*;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 
 import org.junit.Before;
@@ -82,11 +78,7 @@ public class RBVDR302Test {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Test.class);
 
 	private InsuranceLifeSimulationBO responseRimac;
-	private List<InsuranceProductModalityDAO> productModalities;
 
-	private InsuranceLifeSimulationBO requestRimac;
-
-	private LifeSimulationDTO input;
 
 	private LifeSimulationDTO requestInput;
 
@@ -112,10 +104,8 @@ public class RBVDR302Test {
 		mockData = MockData.getInstance();
 
 		responseRimac = mockData.getInsuranceRimacSimulationResponse();
-		requestRimac = mockData.getInsuranceRimacSimulationRequest();
 		requestInput = mockData.getInsuranceSimulationRequest();
 
-		input = new LifeSimulationDTO();
 
 		when(this.applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
 
