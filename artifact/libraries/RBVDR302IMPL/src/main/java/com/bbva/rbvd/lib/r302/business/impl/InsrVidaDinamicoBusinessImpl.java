@@ -119,6 +119,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
         payloadStore.setResponseRimac(responseRimac);
         payloadStore.setResponse(response);
+        payloadStore.setCustomer(payloadConfig.getCustomerListASO());
         payloadStore.setDocumentTypeId(documentTypeId);
         payloadStore.setProductInformation(payloadConfig.getProductInformation());
         return payloadStore;

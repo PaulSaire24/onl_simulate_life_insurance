@@ -7,6 +7,7 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import org.junit.Assert;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -57,7 +59,8 @@ public class GifoleBusinessImplTest  {
     public void createGifoleAsoDynamic_OK() throws IOException {
 
         requestCustomerListASO = mockDTO.getCustomerDataResponse();
-
+        responseOut.setParticipants(Collections.singletonList(new ParticipantDTO()));
+        responseOut.getParticipants().get(0).setId("123456789145789");
         com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO  responseGifoleInsuranceRequest =
                 gifoleBusiness.createGifoleAsoDynamic(responseOut, requestCustomerListASO);
 

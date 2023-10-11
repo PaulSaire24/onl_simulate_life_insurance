@@ -95,7 +95,7 @@ public class SimulationStore implements PostSimulation {
 		SimulationParticipantDAO simulationParticipant = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
 									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId());
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
-		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
+		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant,payloadStore.getCustomer());
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
 		insuranceSimulationDao.getInsertSimulationParticipant(argumentForSaveParticipant);

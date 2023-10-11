@@ -1,8 +1,10 @@
 package com.bbva.rbvd.lib.r302.transform.map;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class SimulationParticipantMap {
@@ -18,7 +21,7 @@ public class SimulationParticipantMap {
 
     private SimulationParticipantMap() {super();}
 
-    public static Map<String, Object> createArgumentsForSaveParticipant(SimulationParticipantDAO simulationParticipant){
+    public static Map<String, Object> createArgumentsForSaveParticipant(SimulationParticipantDAO simulationParticipant, CustomerListASO customer){
         LOGGER.info("SimulationParticipantMap start - createArgumentsForSaveParticipant");
         Map<String, Object> arguments = new HashMap<>();
         arguments.put(RBVDProperties.FIELD_INSURANCE_SIMULATION_ID.getValue(),simulationParticipant.getInsuranceSimulationId());
@@ -68,6 +71,12 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),null);
             arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),null);
             arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
+
+            if( Objects.nonNull(customer)){
+                if(StringUtils.isNotEmpty(customer.getData().get(0).getBirthData().getBirthDate())){
+                    arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
+                }
+            }
         }
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),simulationParticipant.getCreationUser());
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),simulationParticipant.getUserAudit());
@@ -75,5 +84,7 @@ public class SimulationParticipantMap {
         LOGGER.info("SimulationParticipantMap end");
         return arguments;
     }
+
+
 
 }

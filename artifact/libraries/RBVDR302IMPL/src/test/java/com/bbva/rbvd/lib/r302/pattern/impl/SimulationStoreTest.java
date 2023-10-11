@@ -1,7 +1,18 @@
 package com.bbva.rbvd.lib.r302.pattern.impl;
 
+import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -49,7 +60,7 @@ public class SimulationStoreTest {
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
         responseInput = mockData.getInsuranceSimulationResponse();
 
-        payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
+        payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO(),new CustomerListASO());
     }
     @Test
     public void endTest() {
@@ -69,6 +80,11 @@ public class SimulationStoreTest {
         payloadStore.getResponse().setProduct(new InsuranceProductDTO());
         payloadStore.getResponse().setTerm(new TermDTO());
         payloadStore.getResponse().getTerm().setNumber(45);
+        payloadStore.setCustomer(new CustomerListASO());
+        CustomerBO customer = new CustomerBO();
+        customer.setBirthData(new BirthDataBO());
+        customer.getBirthData().setBirthDate("2018-04-25");
+        payloadStore.getCustomer().setData(Collections.singletonList(customer));
 
         InstallmentsDTO installments = new InstallmentsDTO();
         installments.setPeriod(new PeriodDTO());
