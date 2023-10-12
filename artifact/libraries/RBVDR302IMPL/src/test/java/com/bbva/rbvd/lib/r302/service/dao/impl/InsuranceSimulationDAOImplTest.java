@@ -36,7 +36,7 @@ public class InsuranceSimulationDAOImplTest {
 
     @Test(expected = BusinessException.class)
     public void getInsertInsuranceSimulationFailCase() {
-        insuranceSimulation.InsertInsuranceSimulation(null);
+        insuranceSimulation.insertInsuranceSimulation(null);
         Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),null);
     }
 
