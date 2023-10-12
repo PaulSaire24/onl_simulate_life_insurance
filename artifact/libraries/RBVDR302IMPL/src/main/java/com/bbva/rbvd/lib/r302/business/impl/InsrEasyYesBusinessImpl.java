@@ -51,12 +51,6 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
                 .productInformation(payloadConfig.getProductInformation())
                 .build();
 
-        /*payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
-        payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
-        payloadStore.setResponseRimac(responseRimac);
-        payloadStore.setResponse(response);
-        payloadStore.setDocumentTypeId( payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId());
-        payloadStore.setProductInformation(payloadConfig.getProductInformation());*/
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes END | payloadStore: {} *****",payloadStore);
         return payloadStore;

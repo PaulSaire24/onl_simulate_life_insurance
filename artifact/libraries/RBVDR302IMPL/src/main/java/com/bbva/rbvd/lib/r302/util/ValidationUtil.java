@@ -56,7 +56,6 @@ public class ValidationUtil {
             return name;
         }
     }
-
     public void docValidationForGifole(IdentityDocumentsBO customerInfo, HolderASO holder, LifeSimulationDTO response){
         IdentityDocumentASO identityDocument = new IdentityDocumentASO();
         DocumentTypeASO documentType = new DocumentTypeASO();
@@ -105,6 +104,6 @@ public class ValidationUtil {
     }
 
     public static boolean isBBVAClient(String clientId){
-        return StringUtils.isNotEmpty(clientId) || !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) && clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
+        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) && clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
     }
 }

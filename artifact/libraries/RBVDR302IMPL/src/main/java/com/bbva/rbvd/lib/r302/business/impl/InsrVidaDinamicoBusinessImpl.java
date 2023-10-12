@@ -125,16 +125,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 .build();
         return payloadStore;
 
-        /*PayloadStore payloadStore = new PayloadStore();
-
-        payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
-        payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
-        payloadStore.setResponseRimac(responseRimac);
-        payloadStore.setResponse(response);
-        payloadStore.setCustomer(payloadConfig.getCustomerListASO());
-        payloadStore.setDocumentTypeId(documentTypeId);
-        payloadStore.setProductInformation(payloadConfig.getProductInformation());
-        return payloadStore;*/
     }
 
     public String getDocumentTypeId(LifeSimulationDTO input){
