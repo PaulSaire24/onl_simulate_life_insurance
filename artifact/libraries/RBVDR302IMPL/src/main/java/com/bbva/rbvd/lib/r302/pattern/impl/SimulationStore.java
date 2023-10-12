@@ -65,11 +65,9 @@ public class SimulationStore implements PostSimulation {
 		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, payloadStore.getCreationUser(), payloadStore.getUserAudit(), payloadStore.getDocumentTypeId());
 		LOGGER.info("***** SimulationStore - saveSimulation - argumentsForSaveSimulation {} *****",argumentsForSaveSimulation);
 
-		insuranceSimulationDao.getInsertInsuranceSimulation(argumentsForSaveSimulation);
+		insuranceSimulationDao.InsertInsuranceSimulation(argumentsForSaveSimulation);
 
 	}
-
-
 	public void saveSimulationProd(PayloadStore payloadStore,BigDecimal insuranceSimulationId) {
 
 		LOGGER.info("***** SimulationStore - saveSimulationProd START - arguments: payloadStore {} *****",payloadStore);
@@ -98,6 +96,6 @@ public class SimulationStore implements PostSimulation {
 		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant,payloadStore.getCustomer());
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
-		insuranceSimulationDao.getInsertSimulationParticipant(argumentForSaveParticipant);
+		insuranceSimulationDao.InsertSimulationParticipant(argumentForSaveParticipant);
 	}
 }

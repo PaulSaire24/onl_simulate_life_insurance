@@ -6,8 +6,8 @@ public class ConstantsUtil {
     public static final String TEXT_UNIT_TYPE = "TEXT";
     public static final String ANNUAL_PERIOD_ID = "ANNUAL";
     public static final String ANNUAL_PERIOD_NAME = "ANUAL";
-    public static final String YES_CONSTANT = "S";
-    public static final String NO_CONSTANT = "N";
+    public static final String YES_S = "S";
+    public static final String NO_N = "N";
     public static final String PLANUNO = "01";
     public static final String PLANDOS = "02";
     public static final String PLANTRES = "03";
@@ -22,5 +22,8 @@ public class ConstantsUtil {
     public static final String DEFAULT_FRECUENCIA ="A";
     public static final int IS_CONTRACTOR =1;
     public static final int IS_INSURED =2;
+    public static final int CLIENT_BANK_LENGHT =8;
+    public static final String REGEX_CONTAIN_ONLY_LETTERS=".*[a-zA-Z].*";
+    public static final String REGEX_CONTAIN_ONLY_NUMBERS=".*[0-9].*";
 
 }

@@ -29,7 +29,6 @@ import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -44,6 +43,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 public class GifoleBusinessImpl implements IGifoleBusiness {
 
@@ -337,11 +338,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         }
 
         if(!CollectionUtils.isEmpty(response.getParticipants())){
-            holder.setIsBankCustomer(true);
-            if(StringUtils.isNotEmpty(response.getParticipants().get(0).getId())){
-               if(response.getParticipants().get(0).getId().length()==15){
-                   holder.setIsBankCustomer(false);
-               }
+            if(isBBVAClient(response.getParticipants().get(0).getId())){
+                holder.setIsBankCustomer(true);
             }else{
                 holder.setIsBankCustomer(false);
             }

@@ -2,7 +2,6 @@ package com.bbva.rbvd.lib.r302.transform.map;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
@@ -15,6 +14,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 
 public class SimulationParticipantMap {
@@ -46,7 +47,14 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getBirthDate());
             arguments.put(RBVDProperties.FIELD_PERSONAL_ID.getValue(),simulationParticipant.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
 
-            customerBbvaType(simulationParticipant.getResponse().getParticipants().get(0),arguments);
+            arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),isBBVAClient(simulationParticipant.getResponse().getParticipants().get(0).getId())? ConstantsUtil.YES_S : ConstantsUtil.NO_N);
+
+            if(StringUtils.isEmpty(simulationParticipant.getResponse().getParticipants().get(0).getId())){
+                arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),null);
+            }
+
+
+
             arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(), simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
 
         }else{
@@ -58,7 +66,7 @@ public class SimulationParticipantMap {
             arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),null);
             arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),null);
             arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),null);
-            arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
+            arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_S);
 
             if(Objects.nonNull(customer) && StringUtils.isNotEmpty(customer.getData().get(0).getBirthData().getBirthDate())){
                 arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
@@ -69,16 +77,5 @@ public class SimulationParticipantMap {
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),ConstantsUtil.IS_INSURED);
         LOGGER.info("SimulationParticipantMap end");
         return arguments;
-    }
-    private static void customerBbvaType(ParticipantDTO participant, Map<String, Object> arguments){
-        if(StringUtils.isNotEmpty(participant.getId())){
-            arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.YES_CONSTANT);
-            if(participant.getId().length()==15){
-                arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.NO_CONSTANT);
-            }
-        }else{
-            arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),null);
-            arguments.put(RBVDProperties.FIELD_IS_BBVA_CUSTOMER_TYPE.getValue(),ConstantsUtil.NO_CONSTANT);
-        }
     }
 }

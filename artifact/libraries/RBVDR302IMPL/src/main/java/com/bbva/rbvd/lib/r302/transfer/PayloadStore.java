@@ -15,8 +15,6 @@ public class PayloadStore {
     private ProductInformationDAO productInformation;
     private CustomerListASO customer;
 
-    public PayloadStore(){}
-
     public PayloadStore(String creationUser, String userAudit, InsuranceLifeSimulationBO responseRimac, LifeSimulationDTO response, String documentTypeId, ProductInformationDAO productInformation, CustomerListASO customer) {
         this.creationUser = creationUser;
         this.userAudit = userAudit;
@@ -94,5 +92,61 @@ public class PayloadStore {
                 ", productInformation=" + productInformation +
                 ", customer=" + customer +
                 '}';
+    }
+
+    public static final class Builder {
+        private String creationUser;
+        private String userAudit;
+        private InsuranceLifeSimulationBO responseRimac;
+        private LifeSimulationDTO response;
+        private String documentTypeId;
+        private ProductInformationDAO productInformation;
+        private CustomerListASO customer;
+
+        private Builder() {
+        }
+
+        public static Builder an() {
+            return new Builder();
+        }
+
+        public Builder creationUser(String creationUser) {
+            this.creationUser = creationUser;
+            return this;
+        }
+
+        public Builder userAudit(String userAudit) {
+            this.userAudit = userAudit;
+            return this;
+        }
+
+        public Builder responseRimac(InsuranceLifeSimulationBO responseRimac) {
+            this.responseRimac = responseRimac;
+            return this;
+        }
+
+        public Builder response(LifeSimulationDTO response) {
+            this.response = response;
+            return this;
+        }
+
+        public Builder documentTypeId(String documentTypeId) {
+            this.documentTypeId = documentTypeId;
+            return this;
+        }
+
+        public Builder productInformation(ProductInformationDAO productInformation) {
+            this.productInformation = productInformation;
+            return this;
+        }
+
+        public Builder customer(CustomerListASO customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        public PayloadStore build() {
+            return new PayloadStore(creationUser, userAudit, responseRimac, response, documentTypeId, productInformation, customer);
+        }
     }
 }

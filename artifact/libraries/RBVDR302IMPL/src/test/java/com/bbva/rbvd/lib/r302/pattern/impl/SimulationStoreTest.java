@@ -4,15 +4,7 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
@@ -49,7 +41,6 @@ public class SimulationStoreTest {
     private MockData mockData;
     private InsuranceLifeSimulationBO responseRimac;
     private LifeSimulationDTO responseInput;
-   // private LifeSimulationDTO requestInput;
     @Before
     public void setUp() throws Exception {
         pisdR350 = mock(PISDR350.class);
@@ -59,8 +50,16 @@ public class SimulationStoreTest {
 
         responseRimac = mockData.getInsuranceRimacSimulationResponse();
         responseInput = mockData.getInsuranceSimulationResponse();
-
-        payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO(),new CustomerListASO());
+        payloadStore = PayloadStore.Builder.an()
+                .creationUser("1234")
+                .userAudit("P02X2021")
+                .responseRimac(responseRimac)
+                .response(responseInput)
+                .documentTypeId("")
+                .productInformation(new ProductInformationDAO())
+                .customer(new CustomerListASO())
+                .build();
+        //payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO(),new CustomerListASO());
     }
     @Test
     public void endTest() {
@@ -81,6 +80,7 @@ public class SimulationStoreTest {
         payloadStore.getResponse().setTerm(new TermDTO());
         payloadStore.getResponse().getTerm().setNumber(45);
         payloadStore.setCustomer(new CustomerListASO());
+
         CustomerBO customer = new CustomerBO();
         customer.setBirthData(new BirthDataBO());
         customer.getBirthData().setBirthDate("2018-04-25");

@@ -114,7 +114,19 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         String documentTypeId = getDocumentTypeId(payloadConfig.getInput());
         //guardar en bd
 
-        PayloadStore payloadStore = new PayloadStore();
+        PayloadStore payloadStore = PayloadStore.Builder.an()
+                .creationUser(payloadConfig.getInput().getCreationUser())
+                .userAudit(payloadConfig.getInput().getCreationUser())
+                .responseRimac(responseRimac)
+                .response(response)
+                .customer(payloadConfig.getCustomerListASO())
+                .documentTypeId(documentTypeId)
+                .productInformation(payloadConfig.getProductInformation())
+                .build();
+        return payloadStore;
+
+        /*PayloadStore payloadStore = new PayloadStore();
+
         payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
         payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
         payloadStore.setResponseRimac(responseRimac);
@@ -122,7 +134,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         payloadStore.setCustomer(payloadConfig.getCustomerListASO());
         payloadStore.setDocumentTypeId(documentTypeId);
         payloadStore.setProductInformation(payloadConfig.getProductInformation());
-        return payloadStore;
+        return payloadStore;*/
     }
 
     public String getDocumentTypeId(LifeSimulationDTO input){
@@ -202,7 +214,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         CoberturaBO coberturaBO = new CoberturaBO();
 
         coberturaBO.setCodigoCobertura(Long.parseLong(coverage.getId()));
-        coberturaBO.setIndSeleccionar(ConstantsUtil.YES_CONSTANT);
+        coberturaBO.setIndSeleccionar(ConstantsUtil.YES_S);
         coberturaBO.setSumaAsegurada(coverage.getInsuredAmount() != null ? coverage.getInsuredAmount().getAmount() : new BigDecimal("0"));
 
         return coberturaBO;

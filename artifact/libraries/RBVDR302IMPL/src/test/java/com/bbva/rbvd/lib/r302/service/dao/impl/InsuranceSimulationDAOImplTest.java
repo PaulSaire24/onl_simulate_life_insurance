@@ -3,7 +3,6 @@ package com.bbva.rbvd.lib.r302.service.dao.impl;
 import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +36,7 @@ public class InsuranceSimulationDAOImplTest {
 
     @Test(expected = BusinessException.class)
     public void getInsertInsuranceSimulationFailCase() {
-        insuranceSimulation.getInsertInsuranceSimulation(null);
+        insuranceSimulation.InsertInsuranceSimulation(null);
         Mockito.verify(pisdR350, Mockito.atLeastOnce()).executeInsertSingleRow(RBVDProperties.QUERY_INSERT_INSURANCE_SIMULATION.getValue(),null);
     }
 
