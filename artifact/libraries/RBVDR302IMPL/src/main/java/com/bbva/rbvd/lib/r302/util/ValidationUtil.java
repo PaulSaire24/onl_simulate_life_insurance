@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Arrays;
 
-import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.*;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_LETTERS;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_NUMBERS;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.CLIENT_BANK_LENGHT;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
