@@ -2,6 +2,8 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
+import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
+import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
@@ -28,9 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,6 +92,21 @@ public class SimulationStoreTest {
         CustomerBO customer = new CustomerBO();
         customer.setBirthData(new BirthDataBO());
         customer.getBirthData().setBirthDate("2018-04-25");
+
+        ContactDetailsBO contactDetail = new ContactDetailsBO();
+        contactDetail.setContact("dgdfg@gmial.com");
+        contactDetail.setContactType(new ContactTypeBO());
+        contactDetail.getContactType().setId("EMAIL");
+
+        ContactDetailsBO contactDetail2 = new ContactDetailsBO();
+        contactDetail2.setContact("960675837");
+        contactDetail2.setContactType(new ContactTypeBO());
+        contactDetail2.getContactType().setId("MOBILE_NUMBER");
+        List<ContactDetailsBO> contactDetailsList = new ArrayList<>();
+
+        contactDetailsList.add(contactDetail);
+        contactDetailsList.add(contactDetail2);
+        customer.setContactDetails(contactDetailsList);
         payloadStore.getCustomer().setData(Collections.singletonList(customer));
 
         InstallmentsDTO installments = new InstallmentsDTO();
