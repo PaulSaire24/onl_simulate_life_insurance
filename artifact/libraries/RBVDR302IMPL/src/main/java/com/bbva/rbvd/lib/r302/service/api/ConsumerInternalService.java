@@ -5,13 +5,10 @@ import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 
 public class ConsumerInternalService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerInternalService.class);
     private final RBVDR301 rbvdR301;
 
     public ConsumerInternalService(RBVDR301 rbvdR301) {

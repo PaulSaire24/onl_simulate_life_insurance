@@ -152,7 +152,7 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
 
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : coverage.getDescripcionCobertura());
-        coverageDTO.setIsSelected(ConstantsUtil.YES_CONSTANT.equalsIgnoreCase(coverage.getPrincipal()));
+        coverageDTO.setIsSelected(ConstantsUtil.YES_S.equalsIgnoreCase(coverage.getPrincipal()));
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));

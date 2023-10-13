@@ -2,6 +2,7 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
@@ -10,8 +11,10 @@ import com.bbva.rbvd.lib.r302.service.dao.ISimulationProductDAO;
 import com.bbva.rbvd.lib.r302.service.dao.impl.InsuranceSimulationDAOImpl;
 import com.bbva.rbvd.lib.r302.service.dao.impl.SimulationProductDAOImpl;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationBean;
+import com.bbva.rbvd.lib.r302.transform.bean.SimulationParticipanBean;
 import com.bbva.rbvd.lib.r302.transform.bean.SimulationProductBean;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationMap;
+import com.bbva.rbvd.lib.r302.transform.map.SimulationParticipantMap;
 import com.bbva.rbvd.lib.r302.transform.map.SimulationProductMap;
 import com.bbva.rbvd.lib.r302.util.ConvertUtil;
 import org.slf4j.Logger;
@@ -35,6 +38,7 @@ public class SimulationStore implements PostSimulation {
 		BigDecimal nextId = this.getInsuranceSimulationId();
 		this.saveSimulation(payloadStore, nextId);
 		this.saveSimulationProd(payloadStore,nextId);
+		this.saveParticipantInformation(payloadStore,nextId);
 	}
 
 
@@ -61,11 +65,9 @@ public class SimulationStore implements PostSimulation {
 		Map<String, Object> argumentsForSaveSimulation = SimulationMap.createArgumentsForSaveSimulation(simulationDAO, payloadStore.getCreationUser(), payloadStore.getUserAudit(), payloadStore.getDocumentTypeId());
 		LOGGER.info("***** SimulationStore - saveSimulation - argumentsForSaveSimulation {} *****",argumentsForSaveSimulation);
 
-		insuranceSimulationDao.getInsertInsuranceSimulation(argumentsForSaveSimulation);
+		insuranceSimulationDao.insertInsuranceSimulation(argumentsForSaveSimulation);
 
 	}
-
-
 	public void saveSimulationProd(PayloadStore payloadStore,BigDecimal insuranceSimulationId) {
 
 		LOGGER.info("***** SimulationStore - saveSimulationProd START - arguments: payloadStore {} *****",payloadStore);
@@ -86,5 +88,14 @@ public class SimulationStore implements PostSimulation {
 		iSimulationProductDAO.insertSimulationProduct(argumentsForSaveSimulationProduct);
 	}
 
-
+	public void saveParticipantInformation(PayloadStore payloadStore,BigDecimal insuranceSimulationId){
+		LOGGER.info("***** SimulationStore - saveParticipantInformation START - arguments: payloadStore {} *****",payloadStore);
+		SimulationParticipantDAO simulationParticipant = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
+									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId());
+		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
+		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant,payloadStore.getCustomer());
+		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
+		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
+		insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
+	}
 }

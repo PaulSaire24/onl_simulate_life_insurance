@@ -42,13 +42,15 @@ public class InsrEasyYesBusinessImpl implements IInsrEasyYesBusiness {
         LifeSimulationDTO response = prepareResponse(this.applicationConfigurationService, payloadConfig, responseRimac);
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes | response trx: {} *****",response);
 
-        PayloadStore payloadStore = new PayloadStore();
-        payloadStore.setCreationUser(payloadConfig.getInput().getCreationUser());
-        payloadStore.setUserAudit(payloadConfig.getInput().getUserAudit());
-        payloadStore.setResponseRimac(responseRimac);
-        payloadStore.setResponse(response);
-        payloadStore.setDocumentTypeId( payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId());
-        payloadStore.setProductInformation(payloadConfig.getProductInformation());
+        PayloadStore payloadStore = PayloadStore.Builder.an()
+                .creationUser(payloadConfig.getInput().getCreationUser())
+                .userAudit(payloadConfig.getInput().getCreationUser())
+                .responseRimac(responseRimac)
+                .response(response)
+                .documentTypeId(payloadConfig.getInput().getHolder().getIdentityDocument().getDocumentType().getId())
+                .productInformation(payloadConfig.getProductInformation())
+                .build();
+
 
         LOGGER.info("***** InsrEasyYesBusinessImpl - doEasyYes END | payloadStore: {} *****",payloadStore);
         return payloadStore;
