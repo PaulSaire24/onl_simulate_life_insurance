@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.EMAIL;
 import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.MOBILE_NUMBER;
-import static com.bbva.rbvd.lib.r302.util.ConvertUtil.validateContactDetails;
+import static com.bbva.rbvd.lib.r302.util.ConvertUtil.getGroupedByTypeContactDetail;
 import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 
@@ -69,7 +69,7 @@ public class SimulationParticipantMap {
 
             if(Objects.nonNull(customer) && StringUtils.isNotEmpty(customer.getData().get(0).getBirthData().getBirthDate())){
                 arguments.put(RBVDProperties.FIELD_CUSTOMER_BIRTH_DATE.getValue(),ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
-                Map<String, String> contactDetails = validateContactDetails(customer.getData().get(0));
+                Map<String, String> contactDetails = getGroupedByTypeContactDetail(customer.getData().get(0));
                 arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(),contactDetails.get(EMAIL));
                 arguments.put(RBVDProperties.FIELD_PHONE_ID.getValue(),contactDetails.get(MOBILE_NUMBER));
             }

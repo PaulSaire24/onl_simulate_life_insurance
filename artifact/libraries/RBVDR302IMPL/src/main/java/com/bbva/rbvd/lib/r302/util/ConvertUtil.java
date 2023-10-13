@@ -22,7 +22,7 @@ public class ConvertUtil {
         dateTime.withZone(DateTimeZone.forID("America/Lima"));
         return dateTime.toDate();
     }
-    public static Map<String, String> validateContactDetails(final CustomerBO customer){
+    public static Map<String, String> getGroupedByTypeContactDetail(final CustomerBO customer){
 
         Map<String, String> contactDetails = customer.getContactDetails().
                 stream().
@@ -31,7 +31,6 @@ public class ConvertUtil {
                         contactDetail -> contactDetail.getContactType().getId(),
                         mapping(ContactDetailsBO::getContact, new SingletonStringCollector())
                 ));
-
         return contactDetails;
     }
 
