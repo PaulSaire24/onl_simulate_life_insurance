@@ -97,7 +97,9 @@ public class CustomerBOBean {
                 contactDetailsBOList.add(contactDetailEmail);
             }
 
+            LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map contactDetailsBOList: {}", contactDetailsBOList);
             customer.setContactDetails(contactDetailsBOList);
+            LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map contactDetailsBOList: {}", customer.getContactDetails());
             /* section contact Details */
 
             LOGGER.info("***** CustomerListAsoBean - executeGetListCustomer End ***** customerBO: {}", customer);
