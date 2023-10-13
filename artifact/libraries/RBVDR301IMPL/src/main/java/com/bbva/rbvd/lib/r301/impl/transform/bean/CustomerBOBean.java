@@ -73,6 +73,7 @@ public class CustomerBOBean {
 
             /* section contact2 type, validate MOBILE_NUMBER */
             LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map getTipoco2: {}", result.getPemsalwu().getTipoco2());
+            LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map getContac2: {}", result.getPemsalwu().getContac2());
             if (StringUtils.isNotEmpty(result.getPemsalwu().getContac2())) {
                 ContactDetailsBO contactDetailMobileNumber = new ContactDetailsBO();
                 contactDetailMobileNumber.setContactDetailId(result.getPemsalwu().getIdenco2());
@@ -85,6 +86,7 @@ public class CustomerBOBean {
 
             /* section contact2 type, validate EMAIL */
             LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map getTipoco3: {}", result.getPemsalwu().getTipoco3());
+            LOGGER.info("***** PISDR008Impl - executeGetCustomerHost  ***** Map getContac2: {}", result.getPemsalwu().getContac3());
             if (StringUtils.isNotEmpty(result.getPemsalwu().getContac3())) {
                 ContactDetailsBO contactDetailEmail = new ContactDetailsBO();
                 contactDetailEmail.setContactDetailId(result.getPemsalwu().getIdenco3());

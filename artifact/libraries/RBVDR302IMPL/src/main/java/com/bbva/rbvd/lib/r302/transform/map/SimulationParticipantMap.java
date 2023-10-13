@@ -52,9 +52,6 @@ public class SimulationParticipantMap {
             if(StringUtils.isEmpty(simulationParticipant.getResponse().getParticipants().get(0).getId())){
                 arguments.put(RBVDProperties.FIELD_CUSTOMER_ENTRY_DATE.getValue(),null);
             }
-
-
-
             arguments.put(RBVDProperties.FIELD_USER_EMAIL_PERSONAL_DESC.getValue(), simulationParticipant.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
 
         }else{
