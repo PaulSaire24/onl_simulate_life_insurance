@@ -63,7 +63,8 @@ public class GifoleBusinessImplTest  {
         responseOut.setParticipants(Collections.singletonList(participant));
 
         requestCustomerListASO = mockDTO.getCustomerDataResponse();
-
+        responseOut.setParticipants(Collections.singletonList(new ParticipantDTO()));
+        responseOut.getParticipants().get(0).setId("123456789145789");
         com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO  responseGifoleInsuranceRequest =
                 gifoleBusiness.createGifoleAsoDynamic(responseOut, requestCustomerListASO);
 

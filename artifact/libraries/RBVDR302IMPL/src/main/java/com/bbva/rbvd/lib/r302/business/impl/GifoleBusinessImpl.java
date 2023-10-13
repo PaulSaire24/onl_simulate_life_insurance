@@ -21,6 +21,7 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.BusinessAgentASO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.GenericAmountASO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.ProductModalityASO;
+import com.bbva.rbvd.dto.connectionapi.aso.common.QuotationASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
@@ -29,7 +30,6 @@ import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -44,6 +44,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.FLAG_GIFOLE_LIB_LIFE;
+import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 public class GifoleBusinessImpl implements IGifoleBusiness {
 
@@ -228,7 +231,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService START *****");
 
-        String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
+        String flag = this.applicationConfigurationService.getProperty(FLAG_GIFOLE_LIB_LIFE);
 
         if(flag.equals("true")){
 
@@ -337,10 +340,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         }
 
         if(!CollectionUtils.isEmpty(response.getParticipants())){
-            holder.setIsBankCustomer(true);
-            if(StringUtils.isEmpty(response.getParticipants().get(0).getId())){
-                holder.setIsBankCustomer(false);
-            }
+            holder.setIsBankCustomer(isBBVAClient(response.getParticipants().get(0).getId()));
         }
 
 
@@ -376,6 +376,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
         gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
+        gifoleInsuranceRequest.setQuotation(new QuotationASO());
+        gifoleInsuranceRequest.getQuotation().setId(response.getExternalSimulationId());
         gifoleInsuranceRequest.setProduct(product);
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);

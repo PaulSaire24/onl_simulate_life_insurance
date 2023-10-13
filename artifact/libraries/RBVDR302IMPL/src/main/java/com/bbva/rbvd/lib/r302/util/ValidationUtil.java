@@ -12,15 +12,19 @@ import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.List;
 
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_LETTERS;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_NUMBERS;
+import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.CLIENT_BANK_LENGHT;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -54,7 +58,6 @@ public class ValidationUtil {
             return name;
         }
     }
-
     public void docValidationForGifole(IdentityDocumentsBO customerInfo, HolderASO holder, LifeSimulationDTO response){
         IdentityDocumentASO identityDocument = new IdentityDocumentASO();
         DocumentTypeASO documentType = new DocumentTypeASO();
@@ -72,7 +75,6 @@ public class ValidationUtil {
         holder.setIdentityDocument(identityDocument);
     }
 
-
     public void docValidationForGifoleDynamic(String documentNumber, String documentType, com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder, LifeSimulationDTO response){
         com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO identityDocument = new com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO();
         GenericTypeASO documentTypeAso = new GenericTypeASO();
@@ -86,9 +88,6 @@ public class ValidationUtil {
         }
         holder.setIdentityDocument(identityDocument);
     }
-
-
-
 
     public Boolean selectValuePlansDescription(String segmentoPlan, LifeSimulationDTO input){
         boolean valuePlus= false;
@@ -106,5 +105,8 @@ public class ValidationUtil {
         return Objects.isNull(externalSimulationId);
     }
 
+    public static boolean isBBVAClient(String clientId){
+        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) && clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
+    }
 
 }

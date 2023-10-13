@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface IInsuranceSimulationDAO {
     BigDecimal getSimulationNextVal();
-
-    void getInsertInsuranceSimulation (Map<String, Object> argumentsForSaveSimulation);
+    void insertInsuranceSimulation(Map<String, Object> argumentsForSaveSimulation);
+    void insertSimulationParticipant(Map<String, Object> argumentForSaveParticipant);
 }

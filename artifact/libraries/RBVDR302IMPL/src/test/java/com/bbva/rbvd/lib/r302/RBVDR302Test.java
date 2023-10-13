@@ -21,24 +21,28 @@ import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.ProductInformationDAO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ContractDetailsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ContactDTO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 
 import com.bbva.rbvd.lib.r301.RBVDR301;
-import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
-import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.business.IInsrEasyYesBusiness;
 import com.bbva.rbvd.lib.r302.impl.RBVDR302Impl;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.mockito.*;
+import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
@@ -46,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +60,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -66,7 +73,7 @@ public class RBVDR302Test {
 	private Context context;
 
 	@InjectMocks
-	private RBVDR302Impl rbvdR302 ;//= new RBVDR302Impl();
+	private RBVDR302Impl rbvdR302 ;
 
 	@Mock
 	private ApplicationConfigurationService applicationConfigurationService;
@@ -74,56 +81,40 @@ public class RBVDR302Test {
 	@Mock
 	private RBVDR301 rbvdr301;
 
+
 	private MockData mockData;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR302Test.class);
 
 	private InsuranceLifeSimulationBO responseRimac;
 
-	private InsuranceLifeSimulationBO requestRimac;
-
-	private LifeSimulationDTO input;
 
 	private LifeSimulationDTO requestInput;
 
-	private LifeSimulationDTO responseInput;
-
 	@Mock
 	private PISDR350 pisdR350;
-
 
 	private TierASO tier;
 
 	private MockDTO mockDTO;
 
-
-	private Map<String, Object> responseQueryGetProductInformation;
-
-
 	private Map<String, Object> responseQueryModalities;
 
 	private Map<String, Object> responseQuerySumCumulus;
 
-	private int executeInsertSingleRow;
-
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
-	private IInsrEasyYesBusiness seguroEasyYes;
-	private PayloadStore payloadStore;
-	private PayloadConfig payloadConfig;
+
 
 	@Before
 	public void setUp() throws Exception {
-		//MockitoAnnotations.initMocks(this);
 		context = new Context();
 		ThreadContext.set(context);
 
 		mockData = MockData.getInstance();
 
 		responseRimac = mockData.getInsuranceRimacSimulationResponse();
-		requestRimac = mockData.getInsuranceRimacSimulationRequest();
 		requestInput = mockData.getInsuranceSimulationRequest();
 
-		input = new LifeSimulationDTO();
 
 		when(this.applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
 
@@ -144,7 +135,6 @@ public class RBVDR302Test {
 		gifoleInsReqAso.setOperationDate("OperationDate");
 		gifoleInsReqAso.setPolicyNumber("PolicyNumber");
 
-		executeInsertSingleRow = 1;
 
 		mockDTO = MockDTO.getInstance();
 		tier = mockDTO.getTierMockResponse();
@@ -160,15 +150,29 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentNumber("14457841");
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("10225879");
 		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
+
+		participantDTO.setParticipantType(new ParticipantTypeDTO());
+		participantDTO.getParticipantType().setId("455");
+		ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+		contractDetail.setContact(new ContactDTO());
+		contractDetail.getContact().setAddress("4555");
+		ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+		contractDetail2.setContact(new ContactDTO());
+		contractDetail2.getContact().setAddress("@gmail.com");
+		List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+		contractDetailsList.add(contractDetail);
+		contractDetailsList.add(contractDetail2);
+		participantDTO.setContactDetails(contractDetailsList);
+		this.requestInput.setTerm(new TermDTO());
+		this.requestInput.getTerm().setNumber(45);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
-
-		//when(applicationConfigurationService.getProperty("ENABLE_GIFOLE_LIFE_ASO")).thenReturn("true");
 
 		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
 		responseQueryGetProductInformation2.put(RBVDProperties.FIELD_OR_FILTER_INSURANCE_PRODUCT_ID.getValue(),new BigDecimal(840));
@@ -196,8 +200,6 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-
-		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -210,6 +212,8 @@ public class RBVDR302Test {
 	@Test
 	public void executeTestParticipantNull() {
 		this.requestInput.getProduct().setId("840");
+		this.requestInput.setTerm(new TermDTO());
+		this.requestInput.getTerm().setNumber(45);
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -237,12 +241,10 @@ public class RBVDR302Test {
 				.thenReturn(responseQueryModalities)
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
+
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-
-
-		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -277,7 +279,7 @@ public class RBVDR302Test {
 	}
 
 	@Test
-	public void executeGetGenerateDynamicLifeTest() {
+	public void executeGetGenerateDynamicLifeTest() throws IOException {
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateDynamicLifeTest...");
 		this.requestInput.getProduct().setId("841");
@@ -290,13 +292,26 @@ public class RBVDR302Test {
 		identityDocumentDTO.setDocumentType(documentTypeDTO);
 
 		ParticipantDTO participantDTO = new ParticipantDTO();
+		participantDTO.setId("PE0074000000446");
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
+		participantDTO.setParticipantType(new ParticipantTypeDTO());
+		participantDTO.getParticipantType().setId("455");
+		ContractDetailsDTO contractDetail = new ContractDetailsDTO();
+		contractDetail.setContact(new ContactDTO());
+		contractDetail.getContact().setAddress("4555");
+		ContractDetailsDTO contractDetail2 = new ContractDetailsDTO();
+		contractDetail2.setContact(new ContactDTO());
+		contractDetail2.getContact().setAddress("@gmail.com");
+		List<ContractDetailsDTO> contractDetailsList = new ArrayList<>();
+		contractDetailsList.add(contractDetail);
+		contractDetailsList.add(contractDetail2);
+		participantDTO.setContactDetails(contractDetailsList);
+		this.requestInput.setTerm(new TermDTO());
+		this.requestInput.getTerm().setNumber(45);
+
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
-
-
-
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -325,11 +340,20 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
+
+		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
+		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
+
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
 
-		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
+		List<InsurancePlanDTO> insurancePlanList = new ArrayList<>();
+		InsurancePlanDTO insurancePlan = new InsurancePlanDTO();
+		insurancePlan.setTotalInstallment(new TotalInstallmentDTO());
+		insurancePlan.getTotalInstallment().setAmount(BigDecimal.valueOf(555484));
+		insurancePlanList.add(insurancePlan);
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -392,8 +416,6 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
-
-		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -478,7 +500,6 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
 
-		payloadStore = new PayloadStore("1234","P02X2021",responseRimac, responseInput, "",new ProductInformationDAO());
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 

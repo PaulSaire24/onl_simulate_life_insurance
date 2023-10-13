@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -67,37 +66,6 @@ public class ListInstallmentPlanTest {
         Assert.assertNotNull(plans);
     }
 
-    /*
-    @Test
-    public void listInstallmentPlanFullTest(){
-        //Agregar comportamientos para el full test
-        LOGGER.info("ListInstallmentPlanTest - Executing listInstallmentPlanFullTest...");
-        String periodicity = "Mensual";
-        PlanBO rimacPlan = cotizacion.getPlan();
-        responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(1L);
-        InsuranceProductModalityDAO modality = new InsuranceProductModalityDAO();
-        modality.setInsuranceCompanyModalityId("533629");
-        modality.setInsuranceModalityName("PLAN 01 VIDADINAMICO");
-        modality.setInsuranceModalityType("01");
-        productModalities.add(modality);
-        applicationConfigurationService.getProperty(String.valueOf(1));
-        //when(period.setId(this.applicationConfigurationService.getProperty(periodicity))).thenReturn(1);
-        List<InsurancePlanDTO> plan1 = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, true, false, false);
-        assertNotNull(plan1.get(0).getName());
-        //modalidad 02
-        responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(0L);
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("INC");
-        productModalities.get(0).setInsuranceModalityType("02");
-        applicationConfigurationService.getProperty(String.valueOf(2));
-        List<InsurancePlanDTO> plan2 = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, true, false);
-        assertEquals(1, plan2.size());
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCoberturas(new ArrayList<>());
-        productModalities.get(0).setInsuranceModalityType("02");
-        applicationConfigurationService.getProperty(String.valueOf(3));
-        List<InsurancePlanDTO> plan = listInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities, responseRimac, false, false, false);
-        assertEquals(1, plan.size());
-
-    }*/
 
     @Test
     public void listInstallmentPlanNullTest() {
