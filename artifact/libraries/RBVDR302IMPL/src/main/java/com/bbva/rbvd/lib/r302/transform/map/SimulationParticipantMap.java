@@ -38,6 +38,7 @@ public class SimulationParticipantMap {
         arguments.put(RBVDProperties.FIELD_CREATION_USER_ID.getValue(),commonsLife.getCreationUser());
         arguments.put(RBVDProperties.FIELD_USER_AUDIT_ID.getValue(),commonsLife.getUserAudit());
         arguments.put(RBVDProperties.FIELD_PARTICIPANT_ROLE_ID.getValue(),commonsLife.getParticipantRoleId());
+        arguments.put(RBVDProperties.FIELD_GENDER_ID.getValue(),commonsLife.getGenderId());
         LOGGER.info("SimulationParticipantMap end");
         return arguments;
     }
