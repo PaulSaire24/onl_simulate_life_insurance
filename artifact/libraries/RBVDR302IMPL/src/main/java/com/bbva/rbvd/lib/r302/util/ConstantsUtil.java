@@ -30,6 +30,9 @@ public class ConstantsUtil {
     public static final String REGEX_CONTAIN_ONLY_NUMBERS=".*[0-9].*";
     public static final String MOBILE_NUMBER="MOBILE_NUMBER";
     public static final String EMAIL="EMAIL";
-
+    public static final String MALE = "MALE";
+    public static final String FEMALE = "FEMALE";
+    public static final String M = "M";
+    public static final String F = "F";
 
 }

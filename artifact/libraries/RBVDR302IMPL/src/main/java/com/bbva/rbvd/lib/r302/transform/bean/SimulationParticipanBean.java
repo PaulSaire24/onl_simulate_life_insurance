@@ -51,6 +51,7 @@ public class SimulationParticipanBean {
             commonsLife.setPersonalId(insuranceSimulation.getParticipants().get(0).getIdentityDocument().getDocumentNumber());
             commonsLife.setUserEmailPersonalDesc(insuranceSimulation.getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
             commonsLife.setIsBbvaCustomerType(isBBVAClient(insuranceSimulation.getParticipants().get(0).getId())? ConstantsUtil.YES_S : ConstantsUtil.NO_N);
+            commonsLife.setGenderId(insuranceSimulation.getParticipants().get(0).getGender().getId().equals(ConstantsUtil.MALE)? ConstantsUtil.M:ConstantsUtil.F);
             if(StringUtils.isEmpty(insuranceSimulation.getParticipants().get(0).getId())){
                 commonsLife.setCustomerEntryDate(null);
             }
@@ -70,6 +71,7 @@ public class SimulationParticipanBean {
                 Map<String, String> contactDetails = getGroupedByTypeContactDetail(customer.getData().get(0));
                 commonsLife.setUserEmailPersonalDesc(contactDetails.get(EMAIL));
                 commonsLife.setPhoneId(contactDetails.get(MOBILE_NUMBER));
+                commonsLife.setGenderId(customer.getData().get(0).getGender().getId().equals(ConstantsUtil.MALE)? ConstantsUtil.M:ConstantsUtil.F);
             }
         }
         commonsLife.setParticipantRoleId(BigDecimal.valueOf(ConstantsUtil.IS_INSURED));

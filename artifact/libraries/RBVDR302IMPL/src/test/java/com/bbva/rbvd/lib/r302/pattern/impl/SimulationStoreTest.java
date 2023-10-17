@@ -4,6 +4,7 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
+import com.bbva.pisd.dto.insurance.bo.GenderBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
@@ -111,6 +112,8 @@ public class SimulationStoreTest {
         contactDetailsList.add(contactDetail);
         contactDetailsList.add(contactDetail2);
         customer.setContactDetails(contactDetailsList);
+        customer.setGender(new GenderBO());
+        customer.getGender().setId("MALE");
         payloadStore.getCustomer().setData(Collections.singletonList(customer));
 
         InstallmentsDTO installments = new InstallmentsDTO();

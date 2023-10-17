@@ -13,16 +13,7 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
-import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
@@ -153,6 +144,9 @@ public class RBVDR302Test {
 		participantDTO.setId("10225879");
 		participantDTO.setBirthDate( new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
+		participantDTO.setGender(new GenderDTO());
+		participantDTO.getGender().setId("MALE");
+
 
 		participantDTO.setParticipantType(new ParticipantTypeDTO());
 		participantDTO.getParticipantType().setId("455");
@@ -295,6 +289,8 @@ public class RBVDR302Test {
 		participantDTO.setId("PE0074000000446");
 		participantDTO.setBirthDate(new Date());
 		participantDTO.setIdentityDocument(identityDocumentDTO);
+		participantDTO.setGender(new GenderDTO());
+		participantDTO.getGender().setId("FEMALE");
 
 		participantDTO.setParticipantType(new ParticipantTypeDTO());
 		participantDTO.getParticipantType().setId("455");
