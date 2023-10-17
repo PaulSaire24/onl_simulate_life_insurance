@@ -5,8 +5,10 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.groupingBy;
@@ -33,7 +35,12 @@ public class ConvertUtil {
                 ));
         return contactDetails;
     }
-
+    public static LocalDate toLocalDate(Date date) {
+        if(!Objects.nonNull(date)){
+            return null;
+        }
+        return date.toInstant().atZone(ConstantsUtil.ZONE_ID).toLocalDate();
+    }
 
 
 }

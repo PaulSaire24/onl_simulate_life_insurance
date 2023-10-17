@@ -5,6 +5,8 @@ import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 
 public class SimulationParticipanBean {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParticipanBean.class);
 
     private SimulationParticipanBean() {
     }
@@ -63,6 +66,7 @@ public class SimulationParticipanBean {
             commonsLife.setUserEmailPersonalDesc(null);
             if(Objects.nonNull(customer) && StringUtils.isNotEmpty(customer.getData().get(0).getBirthData().getBirthDate())){
                 commonsLife.setCustomerBirthDate(ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
+                LOGGER.info("birthDay Customer - {}",ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
                 Map<String, String> contactDetails = getGroupedByTypeContactDetail(customer.getData().get(0));
                 commonsLife.setUserEmailPersonalDesc(contactDetails.get(EMAIL));
                 commonsLife.setPhoneId(contactDetails.get(MOBILE_NUMBER));
