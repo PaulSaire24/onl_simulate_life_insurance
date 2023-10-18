@@ -9,6 +9,7 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanDynamicLife;
 import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanEasyYes;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.google.common.primitives.Booleans;
 import org.junit.Assert;
 import org.junit.Before;
@@ -181,13 +182,13 @@ public class ListInstallmentPlanTest {
         //Coberturas adicionales
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAsegurada(BigDecimal.valueOf(2500));
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setMoneda("PEN");
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setMoneda(ConstantsUtil.CoverageType.PENDING.getKey());
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMinima(BigDecimal.valueOf(1000));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMaxima(BigDecimal.valueOf(5000));
 
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(1).setCondicion("OPC");
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion("BLO");
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(1).setCondicion(ConstantsUtil.CoverageType.OPTIONAL.getKey());
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setCondicion(ConstantsUtil.CoverageType.BLOCKED.getKey());
 
         plans = iListInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities,responseRimac,new ArrayList<>());
         Assert.assertNotNull(plans);

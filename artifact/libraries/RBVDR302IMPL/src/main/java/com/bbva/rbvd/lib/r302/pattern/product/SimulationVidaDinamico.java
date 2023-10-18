@@ -84,7 +84,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 					.filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(ConstantsUtil.REFUND_UNIT_PERCENTAGE))
 					.map(refundsDTO -> refundsDTO.getUnit().getPercentage()).collect(Collectors.toList()).get(0);
 
-			if(percentage.compareTo(BigDecimal.ZERO) == 0){
+			if(percentage.compareTo(BigDecimal.ZERO) == ConstantsUtil.Numero.CERO){
 				InsurancePlanDTO plan01 = new InsurancePlanDTO();
 				plan01.setId(ConstantsUtil.PLANUNO);
 				List<InsurancePlanDTO> plans = new ArrayList<>();
