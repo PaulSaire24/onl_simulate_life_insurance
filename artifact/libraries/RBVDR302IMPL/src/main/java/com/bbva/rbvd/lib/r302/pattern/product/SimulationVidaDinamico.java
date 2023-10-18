@@ -101,4 +101,35 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 	}
 
 
+	public static final class Builder {
+		private PreSimulation preSimulation;
+		private PostSimulation postSimulation;
+		private RBVDR044 rbvdr044;
+
+		private Builder() {
+		}
+
+		public static Builder An() {
+			return new Builder();
+		}
+
+		public Builder withPreSimulation(PreSimulation preSimulation) {
+			this.preSimulation = preSimulation;
+			return this;
+		}
+
+		public Builder withPostSimulation(PostSimulation postSimulation) {
+			this.postSimulation = postSimulation;
+			return this;
+		}
+
+		public Builder withRbvdr044(RBVDR044 rbvdr044) {
+			this.rbvdr044 = rbvdr044;
+			return this;
+		}
+
+		public SimulationVidaDinamico build() {
+			return new SimulationVidaDinamico(preSimulation, postSimulation, rbvdr044);
+		}
+	}
 }

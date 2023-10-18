@@ -6,6 +6,7 @@ import com.bbva.rbvd.lib.r302.pattern.product.SimulationEasyYes;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationParameter;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationStore;
 import com.bbva.rbvd.lib.r302.pattern.product.SimulationVidaDinamico;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,23 +24,21 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 		LifeSimulationDTO response = new LifeSimulationDTO();
 		Simulation simulation;
-		if (input.getProduct().getId().equals("840")) {
-
-			simulation = new SimulationEasyYes(
-					new SimulationParameter(this.pisdR350, this.rbvdR301, this.applicationConfigurationService)
-					, new SimulationStore(this.pisdR350)
-			);
-
-			LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
+		if (ConstantsUtil.Product.EASY_YES.equals(input.getProduct().getId())) {
+			simulation = SimulationEasyYes.Builder.An()
+					.withPreSimulation( SimulationParameter.Builder.an().withPisdR350(this.pisdR350).withRbvdR301(this.rbvdR301).withApplicationConfigurationService(this.applicationConfigurationService).build())
+					.withPostSimulation(new SimulationStore(this.pisdR350))
+					.build();
+						LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
 			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 
-		} else if (input.getProduct().getId().equals("841")) {
+		} else if (ConstantsUtil.Product.DYNAMIC_LIFE.equals(input.getProduct().getId())) {
 
-			simulation = new SimulationVidaDinamico(
-					new SimulationParameter(this.pisdR350, this.rbvdR301, this.applicationConfigurationService),
-					new SimulationStore(this.pisdR350), this.rbvdR044
-			);
-
+			simulation = SimulationVidaDinamico.Builder.An()
+					.withPreSimulation(SimulationParameter.Builder.an().withPisdR350(this.pisdR350).withRbvdR301(this.rbvdR301).withApplicationConfigurationService(this.applicationConfigurationService).build())
+					.withPostSimulation( new SimulationStore(this.pisdR350))
+					.withRbvdr044(this.rbvdR044 )
+					.build();
 			LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico ***** {}", simulation);
 			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 		}

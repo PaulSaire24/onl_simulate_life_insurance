@@ -29,5 +29,40 @@ public class ConstantsUtil {
     public static final String MOBILE_NUMBER="MOBILE_NUMBER";
     public static final String EMAIL="EMAIL";
 
+    public static final class Numero{
+        private Numero() {   }
+        public static final Integer CERO = 0;
+        public static final Integer UNO = 1;
+        public static final Integer DOS = 2;
+        public static final Integer TRES = 3;
+    }
+    public static final class Plan {
+        private Plan() {
+        }
 
+        public static final String UNO = "01";
+        public static final String DOS = "02";
+        public static final String TRES = "03";
+    }
+
+    public enum CoverageType{
+        BLOCKED ("BLO","BLOCKED", "BLOCKED"),
+        OPTIONAL ("", "", "");
+
+        private final String key;
+        private final String id;
+        private final String name;
+        CoverageType(String key, String id, String name) { this.key = key; this.id = id; this.name = name;}
+        public String getKey() { return key; }
+        public String getId() { return id; }
+        public String getName() { return name; }
+    }
+
+    public static final class Product {
+        private Product() {
+        }
+
+        public static final String EASY_YES = "840";
+        public static final String DYNAMIC_LIFE = "841";
+    }
 }

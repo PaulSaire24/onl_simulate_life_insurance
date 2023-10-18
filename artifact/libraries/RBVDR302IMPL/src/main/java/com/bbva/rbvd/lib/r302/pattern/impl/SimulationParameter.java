@@ -41,13 +41,10 @@ public class SimulationParameter implements PreSimulation {
 	private final RBVDR301 rbvdR301;
 	private final ApplicationConfigurationService applicationConfigurationService;
 
-	private final com.bbva.rbvd.lib.r302.util.ValidationUtil validationUtil;
-
 	public SimulationParameter(PISDR350 pisdR350,RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		this.applicationConfigurationService = applicationConfigurationService;
 		this.pisdR350 = pisdR350;
 		this.rbvdR301 = rbvdR301;
-		this.validationUtil = new ValidationUtil();
 	}
 
 
@@ -129,6 +126,7 @@ public class SimulationParameter implements PreSimulation {
 		String segmentoLifePlan2 = applicationConfigurationService.getProperty("segmentoLifePlan2");
 		String segmentoLifePlan3 = applicationConfigurationService.getProperty("segmentoLifePlan3");
 
+		ValidationUtil validationUtil = new ValidationUtil();
 		Boolean seglifePlan1 = validationUtil.selectValuePlansDescription(segmentoLifePlan1,input);
 		Boolean seglifePlan2 = validationUtil.selectValuePlansDescription(segmentoLifePlan2,input);
 		Boolean seglifePlan3 = validationUtil.selectValuePlansDescription(segmentoLifePlan3,input);
@@ -232,4 +230,36 @@ public class SimulationParameter implements PreSimulation {
 		return responseTierASO;
 	}
 
+
+	public static final class Builder {
+		private PISDR350 pisdR350;
+		private RBVDR301 rbvdR301;
+		private ApplicationConfigurationService applicationConfigurationService;
+
+		private Builder() {
+		}
+
+		public static Builder an() {
+			return new Builder();
+		}
+
+		public Builder withPisdR350(PISDR350 pisdR350) {
+			this.pisdR350 = pisdR350;
+			return this;
+		}
+
+		public Builder withRbvdR301(RBVDR301 rbvdR301) {
+			this.rbvdR301 = rbvdR301;
+			return this;
+		}
+
+		public Builder withApplicationConfigurationService(ApplicationConfigurationService applicationConfigurationService) {
+			this.applicationConfigurationService = applicationConfigurationService;
+			return this;
+		}
+
+		public SimulationParameter build() {
+			return new SimulationParameter(pisdR350, rbvdR301, applicationConfigurationService);
+		}
+	}
 }
