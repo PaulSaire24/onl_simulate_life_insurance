@@ -19,6 +19,7 @@ import java.util.Objects;
 import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.EMAIL;
 import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.MOBILE_NUMBER;
 import static com.bbva.rbvd.lib.r302.util.ConvertUtil.getGroupedByTypeContactDetail;
+import static com.bbva.rbvd.lib.r302.util.ConvertUtil.toLocalDate;
 import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
 
 
@@ -35,7 +36,7 @@ public class SimulationParticipanBean {
         commonsLife.setInsuredAmount(getInsuredAmount(insuranceSimulation.getInsuredAmount()));
         commonsLife.setPeriodNumber(getPeriodNumber(insuranceSimulation.getTerm()));
         commonsLife.setPeriodType("A");
-        commonsLife.setCustomerEntryDate(new Date());
+        commonsLife.setCustomerEntryDate(toLocalDate(new Date()));
 
         if(!CollectionUtils.isEmpty(insuranceSimulation.getListRefunds())){
             commonsLife.setRefundPer(insuranceSimulation.getListRefunds().get(0).getUnit().getPercentage());
@@ -49,7 +50,7 @@ public class SimulationParticipanBean {
             commonsLife.setInsuredCustomerName(insuranceSimulation.getParticipants().get(0).getFirstName());
             commonsLife.setClientLastName(insuranceSimulation.getParticipants().get(0).getLastName());
             commonsLife.setPhoneId(insuranceSimulation.getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
-            commonsLife.setCustomerBirthDate(insuranceSimulation.getParticipants().get(0).getBirthDate());
+            commonsLife.setCustomerBirthDate(toLocalDate(insuranceSimulation.getParticipants().get(0).getBirthDate()));
             commonsLife.setPersonalId(insuranceSimulation.getParticipants().get(0).getIdentityDocument().getDocumentNumber());
             commonsLife.setUserEmailPersonalDesc(insuranceSimulation.getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
             commonsLife.setIsBbvaCustomerType(isBBVAClient(insuranceSimulation.getParticipants().get(0).getId())? ConstantsUtil.YES_S : ConstantsUtil.NO_N);
@@ -68,7 +69,7 @@ public class SimulationParticipanBean {
             commonsLife.setIsBbvaCustomerType(ConstantsUtil.YES_S);
             commonsLife.setUserEmailPersonalDesc(null);
             if(Objects.nonNull(customer) && StringUtils.isNotEmpty(customer.getData().get(0).getBirthData().getBirthDate())){
-                commonsLife.setCustomerBirthDate(ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
+                commonsLife.setCustomerBirthDate(toLocalDate(ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate())));
                 LOGGER.info("birthDay Customer - {}",ModifyQuotationRimac.ParseFecha(customer.getData().get(0).getBirthData().getBirthDate()));
                 Map<String, String> contactDetails = getGroupedByTypeContactDetail(customer.getData().get(0));
                 commonsLife.setUserEmailPersonalDesc(contactDetails.get(EMAIL));
