@@ -1,6 +1,8 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
@@ -30,12 +32,8 @@ public class SimulationParticipanBean {
         CommonsLifeDAO commonsLife = new CommonsLifeDAO();
         commonsLife.setInsuranceSimulationId(insuranceSimulationId);
         commonsLife.setInsuranceProductId(productId);
-        if(Objects.nonNull(insuranceSimulation.getInsuredAmount())){
-            commonsLife.setInsuredAmount(insuranceSimulation.getInsuredAmount().getAmount());
-        }
-        if(Objects.nonNull(insuranceSimulation.getTerm())){
-            commonsLife.setPeriodNumber(BigDecimal.valueOf(insuranceSimulation.getTerm().getNumber()));
-        }
+        commonsLife.setInsuredAmount(getInsuredAmount(insuranceSimulation.getInsuredAmount()));
+        commonsLife.setPeriodNumber(getPeriodNumber(insuranceSimulation.getTerm()));
         commonsLife.setPeriodType("A");
         commonsLife.setCustomerEntryDate(new Date());
 
@@ -83,5 +81,11 @@ public class SimulationParticipanBean {
         commonsLife.setUserAudit(userAudit);
 
         return  commonsLife;
+    }
+    private static BigDecimal getInsuredAmount(InsuredAmountDTO insuredAmount){
+        return Objects.nonNull(insuredAmount)? insuredAmount.getAmount():null;
+    }
+    private static BigDecimal getPeriodNumber(TermDTO term){
+        return Objects.nonNull(term)? BigDecimal.valueOf(term.getNumber()):null;
     }
 }
