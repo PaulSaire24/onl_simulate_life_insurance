@@ -41,6 +41,4 @@ public class ConvertUtil {
         }
         return date.toInstant().atZone(ConstantsUtil.ZONE_ID).toLocalDate();
     }
-
-
 }

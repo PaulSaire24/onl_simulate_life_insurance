@@ -376,9 +376,6 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
         gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
-        gifoleInsuranceRequest.setQuotation(new QuotationASO());
-        gifoleInsuranceRequest.getQuotation().setId(response.getExternalSimulationId());
-        LOGGER.info("GIFOLE setQuotation {}", gifoleInsuranceRequest.getQuotation());
         gifoleInsuranceRequest.setProduct(product);
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
