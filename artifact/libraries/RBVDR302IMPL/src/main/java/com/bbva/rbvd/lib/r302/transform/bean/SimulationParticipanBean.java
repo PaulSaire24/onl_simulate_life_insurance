@@ -30,8 +30,12 @@ public class SimulationParticipanBean {
         CommonsLifeDAO commonsLife = new CommonsLifeDAO();
         commonsLife.setInsuranceSimulationId(insuranceSimulationId);
         commonsLife.setInsuranceProductId(productId);
-        commonsLife.setInsuredAmount(insuranceSimulation.getInsuredAmount().getAmount());
-        commonsLife.setPeriodNumber(BigDecimal.valueOf(insuranceSimulation.getTerm().getNumber()));
+        if(Objects.nonNull(insuranceSimulation.getInsuredAmount())){
+            commonsLife.setInsuredAmount(insuranceSimulation.getInsuredAmount().getAmount());
+        }
+        if(Objects.nonNull(insuranceSimulation.getTerm())){
+            commonsLife.setPeriodNumber(BigDecimal.valueOf(insuranceSimulation.getTerm().getNumber()));
+        }
         commonsLife.setPeriodType("A");
         commonsLife.setCustomerEntryDate(new Date());
 
