@@ -48,7 +48,7 @@ public class SimulationParticipanBean {
             commonsLife.setInsuredId(insuranceSimulation.getParticipants().get(0).getId());
             commonsLife.setCustomerDocumentType(insuranceSimulation.getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
             commonsLife.setInsuredCustomerName(insuranceSimulation.getParticipants().get(0).getFirstName());
-            commonsLife.setClientLastName(insuranceSimulation.getParticipants().get(0).getLastName());
+            commonsLife.setClientLastName(insuranceSimulation.getParticipants().get(0).getLastName().concat(ConstantsUtil.DELIMITER).concat(insuranceSimulation.getParticipants().get(0).getSecondLastName()));
             commonsLife.setPhoneId(insuranceSimulation.getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
             commonsLife.setCustomerBirthDate(toLocalDate(insuranceSimulation.getParticipants().get(0).getBirthDate()));
             commonsLife.setPersonalId(insuranceSimulation.getParticipants().get(0).getIdentityDocument().getDocumentNumber());
@@ -62,7 +62,7 @@ public class SimulationParticipanBean {
             commonsLife.setInsuredId(insuranceSimulation.getHolder().getId());
             commonsLife.setCustomerDocumentType(insuranceSimulation.getHolder().getIdentityDocument().getDocumentType().getId());
             commonsLife.setInsuredCustomerName(insuranceSimulation.getHolder().getFirstName());
-            commonsLife.setClientLastName(insuranceSimulation.getHolder().getLastName());
+            commonsLife.setClientLastName(insuranceSimulation.getHolder().getLastName().replace(" ",ConstantsUtil.DELIMITER));
             commonsLife.setPhoneId(null);
             commonsLife.setCustomerBirthDate(null);
             commonsLife.setPersonalId(insuranceSimulation.getHolder().getIdentityDocument().getDocumentNumber());

@@ -34,5 +34,6 @@ public class ConstantsUtil {
     public static final String FEMALE = "FEMALE";
     public static final String M = "M";
     public static final String F = "F";
+    public static final String DELIMITER = "|";
 
 }

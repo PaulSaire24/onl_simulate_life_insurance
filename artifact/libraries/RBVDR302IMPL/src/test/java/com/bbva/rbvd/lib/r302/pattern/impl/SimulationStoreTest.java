@@ -89,6 +89,7 @@ public class SimulationStoreTest {
         payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentType(new DocumentTypeDTO());
         payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId("45454");
         payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentNumber("45555");
+        payloadStore.getResponse().getHolder().setLastName("HHHH");
         payloadStore.getResponse().setProduct(new InsuranceProductDTO());
         payloadStore.getResponse().setTerm(new TermDTO());
         payloadStore.getResponse().getTerm().setNumber(45);

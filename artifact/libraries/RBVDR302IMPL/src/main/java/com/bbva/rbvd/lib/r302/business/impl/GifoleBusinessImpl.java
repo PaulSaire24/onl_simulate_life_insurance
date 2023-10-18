@@ -21,7 +21,6 @@ import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.BusinessAgentASO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.GenericAmountASO;
 import com.bbva.rbvd.dto.connectionapi.aso.common.ProductModalityASO;
-import com.bbva.rbvd.dto.connectionapi.aso.common.QuotationASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
