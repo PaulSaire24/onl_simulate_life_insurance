@@ -2,7 +2,7 @@ package com.bbva.rbvd.lib.r302.pattern.impl;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationDAO;
-import com.bbva.rbvd.dto.lifeinsrc.dao.CommonsLifeDAO;
+import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationProductDAO;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.pattern.PostSimulation;
@@ -90,10 +90,10 @@ public class SimulationStore implements PostSimulation {
 
 	public void saveParticipantInformation(PayloadStore payloadStore,BigDecimal insuranceSimulationId){
 		LOGGER.info("***** SimulationStore - saveParticipantInformation START - arguments: payloadStore {} *****",payloadStore);
-		CommonsLifeDAO commonsLife  = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
+		SimulationParticipantDAO simulationParticipant  = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
 									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId(),payloadStore.getCustomer());
-		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",commonsLife);
-		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(commonsLife);
+		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
+		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
 		IInsuranceSimulationDAO insuranceSimulationDao= new InsuranceSimulationDAOImpl(pisdR350);
 		insuranceSimulationDao.insertSimulationParticipant(argumentForSaveParticipant);
