@@ -134,7 +134,7 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
         if(ConstantsUtil.Plan.TRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan3;
         }
-        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && ConstantsUtil.PLANTRES.equals(modalityDao.getInsuranceModalityType())){
+        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && ConstantsUtil.Plan.TRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend=true;
         }
 

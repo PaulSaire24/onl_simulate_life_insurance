@@ -22,9 +22,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_LETTERS;
-import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.REGEX_CONTAIN_ONLY_NUMBERS;
-import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.CLIENT_BANK_LENGHT;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -106,7 +103,7 @@ public class ValidationUtil {
     }
 
     public static boolean isBBVAClient(String clientId){
-        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(REGEX_CONTAIN_ONLY_LETTERS) && clientId.matches(REGEX_CONTAIN_ONLY_NUMBERS) && clientId.length()>CLIENT_BANK_LENGHT);
+        return StringUtils.isNotEmpty(clientId) && !(clientId.matches(ConstantsUtil.RegularExpression.CONTAIN_ONLY_LETTERS) && clientId.matches(ConstantsUtil.RegularExpression.CONTAIN_ONLY_NUMBERS) && clientId.length()>ConstantsUtil.CLIENT_BANK_LENGHT);
     }
 
 }

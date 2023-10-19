@@ -39,7 +39,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 
 	@Override
 	public LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
-		LOGGER.info("***** SimulationVidaDinamico - start START | input {} *****",input);
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico - start START | input {} *****",input);
 
 		validatePlanWithRefundPercentage(input);
 
@@ -51,24 +51,13 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		String simulationId = input.getExternalSimulationId();
 		//ejecucion servicio rimac
 		PayloadStore payloadStore = seguroVidaDinamico.doDynamicLife(payloadConfig);
-		LOGGER.info("***** SimulationVidaDinamico - start | payloadStore {} *****",payloadStore);
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start() -  payloadStore {} *****",payloadStore);
+		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
 
 		if(ValidationUtil.isFirstCalled(simulationId)){
 			this.getPostSimulation().end(payloadStore);
-		}
 
-		//Actualizacion tipo documento en salida trx
-		if(!CollectionUtils.isEmpty(input.getParticipants())){
-			payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
-		}else{
-			payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
-		}
-
-		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico.start()  ***** Response: {}", payloadStore.getResponse());
-
-
-		//LLAMADA A GIFOLE!
-		if(ValidationUtil.isFirstCalled(simulationId)){
+			//LLAMADA A GIFOLE!
 			IGifoleBusiness iGifoleBusiness = new GifoleBusinessImpl(rbvdR301, applicationConfigurationService);
 			iGifoleBusiness.callGifoleDynamicService(payloadStore.getResponse(), payloadConfig.getCustomerListASO(), this.rbvdr044);
 		}
@@ -86,13 +75,13 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 
 			if(percentage.compareTo(BigDecimal.ZERO) == ConstantsUtil.Numero.CERO){
 				InsurancePlanDTO plan01 = new InsurancePlanDTO();
-				plan01.setId(ConstantsUtil.PLANUNO);
+				plan01.setId(ConstantsUtil.Plan.UNO);
 				List<InsurancePlanDTO> plans = new ArrayList<>();
 				plans.add(plan01);
 				input.getProduct().setPlans(plans);
 			}else{
 				InsurancePlanDTO plan02 = new InsurancePlanDTO();
-				plan02.setId(ConstantsUtil.PLANDOS);
+				plan02.setId(ConstantsUtil.Plan.DOS);
 				List<InsurancePlanDTO> plans = new ArrayList<>();
 				plans.add(plan02);
 				input.getProduct().setPlans(plans);
