@@ -90,8 +90,7 @@ public class SimulationStore implements PostSimulation {
 
 	public void saveParticipantInformation(PayloadStore payloadStore,BigDecimal insuranceSimulationId){
 		LOGGER.info("***** SimulationStore - saveParticipantInformation START - arguments: payloadStore {} *****",payloadStore);
-		SimulationParticipantDAO simulationParticipant  = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore.getResponse(),
-									payloadStore.getCreationUser(),payloadStore.getUserAudit(),payloadStore.getProductInformation().getInsuranceProductId(),payloadStore.getCustomer());
+		SimulationParticipantDAO simulationParticipant  = SimulationParticipanBean.createSimulationParticipant(insuranceSimulationId,payloadStore);
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - SimulationParticipantDAO {} *****",simulationParticipant);
 		Map<String, Object> argumentForSaveParticipant = SimulationParticipantMap.createArgumentsForSaveParticipant(simulationParticipant);
 		LOGGER.info("***** SimulationStore - saveParticipantInformation - argumentForSaveParticipant {} *****",argumentForSaveParticipant);
