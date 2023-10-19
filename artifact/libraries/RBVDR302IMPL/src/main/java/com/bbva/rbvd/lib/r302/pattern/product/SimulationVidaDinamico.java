@@ -1,7 +1,6 @@
 package com.bbva.rbvd.lib.r302.pattern.product;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -14,16 +13,9 @@ import com.bbva.rbvd.lib.r302.pattern.PreSimulation;
 import com.bbva.rbvd.lib.r302.pattern.impl.SimulationDecorator;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class SimulationVidaDinamico extends SimulationDecorator {

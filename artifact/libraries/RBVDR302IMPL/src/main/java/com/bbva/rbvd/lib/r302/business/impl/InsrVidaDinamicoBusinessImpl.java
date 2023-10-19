@@ -1,8 +1,10 @@
 package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.*;
+import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
@@ -10,19 +12,18 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.CotizacionBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
-import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
 import com.bbva.rbvd.lib.r301.RBVDR301;
+import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r302.service.api.ConsumerExternalService;
 import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
-import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceBean;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuredAmountBean;
-import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
+import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.list.impl.ListInstallmentPlanDynamicLife;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
@@ -31,7 +32,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
@@ -97,7 +102,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig.toString());
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {0} ", payloadConfig);
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
         validatePlanWithRefundPercentage(payloadConfig.getInput());
@@ -239,9 +244,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMinima() != null &&
                 responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMaxima() != null){
 
-            InsuranceLimitsDTO insuranceLimits = InsuredAmountBean.getInsuranceLimitsDTO(responseRimac.getPayload().getCotizaciones().get(0).getPlan());
-
-            return insuranceLimits;
+            return InsuredAmountBean.getInsuranceLimitsDTO(responseRimac.getPayload().getCotizaciones().get(0).getPlan());
 
         } else {
             return null;
