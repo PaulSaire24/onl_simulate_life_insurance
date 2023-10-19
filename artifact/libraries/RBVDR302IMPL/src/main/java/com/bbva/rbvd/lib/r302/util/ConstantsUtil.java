@@ -1,7 +1,9 @@
 package com.bbva.rbvd.lib.r302.util;
 
-public class ConstantsUtil {
+import java.time.ZoneId;
 
+public class ConstantsUtil {
+    public static final ZoneId ZONE_ID = ZoneId.of("GMT");
     public static final String AMOUNT_UNIT_TYPE = "AMOUNT";
     public static final String TEXT_UNIT_TYPE = "TEXT";
     public static final String ANNUAL_PERIOD_ID = "ANNUAL";
@@ -31,6 +33,11 @@ public class ConstantsUtil {
         public static final String CONTAIN_ONLY_LETTERS=".*[a-zA-Z].*";
         public static final String CONTAIN_ONLY_NUMBERS=".*[0-9].*";
     }
+    public static final String MALE = "MALE";
+    public static final String FEMALE = "FEMALE";
+    public static final String M = "M";
+    public static final String F = "F";
+    public static final String DELIMITER = "|";
 
     public static final class Numero{
         private Numero() {   }
