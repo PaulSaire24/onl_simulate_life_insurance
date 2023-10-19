@@ -54,7 +54,7 @@ public class QuotationRimac {
 
         DatoParticularBO datos = new DatoParticularBO();
         List<DatoParticularBO> datosParticulares = new ArrayList<>();
-        datos.setEtiqueta(ConstantsUtil.DATO_PARTICULAR_CUMULO_CLIENTE);
+        datos.setEtiqueta(ConstantsUtil.PARTICULAR_DATA_CLIENT_CUMULUS);
         datos.setCodigo("");
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         datosParticulares.add(datos);

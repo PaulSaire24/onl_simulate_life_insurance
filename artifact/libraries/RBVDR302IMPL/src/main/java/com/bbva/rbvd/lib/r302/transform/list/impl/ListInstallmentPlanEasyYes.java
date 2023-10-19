@@ -125,16 +125,16 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
     private Boolean setValueRecommended(InsuranceProductModalityDAO modalityDao, Boolean seglifePlan1,
                                         Boolean seglifePlan2, Boolean seglifePlan3){
         Boolean checkRecommend = false;
-        if(ConstantsUtil.PLANUNO.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.Plan.UNO.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan1;
         }
-        if(ConstantsUtil.PLANDOS.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.Plan.DOS.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan2;
         }
-        if(ConstantsUtil.PLANTRES.equals(modalityDao.getInsuranceModalityType())){
+        if(ConstantsUtil.Plan.TRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend = seglifePlan3;
         }
-        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && ConstantsUtil.PLANTRES.equals(modalityDao.getInsuranceModalityType())){
+        if(!seglifePlan1 && !seglifePlan2 && !seglifePlan3 && ConstantsUtil.Plan.TRES.equals(modalityDao.getInsuranceModalityType())){
             checkRecommend=true;
         }
 
