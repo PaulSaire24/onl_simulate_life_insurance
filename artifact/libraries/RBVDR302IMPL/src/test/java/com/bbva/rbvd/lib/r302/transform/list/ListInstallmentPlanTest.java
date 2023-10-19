@@ -182,7 +182,7 @@ public class ListInstallmentPlanTest {
         //Coberturas adicionales
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAsegurada(BigDecimal.valueOf(2500));
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setMoneda(ConstantsUtil.CoverageType.PENDING.getKey());
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setMoneda(ConstantsUtil.Currency.PEN);
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMinima(BigDecimal.valueOf(1000));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCoberturas().get(0).setSumaAseguradaMaxima(BigDecimal.valueOf(5000));

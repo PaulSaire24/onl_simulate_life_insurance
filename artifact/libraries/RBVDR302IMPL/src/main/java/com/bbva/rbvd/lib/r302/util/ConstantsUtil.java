@@ -36,6 +36,7 @@ public class ConstantsUtil {
         private Numero() {   }
         public static final Integer CERO = 0;
     }
+
     public static final class Plan {
         private Plan() {
         }
@@ -45,11 +46,16 @@ public class ConstantsUtil {
         public static final String TRES = "03";
     }
 
+    public static final class Currency {
+        private Currency() {
+        }
+
+        public static final String PEN = "PEN";
+    }
+
     public enum CoverageType{
         BLOCKED ("BLO","BLO", "BLOCKED"),
-        OPTIONAL ("OPC", "OPC", "OPTIONAL"),
-        PENDING ("PEN", "PEN", "PENDING");
-
+        OPTIONAL ("OPC", "OPC", "OPTIONAL");
         private final String key;
         private final String id;
         private final String name;

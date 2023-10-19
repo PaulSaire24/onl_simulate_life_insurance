@@ -38,12 +38,9 @@ public class ValidationUtil {
         return rows.stream().map(InsuranceProductModalityBean::createInsuranceProductModalityDAO).collect(toList());
     }
 
-    public static void validateParticipant(LifeSimulationDTO input, PayloadConfig payloadConfig){
+    public static Boolean isParticipant(LifeSimulationDTO input){
 
-        if(!CollectionUtils.isEmpty(input.getParticipants())){
-            LOGGER.info("***** SimulationParameter: participan is not null *****");
-            payloadConfig.setParticipant(true);
-        }
+        return !CollectionUtils.isEmpty(input.getParticipants());
     }
 
 

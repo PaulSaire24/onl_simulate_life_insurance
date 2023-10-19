@@ -2,10 +2,7 @@ package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
@@ -22,6 +19,7 @@ import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.business.IInsrDynamicLifeBusiness;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceBean;
+import com.bbva.rbvd.lib.r302.transform.bean.InsuredAmountBean;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.transform.bean.ModifyQuotationRimac;
 import com.bbva.rbvd.lib.r302.transform.bean.QuotationRimac;
@@ -102,6 +100,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} *****",payloadConfig.toString());
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
+        validatePlanWithRefundPercentage(payloadConfig.getInput());
+        payloadConfig.setParticipant(ValidationUtil.isParticipant(payloadConfig.getInput()));
 
         if(ValidationUtil.isFirstCalled(payloadConfig.getInput().getExternalSimulationId())) {
             responseRimac = this.executeQuotationRimacService(payloadConfig);
@@ -115,7 +115,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         String documentTypeId = getDocumentTypeId(payloadConfig.getInput());
 
         //Actualizacion tipo documento en salida trx
-        if(!CollectionUtils.isEmpty(payloadConfig.getInput().getParticipants())){
+        if(payloadConfig.isParticipant()){
             response.getParticipants().get(0).getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
         }else{
             response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
@@ -239,24 +239,34 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                 responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMinima() != null &&
                 responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMaxima() != null){
 
-            InsuranceLimitsDTO insuranceLimits = new InsuranceLimitsDTO();
-
-            InsuredAmountDTO sumaAseguradaMinima = new InsuredAmountDTO();
-            InsuredAmountDTO sumaAseguradaMaxima = new InsuredAmountDTO();
-
-            sumaAseguradaMinima.setAmount(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMinima());
-            sumaAseguradaMinima.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
-
-            sumaAseguradaMaxima.setAmount(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getSumaAseguradaMaxima());
-            sumaAseguradaMaxima.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
-
-            insuranceLimits.setMinimumAmount(sumaAseguradaMinima);
-            insuranceLimits.setMaximumAmount(sumaAseguradaMaxima);
+            InsuranceLimitsDTO insuranceLimits = InsuredAmountBean.getInsuranceLimitsDTO(responseRimac.getPayload().getCotizaciones().get(0).getPlan());
 
             return insuranceLimits;
 
         } else {
             return null;
+        }
+    }
+
+    private static void validatePlanWithRefundPercentage(LifeSimulationDTO input) {
+        if(input.getListRefunds() != null && CollectionUtils.isEmpty(input.getProduct().getPlans())){
+            BigDecimal percentage = input.getListRefunds().stream()
+                    .filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(ConstantsUtil.REFUND_UNIT_PERCENTAGE))
+                    .map(refundsDTO -> refundsDTO.getUnit().getPercentage()).collect(Collectors.toList()).get(0);
+
+            if(percentage.compareTo(BigDecimal.ZERO) == ConstantsUtil.Numero.CERO){
+                InsurancePlanDTO plan01 = new InsurancePlanDTO();
+                plan01.setId(ConstantsUtil.Plan.UNO);
+                List<InsurancePlanDTO> plans = new ArrayList<>();
+                plans.add(plan01);
+                input.getProduct().setPlans(plans);
+            }else{
+                InsurancePlanDTO plan02 = new InsurancePlanDTO();
+                plan02.setId(ConstantsUtil.Plan.DOS);
+                List<InsurancePlanDTO> plans = new ArrayList<>();
+                plans.add(plan02);
+                input.getProduct().setPlans(plans);
+            }
         }
     }
 

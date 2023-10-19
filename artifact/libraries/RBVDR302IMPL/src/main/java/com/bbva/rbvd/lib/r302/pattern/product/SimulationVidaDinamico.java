@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bbva.rbvd.lib.r302.util.ValidationUtil.validateParticipant;
 
 public class SimulationVidaDinamico extends SimulationDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
@@ -41,10 +40,7 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 	public LifeSimulationDTO start(LifeSimulationDTO input, RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
 		LOGGER.info("***** RBVDR302Impl - SimulationVidaDinamico - start START | input {} *****",input);
 
-		validatePlanWithRefundPercentage(input);
-
 		PayloadConfig payloadConfig = this.getPreSimulation().getConfig(input);
-		validateParticipant(input,payloadConfig);
 
 		IInsrDynamicLifeBusiness seguroVidaDinamico = new InsrVidaDinamicoBusinessImpl(rbvdR301, applicationConfigurationService);
 
@@ -67,27 +63,8 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		return payloadStore.getResponse();
 	}
 
-	private static void validatePlanWithRefundPercentage(LifeSimulationDTO input) {
-		if(input.getListRefunds() != null && CollectionUtils.isEmpty(input.getProduct().getPlans())){
-			BigDecimal percentage = input.getListRefunds().stream()
-					.filter(refundsDTO -> refundsDTO.getUnit().getUnitType().equals(ConstantsUtil.REFUND_UNIT_PERCENTAGE))
-					.map(refundsDTO -> refundsDTO.getUnit().getPercentage()).collect(Collectors.toList()).get(0);
 
-			if(percentage.compareTo(BigDecimal.ZERO) == ConstantsUtil.Numero.CERO){
-				InsurancePlanDTO plan01 = new InsurancePlanDTO();
-				plan01.setId(ConstantsUtil.Plan.UNO);
-				List<InsurancePlanDTO> plans = new ArrayList<>();
-				plans.add(plan01);
-				input.getProduct().setPlans(plans);
-			}else{
-				InsurancePlanDTO plan02 = new InsurancePlanDTO();
-				plan02.setId(ConstantsUtil.Plan.DOS);
-				List<InsurancePlanDTO> plans = new ArrayList<>();
-				plans.add(plan02);
-				input.getProduct().setPlans(plans);
-			}
-		}
-	}
+
 
 
 	public static final class Builder {
