@@ -81,7 +81,7 @@ public class ModifyQuotationRimac {
 
     private static DatoParticularBO getCumuloCliente(BigDecimal sumCumulus){
         DatoParticularBO datos = new DatoParticularBO();
-        datos.setEtiqueta(ConstantsUtil.DATO_PARTICULAR_CUMULO_CLIENTE);
+        datos.setEtiqueta(ConstantsUtil.PARTICULAR_DATA_CLIENT_CUMULUS);
         datos.setCodigo("");
         datos.setValor(sumCumulus == null ? "0" : String.valueOf(sumCumulus));
         return datos;
