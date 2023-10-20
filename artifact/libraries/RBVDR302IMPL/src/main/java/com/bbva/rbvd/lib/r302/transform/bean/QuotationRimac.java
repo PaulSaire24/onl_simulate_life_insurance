@@ -6,8 +6,6 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.SimulacionLifePayloadBO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class QuotationRimac {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuotationRimac.class);
     private QuotationRimac(){}
 
     public static InsuranceLifeSimulationBO mapInRequestRimacEasyyesLife(LifeSimulationDTO input, BigDecimal sumCumulus){
@@ -49,7 +46,7 @@ public class QuotationRimac {
         InsuranceLifeSimulationBO requestRimac = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
-        payload.setMoneda(ConstantsUtil.CURRENCY_CODE_PEN);
+        payload.setMoneda(ConstantsUtil.Currency.PEN);
         payload.setProducto(productName);
 
         DatoParticularBO datos = new DatoParticularBO();

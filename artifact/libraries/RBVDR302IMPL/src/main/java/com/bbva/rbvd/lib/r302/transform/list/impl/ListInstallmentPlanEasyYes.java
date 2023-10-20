@@ -104,8 +104,8 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
             PeriodDTO periodAnual = new PeriodDTO();
             totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
-            periodAnual.setId(ConstantsUtil.ANNUAL_PERIOD_ID);
-            periodAnual.setName(ConstantsUtil.ANNUAL_PERIOD_NAME);
+            periodAnual.setId(ConstantsUtil.Period.ANNUAL_PERIOD_ID);
+            periodAnual.setName(ConstantsUtil.Period.ANNUAL_PERIOD_NAME);
             totalInstallmentPlan.setPeriod(periodAnual);
             totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
 
@@ -152,7 +152,7 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
 
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getObservacionCobertura()) ? coverage.getObservacionCobertura() : coverage.getDescripcionCobertura());
-        coverageDTO.setIsSelected(ConstantsUtil.YES_S.equalsIgnoreCase(coverage.getPrincipal()));
+        coverageDTO.setIsSelected(ConstantsUtil.ConditionalExpressions.YES_S.equalsIgnoreCase(coverage.getPrincipal()));
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : coverage.getDescripcionCobertura());
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));

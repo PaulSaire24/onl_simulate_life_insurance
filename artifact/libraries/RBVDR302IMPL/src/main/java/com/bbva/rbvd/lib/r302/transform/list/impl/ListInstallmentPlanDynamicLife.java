@@ -123,8 +123,8 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
         PeriodDTO periodAnual = new PeriodDTO();
         totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
-        periodAnual.setId(ConstantsUtil.ANNUAL_PERIOD_ID);
-        periodAnual.setName(ConstantsUtil.ANNUAL_PERIOD_NAME);
+        periodAnual.setId(ConstantsUtil.Period.ANNUAL_PERIOD_ID);
+        periodAnual.setName(ConstantsUtil.Period.ANNUAL_PERIOD_NAME);
         totalInstallmentPlan.setPeriod(periodAnual);
         totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
 
@@ -161,7 +161,7 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getDescripcionCobertura()) ? coverage.getDescripcionCobertura() : "");
-        coverageDTO.setIsSelected(ConstantsUtil.YES_S.equalsIgnoreCase(coverage.getIndSeleccionar()));
+        coverageDTO.setIsSelected(ConstantsUtil.ConditionalExpressions.YES_S.equalsIgnoreCase(coverage.getIndSeleccionar()));
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : "");
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
@@ -182,8 +182,8 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
     private CoverageTypeDTO coverageType(CoberturaBO coverage){
         CoverageTypeDTO coverageTypeDTO = new CoverageTypeDTO();
-        String coverageId = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_ID));
-        String coverageName = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.COVERAGE_NAME));
+        String coverageId = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.CoverageTypeConstant.COVERAGE_ID));
+        String coverageName = this.applicationConfigurationService.getProperty(coverage.getCondicion().concat(ConstantsUtil.CoverageTypeConstant.COVERAGE_NAME));
         if(!StringUtils.isBlank(coverageId) && !StringUtils.isBlank(coverageName)){
             coverageTypeDTO.setId(coverageId);
             coverageTypeDTO.setName(coverageName);

@@ -204,7 +204,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         CoberturaBO coberturaBO = new CoberturaBO();
 
         coberturaBO.setCodigoCobertura(Long.parseLong(coverage.getId()));
-        coberturaBO.setIndSeleccionar(ConstantsUtil.YES_S);
+        coberturaBO.setIndSeleccionar(ConstantsUtil.ConditionalExpressions.YES_S);
         coberturaBO.setSumaAsegurada(coverage.getInsuredAmount() != null ? coverage.getInsuredAmount().getAmount() : new BigDecimal("0"));
 
         return coberturaBO;
