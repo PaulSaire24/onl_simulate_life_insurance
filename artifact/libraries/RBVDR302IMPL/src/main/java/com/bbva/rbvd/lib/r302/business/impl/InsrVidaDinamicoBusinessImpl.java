@@ -140,11 +140,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
     }
 
     public String getDocumentTypeId(LifeSimulationDTO input){
-        if(!CollectionUtils.isEmpty(input.getParticipants())){
-            return input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId();
-        }else{
-            return input.getHolder().getIdentityDocument().getDocumentType().getId();
-        }
+        return !CollectionUtils.isEmpty(input.getParticipants())?input.getParticipants().get(0).getIdentityDocument().getDocumentType().getId():input.getHolder().getIdentityDocument().getDocumentType().getId();
     }
 
     public void validateConstructionInstallmenPlan(LifeSimulationDTO input, InsuranceLifeSimulationBO requestRimac){
@@ -174,9 +170,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }
         return insurance;
     }
-
-
-
     private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse START *****");
 
@@ -211,7 +204,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         CoberturaBO coberturaBO = new CoberturaBO();
 
         coberturaBO.setCodigoCobertura(Long.parseLong(coverage.getId()));
-        coberturaBO.setIndSeleccionar(ConstantsUtil.YES_S);
+        coberturaBO.setIndSeleccionar(ConstantsUtil.Condition.YES_S);
         coberturaBO.setSumaAsegurada(coverage.getInsuredAmount() != null ? coverage.getInsuredAmount().getAmount() : new BigDecimal("0"));
 
         return coberturaBO;
