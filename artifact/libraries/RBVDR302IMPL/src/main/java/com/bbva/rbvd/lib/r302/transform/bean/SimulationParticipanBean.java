@@ -27,7 +27,7 @@ public class SimulationParticipanBean {
         simulationParticipant.setInsuranceProductId(payloadStore.getProductInformation().getInsuranceProductId());
         simulationParticipant.setInsuredAmount(getInsuredAmount(payloadStore.getResponse().getInsuredAmount()));
         simulationParticipant.setPeriodNumber(getPeriodNumber(payloadStore.getResponse().getTerm()));
-        simulationParticipant.setPeriodType(ConstantsUtil.Period.PERIOD.getCode());
+        simulationParticipant.setPeriodType(ConstantsUtil.Period.ANNUAL.getCode());
         simulationParticipant.setCustomerEntryDate(ConvertUtil.toLocalDate(new Date()));
 
         if(!CollectionUtils.isEmpty(payloadStore.getResponse().getListRefunds())){
@@ -46,7 +46,7 @@ public class SimulationParticipanBean {
             simulationParticipant.setPersonalId(payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
             simulationParticipant.setUserEmailPersonalDesc(payloadStore.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
             simulationParticipant.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(payloadStore.getResponse().getParticipants().get(0).getId())? ConstantsUtil.ConditionalExpressions.YES_S:ConstantsUtil.ConditionalExpressions.NO_N);
-            simulationParticipant.setGenderId(payloadStore.getResponse().getParticipants().get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE)? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
+            simulationParticipant.setGenderId(payloadStore.getResponse().getParticipants().get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE.getName())? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
             if(StringUtils.isEmpty(payloadStore.getResponse().getParticipants().get(0).getId())){
                 simulationParticipant.setCustomerEntryDate(null);
             }

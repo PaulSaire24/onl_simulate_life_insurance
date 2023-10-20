@@ -8,7 +8,7 @@ public class ConstantsUtil {
     public static final String TEXT_UNIT_TYPE = "TEXT";
 
     public enum Period{
-        PERIOD("ANNUAL","ANUAL","A");
+        ANNUAL("ANNUAL","ANUAL","A");
         private final String id;
         private final String name;
         private final String code;

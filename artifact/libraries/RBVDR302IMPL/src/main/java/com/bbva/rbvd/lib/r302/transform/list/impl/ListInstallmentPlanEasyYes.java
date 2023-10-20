@@ -104,8 +104,8 @@ public class ListInstallmentPlanEasyYes implements IListInstallmentPlan {
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
             PeriodDTO periodAnual = new PeriodDTO();
             totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
-            periodAnual.setId(ConstantsUtil.Period.PERIOD.getId());
-            periodAnual.setName(ConstantsUtil.Period.PERIOD.getName());
+            periodAnual.setId(ConstantsUtil.Period.ANNUAL.getId());
+            periodAnual.setName(ConstantsUtil.Period.ANNUAL.getName());
             totalInstallmentPlan.setPeriod(periodAnual);
             totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
 
