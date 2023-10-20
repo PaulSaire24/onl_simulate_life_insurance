@@ -18,8 +18,8 @@ public class ConstantsUtil {
         public String getCode() {return code;}
     }
 
-    public static final class ConditionalExpressions{
-        private ConditionalExpressions() {}
+    public static final class Condition {
+        private Condition() {}
         public static final String YES_S = "S";
         public static final String NO_N = "N";
     }
@@ -32,10 +32,10 @@ public class ConstantsUtil {
     public static final String DEFAULT_FREQUENCY ="A";
     public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
 
-    public static final class RoleId{
-        private RoleId() {}
-        public static final int IS_CONTRACTOR =1;
-        public static final int IS_INSURED =2;
+    public static final class Role {
+        private Role() {}
+        public static final int CONTRACTOR_ID =1;
+        public static final int INSURED_ID =2;
     }
 
     public static final class CoverageTypeConstant{

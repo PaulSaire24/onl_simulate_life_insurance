@@ -50,7 +50,7 @@ public class SimulationParticipanBean {
             simulationParticipant.setCustomerBirthDate(ConvertUtil.toLocalDate(participant.get(0).getBirthDate()));
             simulationParticipant.setPersonalId(participant.get(0).getIdentityDocument().getDocumentNumber());
             simulationParticipant.setUserEmailPersonalDesc(participant.get(0).getContactDetails().get(1).getContact().getAddress());
-            simulationParticipant.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(participant.get(0).getId())? ConstantsUtil.ConditionalExpressions.YES_S:ConstantsUtil.ConditionalExpressions.NO_N);
+            simulationParticipant.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(participant.get(0).getId())? ConstantsUtil.Condition.YES_S: ConstantsUtil.Condition.NO_N);
             simulationParticipant.setGenderId(participant.get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE.getName())? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
             if(StringUtils.isEmpty(participant.get(0).getId())){
                 simulationParticipant.setCustomerEntryDate(null);
@@ -63,7 +63,7 @@ public class SimulationParticipanBean {
             simulationParticipant.setPhoneId(null);
             simulationParticipant.setCustomerBirthDate(null);
             simulationParticipant.setPersonalId(holder.getIdentityDocument().getDocumentNumber());
-            simulationParticipant.setIsBbvaCustomerType(ConstantsUtil.ConditionalExpressions.YES_S);
+            simulationParticipant.setIsBbvaCustomerType(ConstantsUtil.Condition.YES_S);
             simulationParticipant.setUserEmailPersonalDesc(null);
             if(Objects.nonNull(payloadStore.getCustomer()) && StringUtils.isNotEmpty(payloadStore.getCustomer().getData().get(0).getBirthData().getBirthDate())){
                 simulationParticipant.setCustomerBirthDate(ConvertUtil.toLocalDate(ModifyQuotationRimac.ParseFecha(payloadStore.getCustomer().getData().get(0).getBirthData().getBirthDate())));
@@ -73,7 +73,7 @@ public class SimulationParticipanBean {
                 simulationParticipant.setGenderId(payloadStore.getCustomer().getData().get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE.getName())? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
             }
         }
-        simulationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantsUtil.RoleId.IS_INSURED));
+        simulationParticipant.setParticipantRoleId(BigDecimal.valueOf(ConstantsUtil.Role.INSURED_ID));
         simulationParticipant.setCreationUser(payloadStore.getCreationUser());
         simulationParticipant.setUserAudit(payloadStore.getUserAudit());
 

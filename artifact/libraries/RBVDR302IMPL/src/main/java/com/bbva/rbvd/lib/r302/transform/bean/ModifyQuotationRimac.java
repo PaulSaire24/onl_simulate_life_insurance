@@ -90,9 +90,9 @@ public class ModifyQuotationRimac {
         datos.setEtiqueta(RBVDProperties.DATO_PARTICULAR_INDICADOR_ENDOSADO.getValue());
         datos.setCodigo("");
         if(input.isEndorsed()){
-            datos.setValor(ConstantsUtil.ConditionalExpressions.YES_S);
+            datos.setValor(ConstantsUtil.Condition.YES_S);
         }else{
-            datos.setValor(ConstantsUtil.ConditionalExpressions.NO_N);
+            datos.setValor(ConstantsUtil.Condition.NO_N);
         }
         return datos;
     }

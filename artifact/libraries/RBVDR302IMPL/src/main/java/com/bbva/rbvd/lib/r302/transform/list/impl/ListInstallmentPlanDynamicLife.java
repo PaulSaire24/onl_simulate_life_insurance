@@ -161,7 +161,7 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
 
         coverageDTO.setId(coverage.getCobertura().toString());
         coverageDTO.setName(Objects.nonNull(coverage.getDescripcionCobertura()) ? coverage.getDescripcionCobertura() : "");
-        coverageDTO.setIsSelected(ConstantsUtil.ConditionalExpressions.YES_S.equalsIgnoreCase(coverage.getIndSeleccionar()));
+        coverageDTO.setIsSelected(ConstantsUtil.Condition.YES_S.equalsIgnoreCase(coverage.getIndSeleccionar()));
         coverageDTO.setDescription(Objects.nonNull(coverage.getDetalleCobertura()) ? coverage.getDetalleCobertura() : "");
         coverageDTO.setUnit(createUnit(coverage));
         coverageDTO.setCoverageType(coverageType(coverage));
