@@ -42,7 +42,7 @@ public class SimulationParticipanBean {
 
         if(!CollectionUtils.isEmpty(payloadStore.getResponse().getParticipants())){
             simulationParticipant.setInsuredId(payloadStore.getResponse().getParticipants().get(0).getId());
-            simulationParticipant.setCustomerDocumentType(payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentType().getId());
+            simulationParticipant.setCustomerDocumentType(payloadStore.getDocumentTypeId());
             simulationParticipant.setInsuredCustomerName(payloadStore.getResponse().getParticipants().get(0).getFirstName());
             simulationParticipant.setClientLastName(payloadStore.getResponse().getParticipants().get(0).getLastName().concat(ConstantsUtil.DELIMITER).concat(payloadStore.getResponse().getParticipants().get(0).getSecondLastName()));
             simulationParticipant.setPhoneId(payloadStore.getResponse().getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
@@ -56,7 +56,7 @@ public class SimulationParticipanBean {
             }
         }else {
             simulationParticipant.setInsuredId(payloadStore.getResponse().getHolder().getId());
-            simulationParticipant.setCustomerDocumentType(payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().getId());
+            simulationParticipant.setCustomerDocumentType(payloadStore.getDocumentTypeId());
             simulationParticipant.setInsuredCustomerName(payloadStore.getResponse().getHolder().getFirstName());
             simulationParticipant.setClientLastName(payloadStore.getResponse().getHolder().getLastName().replace(" ",ConstantsUtil.DELIMITER));
             simulationParticipant.setPhoneId(null);
