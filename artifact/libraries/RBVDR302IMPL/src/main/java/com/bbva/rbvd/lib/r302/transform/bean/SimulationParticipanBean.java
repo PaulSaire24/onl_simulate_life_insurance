@@ -1,8 +1,10 @@
 package com.bbva.rbvd.lib.r302.transform.bean;
 
+import com.bbva.rbvd.dto.lifeinsrc.commons.HolderDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuredAmountDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.dao.SimulationParticipantDAO;
+import com.bbva.rbvd.dto.lifeinsrc.simulation.ParticipantDTO;
 import com.bbva.rbvd.lib.r302.transfer.PayloadStore;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import com.bbva.rbvd.lib.r302.util.ConvertUtil;
@@ -12,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,6 +26,8 @@ public class SimulationParticipanBean {
 
     public static SimulationParticipantDAO createSimulationParticipant (BigDecimal insuranceSimulationId,PayloadStore payloadStore){
         SimulationParticipantDAO simulationParticipant = new SimulationParticipantDAO();
+        List<ParticipantDTO> participant = payloadStore.getResponse().getParticipants();
+        HolderDTO holder = payloadStore.getResponse().getHolder();
         simulationParticipant.setInsuranceSimulationId(insuranceSimulationId);
         simulationParticipant.setInsuranceProductId(payloadStore.getProductInformation().getInsuranceProductId());
         simulationParticipant.setInsuredAmount(getInsuredAmount(payloadStore.getResponse().getInsuredAmount()));
@@ -36,28 +41,28 @@ public class SimulationParticipanBean {
             simulationParticipant.setTotalReturnAmount(payloadStore.getResponse().getListRefunds().get(1).getUnit().getAmount());
         }
 
-        if(!CollectionUtils.isEmpty(payloadStore.getResponse().getParticipants())){
-            simulationParticipant.setInsuredId(payloadStore.getResponse().getParticipants().get(0).getId());
+        if(!CollectionUtils.isEmpty(participant)){
+            simulationParticipant.setInsuredId(participant.get(0).getId());
             simulationParticipant.setCustomerDocumentType(payloadStore.getDocumentTypeId());
-            simulationParticipant.setInsuredCustomerName(payloadStore.getResponse().getParticipants().get(0).getFirstName());
-            simulationParticipant.setClientLastName(payloadStore.getResponse().getParticipants().get(0).getLastName().concat(ConstantsUtil.RegularExpression.DELIMITER).concat(payloadStore.getResponse().getParticipants().get(0).getSecondLastName()));
-            simulationParticipant.setPhoneId(payloadStore.getResponse().getParticipants().get(0).getContactDetails().get(0).getContact().getNumber());
-            simulationParticipant.setCustomerBirthDate(ConvertUtil.toLocalDate(payloadStore.getResponse().getParticipants().get(0).getBirthDate()));
-            simulationParticipant.setPersonalId(payloadStore.getResponse().getParticipants().get(0).getIdentityDocument().getDocumentNumber());
-            simulationParticipant.setUserEmailPersonalDesc(payloadStore.getResponse().getParticipants().get(0).getContactDetails().get(1).getContact().getAddress());
-            simulationParticipant.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(payloadStore.getResponse().getParticipants().get(0).getId())? ConstantsUtil.ConditionalExpressions.YES_S:ConstantsUtil.ConditionalExpressions.NO_N);
-            simulationParticipant.setGenderId(payloadStore.getResponse().getParticipants().get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE.getName())? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
-            if(StringUtils.isEmpty(payloadStore.getResponse().getParticipants().get(0).getId())){
+            simulationParticipant.setInsuredCustomerName(participant.get(0).getFirstName());
+            simulationParticipant.setClientLastName(participant.get(0).getLastName().concat(ConstantsUtil.RegularExpression.DELIMITER).concat(participant.get(0).getSecondLastName()));
+            simulationParticipant.setPhoneId(participant.get(0).getContactDetails().get(0).getContact().getNumber());
+            simulationParticipant.setCustomerBirthDate(ConvertUtil.toLocalDate(participant.get(0).getBirthDate()));
+            simulationParticipant.setPersonalId(participant.get(0).getIdentityDocument().getDocumentNumber());
+            simulationParticipant.setUserEmailPersonalDesc(participant.get(0).getContactDetails().get(1).getContact().getAddress());
+            simulationParticipant.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(participant.get(0).getId())? ConstantsUtil.ConditionalExpressions.YES_S:ConstantsUtil.ConditionalExpressions.NO_N);
+            simulationParticipant.setGenderId(participant.get(0).getGender().getId().equals(ConstantsUtil.Gender.MALE.getName())? ConstantsUtil.Gender.MALE.getCode():ConstantsUtil.Gender.FEMALE.getCode());
+            if(StringUtils.isEmpty(participant.get(0).getId())){
                 simulationParticipant.setCustomerEntryDate(null);
             }
         }else {
-            simulationParticipant.setInsuredId(payloadStore.getResponse().getHolder().getId());
+            simulationParticipant.setInsuredId(holder.getId());
             simulationParticipant.setCustomerDocumentType(payloadStore.getDocumentTypeId());
-            simulationParticipant.setInsuredCustomerName(payloadStore.getResponse().getHolder().getFirstName());
-            simulationParticipant.setClientLastName(payloadStore.getResponse().getHolder().getLastName().replace(" ",ConstantsUtil.RegularExpression.DELIMITER));
+            simulationParticipant.setInsuredCustomerName(holder.getFirstName());
+            simulationParticipant.setClientLastName(holder.getLastName().replace(" ",ConstantsUtil.RegularExpression.DELIMITER));
             simulationParticipant.setPhoneId(null);
             simulationParticipant.setCustomerBirthDate(null);
-            simulationParticipant.setPersonalId(payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentNumber());
+            simulationParticipant.setPersonalId(holder.getIdentityDocument().getDocumentNumber());
             simulationParticipant.setIsBbvaCustomerType(ConstantsUtil.ConditionalExpressions.YES_S);
             simulationParticipant.setUserEmailPersonalDesc(null);
             if(Objects.nonNull(payloadStore.getCustomer()) && StringUtils.isNotEmpty(payloadStore.getCustomer().getData().get(0).getBirthData().getBirthDate())){
