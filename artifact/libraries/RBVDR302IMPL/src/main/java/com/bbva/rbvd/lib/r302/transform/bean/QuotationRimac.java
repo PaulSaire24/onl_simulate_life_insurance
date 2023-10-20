@@ -20,7 +20,7 @@ public class QuotationRimac {
         InsuranceLifeSimulationBO simulationBo = new InsuranceLifeSimulationBO();
         SimulacionLifePayloadBO payload = new SimulacionLifePayloadBO();
 
-        payload.setMoneda("PEN");
+        payload.setMoneda(ConstantsUtil.Currency.PEN);
 
         DatoParticularBO datos = new DatoParticularBO();
         List<DatoParticularBO> datosParticulares = new ArrayList<>();
