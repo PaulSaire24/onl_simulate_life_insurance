@@ -7,11 +7,15 @@ public class ConstantsUtil {
     public static final String AMOUNT_UNIT_TYPE = "AMOUNT";
     public static final String TEXT_UNIT_TYPE = "TEXT";
 
-    public static final class Period{
-        private Period() {}
-        public static final String ANNUAL_PERIOD_ID = "ANNUAL";
-        public static final String ANNUAL_PERIOD_NAME = "ANUAL";
-        public static final String ANNUAL_PERIOD_CODE = "A";
+    public enum Period{
+        PERIOD("ANNUAL","ANUAL","A");
+        private final String id;
+        private final String name;
+        private final String code;
+        Period(String id, String name, String code) { this.id = id;this.name = name;this.code = code; }
+        public String getId() {return id;}
+        public String getName() {return name;}
+        public String getCode() {return code;}
     }
 
     public static final class ConditionalExpressions{
@@ -53,12 +57,14 @@ public class ConstantsUtil {
         public static final String DELIMITER = "|";
     }
 
-    public static final class Gender{
-        private Gender() {}
-        public static final String MALE = "MALE";
-        public static final String FEMALE = "FEMALE";
-        public static final String M = "M";
-        public static final String F = "F";
+    public enum Gender{
+        MALE("MALE","M"),
+        FEMALE("FEMALE","F");
+        private final String name;
+        private final String code;
+        Gender(String name, String code) {this.name = name;this.code = code;}
+        public String getName() {return name;}
+        public String getCode() {return code;}
     }
 
     public static final class Numero{
