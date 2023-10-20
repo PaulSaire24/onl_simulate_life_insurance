@@ -4,6 +4,7 @@ import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.bo.BirthDataBO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.ContactTypeBO;
+import com.bbva.pisd.dto.insurance.bo.GenderBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.lib.r350.PISDR350;
 import com.bbva.rbvd.dto.lifeinsrc.commons.PeriodDTO;
@@ -88,6 +89,7 @@ public class SimulationStoreTest {
         payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentType(new DocumentTypeDTO());
         payloadStore.getResponse().getHolder().getIdentityDocument().getDocumentType().setId("45454");
         payloadStore.getResponse().getHolder().getIdentityDocument().setDocumentNumber("45555");
+        payloadStore.getResponse().getHolder().setLastName("HHHH");
         payloadStore.getResponse().setProduct(new InsuranceProductDTO());
         payloadStore.getResponse().setTerm(new TermDTO());
         payloadStore.getResponse().getTerm().setNumber(45);
@@ -111,6 +113,8 @@ public class SimulationStoreTest {
         contactDetailsList.add(contactDetail);
         contactDetailsList.add(contactDetail2);
         customer.setContactDetails(contactDetailsList);
+        customer.setGender(new GenderBO());
+        customer.getGender().setId("MALE");
         payloadStore.getCustomer().setData(Collections.singletonList(customer));
 
         InstallmentsDTO installments = new InstallmentsDTO();

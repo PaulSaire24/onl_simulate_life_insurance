@@ -55,10 +55,6 @@ public class SimulationVidaDinamico extends SimulationDecorator {
 		return payloadStore.getResponse();
 	}
 
-
-
-
-
 	public static final class Builder {
 		private PreSimulation preSimulation;
 		private PostSimulation postSimulation;
