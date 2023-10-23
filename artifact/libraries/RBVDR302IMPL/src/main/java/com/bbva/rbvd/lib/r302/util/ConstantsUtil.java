@@ -3,7 +3,12 @@ package com.bbva.rbvd.lib.r302.util;
 import java.time.ZoneId;
 
 public class ConstantsUtil {
-    public static final ZoneId ZONE_ID = ZoneId.of("GMT");
+
+    public static final class Zone {
+        private Zone() {}
+        public static final ZoneId ZONE_ID_GTM = ZoneId.of("GMT");
+    }
+
     public static final String AMOUNT_UNIT_TYPE = "AMOUNT";
     public static final String TEXT_UNIT_TYPE = "TEXT";
 
@@ -22,15 +27,31 @@ public class ConstantsUtil {
         private Condition() {}
         public static final String YES_S = "S";
         public static final String NO_N = "N";
+        public static final String TRUE = "true";
     }
 
     public static final String REFUNDS_UNIT_TYPE_AMOUNT = "AMOUNT";
     public static final String PARTICULAR_DATA_CLIENT_CUMULUS = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
     public static final String CUOTA = "CUOTA";
-    public static final Long DEFAULT_NUM_CUOTAS = 1L;
-    public static final String DEFAULT_FREQUENCY ="A";
-    public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
+    public static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
+    public static final String DEFAULT_BANK_ID = "0011";
+    public static final String DEFAULT_BRANCH_ID = "0814";
+    public static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
+    public static final String EMPTY_VALUE = "";
+
+    public static final class DefaultValues{
+        private DefaultValues() {}
+        public static final Long DEFAULT_NUM_CUOTAS = 1L;
+        public static final String DEFAULT_FREQUENCY ="A";
+    }
+
+    public static final class Flag{
+        private Flag() {}
+        public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
+        public static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
+    }
+
 
     public static final class Role {
         private Role() {}
@@ -48,6 +69,9 @@ public class ConstantsUtil {
         private ContactDetails() {}
         public static final String MOBILE_NUMBER="MOBILE_NUMBER";
         public static final String EMAIL="EMAIL";
+        public static final String PHONE="PHONE";
+        public static final String NOT_FOUND_EMAIL= "No se encontro correo";
+        public static final String NOT_FOUND_PHOME= "No celular";
     }
 
     public static final class RegularExpression{
