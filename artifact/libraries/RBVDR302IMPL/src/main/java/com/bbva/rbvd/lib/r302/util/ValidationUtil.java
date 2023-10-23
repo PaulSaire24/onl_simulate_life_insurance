@@ -10,7 +10,6 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
-import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -69,9 +68,9 @@ public class ValidationUtil {
         holder.setIdentityDocument(identityDocument);
     }
 
-    public void docValidationForGifoleDynamic(String documentNumber, String documentType, com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder, LifeSimulationDTO response){
-        com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO identityDocument = new com.bbva.rbvd.dto.connectionapi.aso.common.IdentityDocumentASO();
-        GenericTypeASO documentTypeAso = new GenericTypeASO();
+    public void docValidationForGifoleDynamic(String documentNumber, String documentType, HolderASO holder, LifeSimulationDTO response){
+        IdentityDocumentASO identityDocument = new IdentityDocumentASO();
+        DocumentTypeASO documentTypeAso = new DocumentTypeASO();
         documentTypeAso.setId(documentType);
         identityDocument.setDocumentType(documentTypeAso);
         identityDocument.setDocumentNumber(documentNumber);

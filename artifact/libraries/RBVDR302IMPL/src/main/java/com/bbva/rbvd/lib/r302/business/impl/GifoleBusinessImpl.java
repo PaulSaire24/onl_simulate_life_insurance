@@ -18,9 +18,7 @@ import com.bbva.pisd.dto.insurance.aso.gifole.BranchASO;
 import com.bbva.pisd.dto.insurance.bo.ContactDetailsBO;
 import com.bbva.pisd.dto.insurance.bo.IdentityDocumentsBO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
-import com.bbva.rbvd.dto.connectionapi.aso.common.BusinessAgentASO;
-import com.bbva.rbvd.dto.connectionapi.aso.common.GenericAmountASO;
-import com.bbva.rbvd.dto.connectionapi.aso.common.ProductModalityASO;
+import com.bbva.pisd.dto.insurance.aso.gifole.BusinessAgentASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
@@ -236,7 +234,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
             LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService ***** --- FLAG after -> {}", flag);
 
-            com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO gifoleInsuranceRequest =
+            GifoleInsuranceRequestASO gifoleInsuranceRequest =
                     this.createGifoleAsoDynamic(inputLife, inputListCustomers);
             LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService: {}", gifoleInsuranceRequest);
 
@@ -248,18 +246,16 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
 
 
-    public com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO createGifoleAsoDynamic(LifeSimulationDTO response, CustomerListASO responseListCustomers) {
+    public GifoleInsuranceRequestASO createGifoleAsoDynamic(LifeSimulationDTO response, CustomerListASO responseListCustomers) {
 
-        com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO gifoleInsuranceRequest =
-                new com.bbva.rbvd.dto.connectionapi.aso.gifole.GifoleInsuranceRequestASO();
+        GifoleInsuranceRequestASO gifoleInsuranceRequest =
+                new GifoleInsuranceRequestASO();
 
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.BankASO bank =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.BankASO();
+        BankASO bank = new BankASO();
         bank.setId(DEFAULT_BANK_ID);
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO branch =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO();
+        BranchASO branch = new BranchASO();
         branch.setId(DEFAULT_BRANCH_ID);
         bank.setBranch(branch);
 
@@ -272,22 +268,20 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         InsurancePlanDTO planDTO = productDto.getPlans().get(0);
         List<InstallmentsDTO> installmentPlanDto = planDTO.getInstallmentPlans();
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.ProductASO product =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.ProductASO();
+        ProductASO product = new ProductASO();
         product.setId(productDto.getId());
         product.setName(productDto.getName());
 
-        ProductModalityASO plan = new ProductModalityASO();
+        PlanASO plan = new PlanASO();
         plan.setId(planDTO.getId());
         plan.setName(planDTO.getName());
 
         product.setPlan(plan);
 
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO installmentPlan =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.InstallmentPlanASO();
+        InstallmentPlanASO installmentPlan = new InstallmentPlanASO();
 
-        GenericAmountASO premiumAmount = new GenericAmountASO();
+        AmountASO premiumAmount = new AmountASO();
         if (!installmentPlanDto.isEmpty() && installmentPlanDto.get(0).getPaymentAmount() != null) {
 
             premiumAmount.setAmount(installmentPlanDto.get(0).getPaymentAmount().getAmount());
@@ -298,23 +292,21 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             premiumAmount.setCurrency("PEN");
         }
         installmentPlan.setPremiumAmount(premiumAmount);
-        installmentPlan.setTotalInstallmentsNumber(installmentPlanDto.get(0).getPaymentsTotalNumber().intValue());
+        installmentPlan.setTotalInstallmentsNumber((long) installmentPlanDto.get(0).getPaymentsTotalNumber().intValue());
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.PeriodASO period =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.PeriodASO();
+        PeriodASO period = new PeriodASO();
         period.setId(installmentPlanDto.get(0).getPeriod().getId());
         period.setName(installmentPlanDto.get(0).getPeriod().getName());
         installmentPlan.setPeriod(period);
 
 
-        GenericAmountASO totalPremiumAmount = new GenericAmountASO();
+        AmountASO totalPremiumAmount = new AmountASO();
         totalPremiumAmount.setAmount(planDTO.getTotalInstallment().getAmount());
         totalPremiumAmount.setCurrency(planDTO.getTotalInstallment().getCurrency());
 
         ValidationUtil validationUtil = new ValidationUtil();
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
-                new com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO();
+        HolderASO holder = new HolderASO();
 
         holder.setFirstName(EMPTY_VALUE);
         holder.setLastName(EMPTY_VALUE);
@@ -326,9 +318,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         holder.setHasCreditCard(false);
         holder.setIsDataTreatment(false);
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO good = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO();
+        GoodASO good = new GoodASO();
 
-        com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO goodDetail = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO();
+        GoodDetailASO goodDetail = new GoodDetailASO();
         goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
         good.setGoodDetail(goodDetail);
 
@@ -354,7 +346,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             holder.setLastName(validationUtil.validateSN(customer.getLastName().concat(" ").concat(validationUtil.validateSN(customer.getSecondLastName()))));
 
             List<ContactDetailsBO> contactDetails = responseListCustomers.getData().get(0).getContactDetails();
-            List<com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO> contactDetailASOS = new ArrayList<>();
+            List<ContactDetailASO> contactDetailASOS = new ArrayList<>();
 
             Optional<ContactDetailsBO> phoneContact = contactDetails.stream()
                     .filter(phone -> CONTACT_DETAIL_MOBILE_TYPE.equals(phone.getContactType().getId())).findFirst();
@@ -374,7 +366,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setBusinessAgent(businessAgent);
-        gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
+        gifoleInsuranceRequest.setExternalSimulationId(response.getExternalSimulationId());
         gifoleInsuranceRequest.setProduct(product);
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
@@ -389,9 +381,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         return gifoleInsuranceRequest;
     }
 
-    public com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO getContactDetail(String contactValue, String contactType) {
-        com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO contactDetailASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO();
-        com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO contactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
+    public ContactDetailASO getContactDetail(String contactValue, String contactType) {
+        ContactDetailASO contactDetailASO = new ContactDetailASO();
+        ContactASO contactASO = new ContactASO();
         contactASO.setContactType(contactType);
         switch (contactType){
             case CONTACT_DETAIL_EMAIL_TYPE:
