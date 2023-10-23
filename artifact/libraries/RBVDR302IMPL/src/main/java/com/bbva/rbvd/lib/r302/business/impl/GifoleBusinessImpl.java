@@ -29,6 +29,7 @@ import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
+import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -44,8 +45,7 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.bbva.rbvd.lib.r302.util.ConstantsUtil.FLAG_GIFOLE_LIB_LIFE;
-import static com.bbva.rbvd.lib.r302.util.ValidationUtil.isBBVAClient;
+
 
 public class GifoleBusinessImpl implements IGifoleBusiness {
 
@@ -230,7 +230,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService START *****");
 
-        String flag = this.applicationConfigurationService.getProperty(FLAG_GIFOLE_LIB_LIFE);
+        String flag = this.applicationConfigurationService.getProperty(ConstantsUtil.FLAG_GIFOLE_LIB_LIFE);
 
         if(flag.equals("true")){
 
@@ -295,7 +295,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         } else {
             premiumAmount.setAmount(new BigDecimal(1000));
-            premiumAmount.setCurrency("PEN");
+            premiumAmount.setCurrency(ConstantsUtil.Currency.PEN);
         }
         installmentPlan.setPremiumAmount(premiumAmount);
         installmentPlan.setTotalInstallmentsNumber(installmentPlanDto.get(0).getPaymentsTotalNumber().intValue());
@@ -339,7 +339,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         }
 
         if(!CollectionUtils.isEmpty(response.getParticipants())){
-            holder.setIsBankCustomer(isBBVAClient(response.getParticipants().get(0).getId()));
+            holder.setIsBankCustomer(ValidationUtil.isBBVAClient(response.getParticipants().get(0).getId()));
         }
 
 
