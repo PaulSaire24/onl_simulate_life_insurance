@@ -39,6 +39,6 @@ public class ConvertUtil {
         if(!Objects.nonNull(date)){
             return null;
         }
-        return date.toInstant().atZone(ConstantsUtil.ZONE_ID).toLocalDate();
+        return date.toInstant().atZone(ConstantsUtil.Zone.ZONE_ID_GTM).toLocalDate();
     }
 }

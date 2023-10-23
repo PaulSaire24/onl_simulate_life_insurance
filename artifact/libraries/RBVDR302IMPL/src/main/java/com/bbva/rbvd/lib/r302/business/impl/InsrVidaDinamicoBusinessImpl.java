@@ -152,8 +152,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             String frecuencia = this.applicationConfigurationService.getProperty(input.getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
             financiamientoBO.setFrecuencia(frecuencia);
         }else{
-            financiamientoBO.setNumeroCuotas(ConstantsUtil.DEFAULT_NUM_CUOTAS);
-            financiamientoBO.setFrecuencia(ConstantsUtil.DEFAULT_FREQUENCY);
+            financiamientoBO.setNumeroCuotas(ConstantsUtil.DefaultValues.DEFAULT_NUM_CUOTAS);
+            financiamientoBO.setFrecuencia(ConstantsUtil.DefaultValues.DEFAULT_FREQUENCY);
         }
         financiamiento.add(financiamientoBO);
         requestRimac.getPayload().setFinanciamiento(financiamiento);
