@@ -1,9 +1,16 @@
 package com.bbva.rbvd.lib.r302.util;
 
+import org.joda.time.DateTimeZone;
+
 import java.time.ZoneId;
 
 public class ConstantsUtil {
-    public static final ZoneId ZONE_ID = ZoneId.of("GMT");
+
+    public static final class Zone {
+        public static final ZoneId ZONE_ID_GTM = ZoneId.of("GMT");
+        public static final DateTimeZone DATE_TIME_ZONE_LIMA = DateTimeZone.forID("America/Lima");
+    }
+
     public static final String AMOUNT_UNIT_TYPE = "AMOUNT";
     public static final String TEXT_UNIT_TYPE = "TEXT";
 
@@ -22,6 +29,8 @@ public class ConstantsUtil {
         private Condition() {}
         public static final String YES_S = "S";
         public static final String NO_N = "N";
+        public static final String TRUE = "true";
+        public static final String FALSE = "false";
     }
 
     public static final String REFUNDS_UNIT_TYPE_AMOUNT = "AMOUNT";
@@ -30,7 +39,12 @@ public class ConstantsUtil {
     public static final String CUOTA = "CUOTA";
     public static final Long DEFAULT_NUM_CUOTAS = 1L;
     public static final String DEFAULT_FREQUENCY ="A";
-    public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
+
+    public static final class Flag{
+        public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
+        public static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
+    }
+
 
     public static final class Role {
         private Role() {}
@@ -48,6 +62,7 @@ public class ConstantsUtil {
         private ContactDetails() {}
         public static final String MOBILE_NUMBER="MOBILE_NUMBER";
         public static final String EMAIL="EMAIL";
+        public static final String PHONE="PHONE";
     }
 
     public static final class RegularExpression{

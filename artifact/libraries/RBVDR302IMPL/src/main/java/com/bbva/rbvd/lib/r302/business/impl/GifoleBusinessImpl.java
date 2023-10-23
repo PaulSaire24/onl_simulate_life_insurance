@@ -31,7 +31,6 @@ import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -50,24 +49,14 @@ import java.util.Date;
 public class GifoleBusinessImpl implements IGifoleBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GifoleBusinessImpl.class);
-
-    private static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
-    private static final String ANNUAL_PERIOD_ID = "ANNUAL";
     private static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
-    private static final String CONTACT_DETAIL_MOBILE_TYPE = "MOBILE_NUMBER";
-    private static final String CONTACT_DETAIL_MOBILE_TYPE_GIFOLE = "PHONE";
-    private static final String CONTACT_DETAIL_EMAIL_TYPE = "EMAIL";
     private static final String DEFAULT_BANK_ID = "0011";
     private static final String DEFAULT_BRANCH_ID = "0814";
-    private static final DateTimeZone DATE_TIME_ZONE = DateTimeZone.forID("America/Lima");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
     private static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
-
     private static final String EMPTY_VALUE = "";
     private static final String NOT_FOUND_EMAIL= "No se encontro correo";
     private static final String NOT_FOUND_PHOME= "No celular";
-
 
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR301 rbvdR301;
@@ -81,10 +70,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
     @Override
     public void serviceAddGifole(LifeSimulationDTO response, CustomerListASO responseListCustomers){
 
-        String flag = this.applicationConfigurationService.getProperty(ENABLE_GIFOLE_LIFE_ASO);
+        String flag = this.applicationConfigurationService.getProperty(ConstantsUtil.Flag.ENABLE_GIFOLE_LIFE_ASO);
 
 
-        if(flag.equals("true")){
+        if(flag.equals(ConstantsUtil.Condition.TRUE)){
 
             LOGGER.info("***** GifoleBusinessImpl - serviceAddGifole ***** --- FLAG after -> {}", flag);
 
@@ -133,7 +122,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         installmentPlan.setTotalInstallmentsNumber(installmentPlanDto.get(0).getPaymentsTotalNumber());
 
-        Optional<InstallmentsDTO> planObj = installmentPlanDto.stream().filter(p -> ANNUAL_PERIOD_ID.equals(p.getPeriod().getId())).findFirst();
+        Optional<InstallmentsDTO> planObj = installmentPlanDto.stream().filter(p -> ConstantsUtil.Period.ANNUAL.getId().equals(p.getPeriod().getId())).findFirst();
         AmountASO totalPremiumAmount = new AmountASO();
         totalPremiumAmount.setAmount(planObj.isPresent() ? planObj.get().getPaymentAmount().getAmount() : planDTO.getTotalInstallment().getAmount());
         totalPremiumAmount.setCurrency(planObj.isPresent() ? planObj.get().getPaymentAmount().getCurrency() : planDTO.getTotalInstallment().getCurrency());
@@ -160,26 +149,26 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             List<ContactDetailASO> contactDetailASOS = new ArrayList<>();
 
             Optional<ContactDetailsBO> phoneContact = contactDetails.stream()
-                    .filter(phone -> CONTACT_DETAIL_MOBILE_TYPE.equals(phone.getContactType().getId())).findFirst();
+                    .filter(phone -> ConstantsUtil.ContactDetails.MOBILE_NUMBER.equals(phone.getContactType().getId())).findFirst();
 
             ContactDetailASO phoneContactDetailASO = new ContactDetailASO();
 
             ContactASO phonecontactASO = new ContactASO();
             phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME));
-            phonecontactASO.setContactType(CONTACT_DETAIL_MOBILE_TYPE_GIFOLE);
+            phonecontactASO.setContactType(ConstantsUtil.ContactDetails.PHONE);
             phoneContactDetailASO.setContact(phonecontactASO);
 
             contactDetailASOS.add(phoneContactDetailASO);
 
             Optional<ContactDetailsBO> emailContact = contactDetails.stream()
-                    .filter(email -> CONTACT_DETAIL_EMAIL_TYPE.equals(email.getContactType().getId())).findFirst();
+                    .filter(email -> ConstantsUtil.ContactDetails.EMAIL.equals(email.getContactType().getId())).findFirst();
 
             ContactDetailASO emailContactDetailASO = new ContactDetailASO();
 
             ContactASO emailcontactASO = new ContactASO();
 
             emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL));
-            emailcontactASO.setContactType(CONTACT_DETAIL_EMAIL_TYPE);
+            emailcontactASO.setContactType(ConstantsUtil.ContactDetails.EMAIL);
             emailContactDetailASO.setContact(emailcontactASO);
 
             contactDetailASOS.add(emailContactDetailASO);
@@ -211,7 +200,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setExternalSimulationId(response.getExternalSimulationId());
 
-        DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
+        DateTime currentDate = new DateTime(new Date(), ConstantsUtil.Zone.DATE_TIME_ZONE_LIMA);
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
 
         gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
@@ -230,9 +219,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService START *****");
 
-        String flag = this.applicationConfigurationService.getProperty(ConstantsUtil.FLAG_GIFOLE_LIB_LIFE);
+        String flag = this.applicationConfigurationService.getProperty(ConstantsUtil.Flag.FLAG_GIFOLE_LIB_LIFE);
 
-        if(flag.equals("true")){
+        if(flag.equals(ConstantsUtil.Condition.TRUE)){
 
             LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService ***** --- FLAG after -> {}", flag);
 
@@ -319,8 +308,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         holder.setFirstName(EMPTY_VALUE);
         holder.setLastName(EMPTY_VALUE);
         holder.setContactDetails(new ArrayList<>());
-        holder.getContactDetails().add(getContactDetail(NOT_FOUND_EMAIL, CONTACT_DETAIL_EMAIL_TYPE));
-        holder.getContactDetails().add(getContactDetail(NOT_FOUND_PHOME, CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
+        holder.getContactDetails().add(getContactDetail(NOT_FOUND_EMAIL, ConstantsUtil.ContactDetails.EMAIL));
+        holder.getContactDetails().add(getContactDetail(NOT_FOUND_PHOME, ConstantsUtil.ContactDetails.PHONE));
         validationUtil.docValidationForGifoleDynamic(EMPTY_VALUE, EMPTY_VALUE, holder, response);
         holder.setHasBankAccount(false);
         holder.setHasCreditCard(false);
@@ -357,13 +346,13 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             List<com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO> contactDetailASOS = new ArrayList<>();
 
             Optional<ContactDetailsBO> phoneContact = contactDetails.stream()
-                    .filter(phone -> CONTACT_DETAIL_MOBILE_TYPE.equals(phone.getContactType().getId())).findFirst();
+                    .filter(phone -> ConstantsUtil.ContactDetails.MOBILE_NUMBER.equals(phone.getContactType().getId())).findFirst();
 
             Optional<ContactDetailsBO> emailContact = contactDetails.stream()
-                    .filter(email -> CONTACT_DETAIL_EMAIL_TYPE.equals(email.getContactType().getId())).findFirst();
+                    .filter(email -> ConstantsUtil.ContactDetails.EMAIL.equals(email.getContactType().getId())).findFirst();
 
-            contactDetailASOS.add(getContactDetail(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL), CONTACT_DETAIL_EMAIL_TYPE));
-            contactDetailASOS.add(getContactDetail(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME), CONTACT_DETAIL_MOBILE_TYPE_GIFOLE));
+            contactDetailASOS.add(getContactDetail(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL), ConstantsUtil.ContactDetails.EMAIL));
+            contactDetailASOS.add(getContactDetail(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME), ConstantsUtil.ContactDetails.PHONE));
 
             holder.setContactDetails(contactDetailASOS);
 
@@ -382,7 +371,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
         gifoleInsuranceRequest.setChannel(response.getAap());
 
-        DateTime currentDate = new DateTime(new Date(), DATE_TIME_ZONE);
+        DateTime currentDate = new DateTime(new Date(), ConstantsUtil.Zone.DATE_TIME_ZONE_LIMA);
         gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
         gifoleInsuranceRequest.setGood(good);
 
@@ -394,10 +383,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO contactASO = new com.bbva.rbvd.dto.connectionapi.aso.common.ContactASO();
         contactASO.setContactType(contactType);
         switch (contactType){
-            case CONTACT_DETAIL_EMAIL_TYPE:
+            case ConstantsUtil.ContactDetails.EMAIL:
                 contactASO.setAddress(contactValue);
                 break;
-            case CONTACT_DETAIL_MOBILE_TYPE_GIFOLE:
+            case ConstantsUtil.ContactDetails.PHONE:
                 contactASO.setPhoneNumber(contactValue);
                 break;
             default:
