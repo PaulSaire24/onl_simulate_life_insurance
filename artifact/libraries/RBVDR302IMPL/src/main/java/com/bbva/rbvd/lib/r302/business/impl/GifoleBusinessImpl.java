@@ -30,31 +30,22 @@ import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.business.IGifoleBusiness;
 import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 
 public class GifoleBusinessImpl implements IGifoleBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GifoleBusinessImpl.class);
-    private static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
-    private static final String DEFAULT_BANK_ID = "0011";
-    private static final String DEFAULT_BRANCH_ID = "0814";
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    private static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
-    private static final String EMPTY_VALUE = "";
 
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR301 rbvdR301;
@@ -132,7 +123,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         GoodASO good = new GoodASO();
 
         GoodDetailASO goodDetail = new GoodDetailASO();
-        goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
+        goodDetail.setInsuranceType(ConstantsUtil.INSURANCE_TYPE_LIFE_VALUE);
         good.setGoodDetail(goodDetail);
 
         if(Objects.nonNull(responseListCustomers)) {
@@ -181,9 +172,9 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         }
 
         BankASO bank = new BankASO();
-        bank.setId(DEFAULT_BANK_ID);
+        bank.setId(ConstantsUtil.DEFAULT_BANK_ID);
         BranchASO branch = new BranchASO();
-        branch.setId(DEFAULT_BRANCH_ID);
+        branch.setId(ConstantsUtil.DEFAULT_BRANCH_ID);
         bank.setBranch(branch);
 
         holder.setHasBankAccount(false);
@@ -198,10 +189,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setBank(bank);
         gifoleInsuranceRequest.setExternalSimulationId(response.getExternalSimulationId());
 
-        DateTime currentDate = new DateTime(new Date(), ConstantsUtil.Zone.DATE_TIME_ZONE_LIMA);
-        gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
+        LocalDateTime currentDate =  LocalDateTime.now();
+        gifoleInsuranceRequest.setOperationDate(String.valueOf(currentDate));
 
-        gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
+        gifoleInsuranceRequest.setOperationType(ConstantsUtil.INSURANCE_SIMULATION_VALUE);
         gifoleInsuranceRequest.setGood(good);
 
         LOGGER.info("***** GifoleBusinessImpl ***** - createGifoleASO END - gifoleInsuranceRequest {}",gifoleInsuranceRequest);
@@ -243,11 +234,11 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
         com.bbva.rbvd.dto.connectionapi.aso.common.BankASO bank =
                 new com.bbva.rbvd.dto.connectionapi.aso.common.BankASO();
-        bank.setId(DEFAULT_BANK_ID);
+        bank.setId(ConstantsUtil.DEFAULT_BANK_ID);
 
         com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO branch =
                 new com.bbva.rbvd.dto.connectionapi.aso.common.BranchASO();
-        branch.setId(DEFAULT_BRANCH_ID);
+        branch.setId(ConstantsUtil.DEFAULT_BRANCH_ID);
         bank.setBranch(branch);
 
 
@@ -303,12 +294,12 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
                 new com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO();
 
-        holder.setFirstName(EMPTY_VALUE);
-        holder.setLastName(EMPTY_VALUE);
+        holder.setFirstName(ConstantsUtil.EMPTY_VALUE);
+        holder.setLastName(ConstantsUtil.EMPTY_VALUE);
         holder.setContactDetails(new ArrayList<>());
         holder.getContactDetails().add(getContactDetail(ConstantsUtil.ContactDetails.NOT_FOUND_EMAIL, ConstantsUtil.ContactDetails.EMAIL));
         holder.getContactDetails().add(getContactDetail(ConstantsUtil.ContactDetails.NOT_FOUND_PHOME, ConstantsUtil.ContactDetails.PHONE));
-        validationUtil.docValidationForGifoleDynamic(EMPTY_VALUE, EMPTY_VALUE, holder, response);
+        validationUtil.docValidationForGifoleDynamic(ConstantsUtil.EMPTY_VALUE, ConstantsUtil.EMPTY_VALUE, holder, response);
         holder.setHasBankAccount(false);
         holder.setHasCreditCard(false);
         holder.setIsDataTreatment(false);
@@ -316,7 +307,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO good = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodASO();
 
         com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO goodDetail = new com.bbva.rbvd.dto.connectionapi.aso.common.GoodDetailASO();
-        goodDetail.setInsuranceType(INSURANCE_TYPE_LIFE_VALUE);
+        goodDetail.setInsuranceType(ConstantsUtil.INSURANCE_TYPE_LIFE_VALUE);
         good.setGoodDetail(goodDetail);
 
         if (Objects.nonNull(response.getHolder())) {
@@ -365,11 +356,11 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
         gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
         gifoleInsuranceRequest.setHolder(holder);
-        gifoleInsuranceRequest.setOperationType(INSURANCE_SIMULATION_VALUE);
+        gifoleInsuranceRequest.setOperationType(ConstantsUtil.INSURANCE_SIMULATION_VALUE);
         gifoleInsuranceRequest.setChannel(response.getAap());
 
-        DateTime currentDate = new DateTime(new Date(), ConstantsUtil.Zone.DATE_TIME_ZONE_LIMA);
-        gifoleInsuranceRequest.setOperationDate(currentDate.toString(DATE_TIME_FORMATTER));
+        LocalDateTime currentDate =  LocalDateTime.now();
+        gifoleInsuranceRequest.setOperationDate(String.valueOf(currentDate));
         gifoleInsuranceRequest.setGood(good);
 
         return gifoleInsuranceRequest;

@@ -1,7 +1,5 @@
 package com.bbva.rbvd.lib.r302.util;
 
-import org.joda.time.DateTimeZone;
-
 import java.time.ZoneId;
 
 public class ConstantsUtil {
@@ -9,7 +7,6 @@ public class ConstantsUtil {
     public static final class Zone {
         private Zone() {}
         public static final ZoneId ZONE_ID_GTM = ZoneId.of("GMT");
-        public static final DateTimeZone DATE_TIME_ZONE_LIMA = DateTimeZone.forID("America/Lima");
     }
 
     public static final String AMOUNT_UNIT_TYPE = "AMOUNT";
@@ -31,13 +28,17 @@ public class ConstantsUtil {
         public static final String YES_S = "S";
         public static final String NO_N = "N";
         public static final String TRUE = "true";
-        public static final String FALSE = "false";
     }
 
     public static final String REFUNDS_UNIT_TYPE_AMOUNT = "AMOUNT";
     public static final String PARTICULAR_DATA_CLIENT_CUMULUS = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
     public static final String CUOTA = "CUOTA";
+    public static final String INSURANCE_TYPE_LIFE_VALUE = "LIFE";
+    public static final String DEFAULT_BANK_ID = "0011";
+    public static final String DEFAULT_BRANCH_ID = "0814";
+    public static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
+    public static final String EMPTY_VALUE = "";
 
     public static final class DefaultValues{
         private DefaultValues() {}
