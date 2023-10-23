@@ -7,6 +7,7 @@ import java.time.ZoneId;
 public class ConstantsUtil {
 
     public static final class Zone {
+        private Zone() {}
         public static final ZoneId ZONE_ID_GTM = ZoneId.of("GMT");
         public static final DateTimeZone DATE_TIME_ZONE_LIMA = DateTimeZone.forID("America/Lima");
     }
@@ -39,11 +40,13 @@ public class ConstantsUtil {
     public static final String CUOTA = "CUOTA";
 
     public static final class DefaultValues{
+        private DefaultValues() {}
         public static final Long DEFAULT_NUM_CUOTAS = 1L;
         public static final String DEFAULT_FREQUENCY ="A";
     }
 
     public static final class Flag{
+        private Flag() {}
         public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
         public static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
     }
