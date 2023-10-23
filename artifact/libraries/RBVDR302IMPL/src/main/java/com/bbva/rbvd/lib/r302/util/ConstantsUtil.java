@@ -37,8 +37,11 @@ public class ConstantsUtil {
     public static final String PARTICULAR_DATA_CLIENT_CUMULUS = "CUMULO_CLIENTE";
     public static final String REFUND_UNIT_PERCENTAGE = "PERCENTAGE";
     public static final String CUOTA = "CUOTA";
-    public static final Long DEFAULT_NUM_CUOTAS = 1L;
-    public static final String DEFAULT_FREQUENCY ="A";
+
+    public static final class DefaultValues{
+        public static final Long DEFAULT_NUM_CUOTAS = 1L;
+        public static final String DEFAULT_FREQUENCY ="A";
+    }
 
     public static final class Flag{
         public static final String FLAG_GIFOLE_LIB_LIFE = "FLAG_GIFOLE_LIB_LIFE";
@@ -63,6 +66,8 @@ public class ConstantsUtil {
         public static final String MOBILE_NUMBER="MOBILE_NUMBER";
         public static final String EMAIL="EMAIL";
         public static final String PHONE="PHONE";
+        public static final String NOT_FOUND_EMAIL= "No se encontro correo";
+        public static final String NOT_FOUND_PHOME= "No celular";
     }
 
     public static final class RegularExpression{

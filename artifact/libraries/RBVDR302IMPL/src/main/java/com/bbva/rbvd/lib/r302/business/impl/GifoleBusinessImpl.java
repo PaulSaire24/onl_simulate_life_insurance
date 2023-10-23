@@ -55,8 +55,6 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     private static final String INSURANCE_SIMULATION_VALUE = "INSURANCE_SIMULATION";
     private static final String EMPTY_VALUE = "";
-    private static final String NOT_FOUND_EMAIL= "No se encontro correo";
-    private static final String NOT_FOUND_PHOME= "No celular";
 
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR301 rbvdR301;
@@ -154,7 +152,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             ContactDetailASO phoneContactDetailASO = new ContactDetailASO();
 
             ContactASO phonecontactASO = new ContactASO();
-            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME));
+            phonecontactASO.setPhoneNumber(phoneContact.map(ContactDetailsBO::getContact).orElse(ConstantsUtil.ContactDetails.NOT_FOUND_PHOME));
             phonecontactASO.setContactType(ConstantsUtil.ContactDetails.PHONE);
             phoneContactDetailASO.setContact(phonecontactASO);
 
@@ -167,7 +165,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
             ContactASO emailcontactASO = new ContactASO();
 
-            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL));
+            emailcontactASO.setAddress(emailContact.map(ContactDetailsBO::getContact).orElse(ConstantsUtil.ContactDetails.NOT_FOUND_EMAIL));
             emailcontactASO.setContactType(ConstantsUtil.ContactDetails.EMAIL);
             emailContactDetailASO.setContact(emailcontactASO);
 
@@ -308,8 +306,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         holder.setFirstName(EMPTY_VALUE);
         holder.setLastName(EMPTY_VALUE);
         holder.setContactDetails(new ArrayList<>());
-        holder.getContactDetails().add(getContactDetail(NOT_FOUND_EMAIL, ConstantsUtil.ContactDetails.EMAIL));
-        holder.getContactDetails().add(getContactDetail(NOT_FOUND_PHOME, ConstantsUtil.ContactDetails.PHONE));
+        holder.getContactDetails().add(getContactDetail(ConstantsUtil.ContactDetails.NOT_FOUND_EMAIL, ConstantsUtil.ContactDetails.EMAIL));
+        holder.getContactDetails().add(getContactDetail(ConstantsUtil.ContactDetails.NOT_FOUND_PHOME, ConstantsUtil.ContactDetails.PHONE));
         validationUtil.docValidationForGifoleDynamic(EMPTY_VALUE, EMPTY_VALUE, holder, response);
         holder.setHasBankAccount(false);
         holder.setHasCreditCard(false);
@@ -331,7 +329,6 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             holder.setIsBankCustomer(ValidationUtil.isBBVAClient(response.getParticipants().get(0).getId()));
         }
 
-
         if(Objects.nonNull(response.getIsDataTreatment())){
             holder.setIsDataTreatment(response.getIsDataTreatment());
         }
@@ -351,8 +348,8 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
             Optional<ContactDetailsBO> emailContact = contactDetails.stream()
                     .filter(email -> ConstantsUtil.ContactDetails.EMAIL.equals(email.getContactType().getId())).findFirst();
 
-            contactDetailASOS.add(getContactDetail(emailContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_EMAIL), ConstantsUtil.ContactDetails.EMAIL));
-            contactDetailASOS.add(getContactDetail(phoneContact.map(ContactDetailsBO::getContact).orElse(NOT_FOUND_PHOME), ConstantsUtil.ContactDetails.PHONE));
+            contactDetailASOS.add(getContactDetail(emailContact.map(ContactDetailsBO::getContact).orElse(ConstantsUtil.ContactDetails.NOT_FOUND_EMAIL), ConstantsUtil.ContactDetails.EMAIL));
+            contactDetailASOS.add(getContactDetail(phoneContact.map(ContactDetailsBO::getContact).orElse(ConstantsUtil.ContactDetails.NOT_FOUND_PHOME), ConstantsUtil.ContactDetails.PHONE));
 
             holder.setContactDetails(contactDetailASOS);
 
