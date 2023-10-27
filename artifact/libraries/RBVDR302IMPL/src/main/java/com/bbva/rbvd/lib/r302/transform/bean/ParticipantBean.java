@@ -40,9 +40,7 @@ public class ParticipantBean {
         participantDAO.setCustomerDocumentType(documentTypeId);
         participantDAO.setInsuredCustomerName(participant.getFirstName());
         participantDAO.setClientLastName(participant.getLastName().concat(ConstantsUtil.RegularExpression.DELIMITER).concat(participant.getSecondLastName()));
-        participantDAO.setContactDetails(new ContactDetailsDAO());
-        participantDAO.getContactDetails().setPhoneId(participant.getContactDetails().get(0).getContact().getNumber());
-        participantDAO.getContactDetails().setUserEmailPersonalDesc(participant.getContactDetails().get(1).getContact().getAddress());
+        getContactDetails(participantDAO, participant);
         participantDAO.setCustomerBirthDate(ConvertUtil.toLocalDate(participant.getBirthDate()));
         participantDAO.setPersonalId(participant.getIdentityDocument().getDocumentNumber());
         participantDAO.setIsBbvaCustomerType(ValidationUtil.isBBVAClient(participant.getId())? ConstantsUtil.Condition.YES_S: ConstantsUtil.Condition.NO_N);
@@ -52,14 +50,25 @@ public class ParticipantBean {
             participantDAO.setCustomerEntryDate(null);
         }
     }
+
+    private static void getContactDetails(ParticipantDAO participantDAO, ParticipantDTO participant) {
+        participantDAO.setContactDetails(new ContactDetailsDAO());
+        participantDAO.getContactDetails().setPhoneId(participant.getContactDetails().get(0).getContact().getNumber());
+        participantDAO.getContactDetails().setUserEmailPersonalDesc(participant.getContactDetails().get(1).getContact().getAddress());
+    }
+
+    private static void getContactDetails(ParticipantDAO participantDAO) {
+        participantDAO.setContactDetails(new ContactDetailsDAO());
+        participantDAO.getContactDetails().setPhoneId(null);
+        participantDAO.getContactDetails().setUserEmailPersonalDesc(null);
+    }
+
     private static void buildFromHolder(CustomerListASO customers, String documentTypeId, ParticipantDAO participantDAO, HolderDTO holder) {
         participantDAO.setInsuredId(holder.getId());
         participantDAO.setCustomerDocumentType(documentTypeId);
         participantDAO.setInsuredCustomerName(holder.getFirstName());
         participantDAO.setClientLastName(holder.getLastName().replace(" ",ConstantsUtil.RegularExpression.DELIMITER));
-        participantDAO.setContactDetails(new ContactDetailsDAO());
-        participantDAO.getContactDetails().setPhoneId(null);
-        participantDAO.getContactDetails().setUserEmailPersonalDesc(null);
+        getContactDetails(participantDAO);
         participantDAO.setCustomerBirthDate(null);
         participantDAO.setCustomerEntryDate(ConvertUtil.toLocalDate(new Date()));
         participantDAO.setPersonalId(holder.getIdentityDocument().getDocumentNumber());
