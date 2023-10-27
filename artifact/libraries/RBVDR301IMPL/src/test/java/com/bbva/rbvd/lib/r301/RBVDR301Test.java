@@ -14,7 +14,6 @@ import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEMSALWU;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
@@ -23,7 +22,6 @@ import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.mock.MockDTO;
 import com.bbva.pisd.lib.r014.PISDR014;
-import com.bbva.rbvd.dto.lifeinsrc.mock.MockData;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.lib.r301.factory.ApiConnectorFactoryMock;
 import com.bbva.rbvd.lib.r301.impl.RBVDR301Impl;
@@ -46,7 +44,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
@@ -82,13 +79,9 @@ public class RBVDR301Test {
 
 	private KSMKR002 ksmkr002;
 
-	private MockData mockData;
-
 	private MockDTO mockDTO;
 	@Spy
 	private Context context;
-
-	private CustomerListASO customerList;
 
 	private GifoleInsuranceRequestASO gifoleInsReqAso;
 
@@ -97,7 +90,6 @@ public class RBVDR301Test {
 	private static final String MESSAGE_EXCEPTION = "Something went wrong!";
 
 	private MockService mockService;
-	private CryptoASO inputCrypto;
 	private TierASO responseTier;
 	private static final String HOLDER_ID = "bWZReWNSdE8";
 
@@ -111,7 +103,6 @@ public class RBVDR301Test {
 		ThreadContext.set(context);
 
 		mockDTO = MockDTO.getInstance();
-		inputCrypto = mock(CryptoASO.class);
 		responseTier = mockDTO.getTierMockResponse();
 		mockService = mock(MockService.class);
 		rbvdr301Impl.setMockService(mockService);
@@ -129,7 +120,6 @@ public class RBVDR301Test {
 		internalApiConnector = apiConnectorFactoryMock.getAPIConnector(mockBundleContext);
 		rbvdr301Impl.setInternalApiConnector(internalApiConnector);
 
-		mockData = MockData.getInstance();
 
 		mockDTO = MockDTO.getInstance();
 
@@ -144,7 +134,6 @@ public class RBVDR301Test {
 
 		gifoleInsReqAso = new GifoleInsuranceRequestASO();
 
-		customerList = mockDTO.getCustomerDataResponse();
 
 		when(pisdr014.executeSignatureConstruction(anyString(), anyString(), anyString(), anyString(), anyString()))
 				.thenReturn(new SignatureAWS("", "", "", ""));
@@ -170,40 +159,6 @@ public class RBVDR301Test {
 				thenThrow(new RestClientException(MESSAGE_EXCEPTION));
 
 		this.rbvdr301Impl.executeSimulationRimacService(new InsuranceLifeSimulationBO(), "traceId");
-	}
-
-	@Test
-	public void executeCallListCustomerResponseOK() {
-		LOGGER.info("RBVDR301Test - Executing executeRegisterAdditionalCustomerResponseOK...");
-
-		when(internalApiConnector.getForObject(anyString(), any(), anyMap()))
-				.thenReturn(customerList);
-
-		CustomerListASO validation = rbvdr301Impl.executeCallListCustomerResponse("00000000");
-		assertNotNull(validation);
-		assertNotNull(validation.getData().get(0).getFirstName());
-	}
-
-	@Test
-	public void executeCallListCustomerResponseNull() {
-		LOGGER.info("RBVDR301Test - Executing executeCallListCustomerResponseNull...");
-
-		when(internalApiConnector.getForObject(anyString(), any(), anyMap()))
-				.thenReturn(null);
-
-		CustomerListASO validation = rbvdr301Impl.executeCallListCustomerResponse("00000000");
-		assertNull(validation);
-	}
-
-	@Test
-	public void executeCallListCustomerResponseWithRestClientException() {
-		LOGGER.info("RBVDR301Test - Executing executeCallListCustomerResponseWithRestClientException...");
-
-		when(internalApiConnector.getForObject(anyString(), any(), anyMap()))
-				.thenThrow(new RestClientException(MESSAGE_EXCEPTION));
-
-		CustomerListASO validation = rbvdr301Impl.executeCallListCustomerResponse("00000000");
-		assertNull(validation);
 	}
 
 	@Test
@@ -275,29 +230,6 @@ public class RBVDR301Test {
 		assertNull(validation);
 	}
 
-	@Test
-	public void executeCryptoServiceOK() throws IOException {
-		LOGGER.info("RBVDR301Test - Executing executeCryptoServiceOK...");
-
-		CryptoASO responseCrypto = mockDTO.getCryptoMockResponse();
-
-		when(internalApiConnector.postForObject(anyString(), anyObject(), any())).
-				thenReturn(responseCrypto);
-		CryptoASO validation = rbvdr301Impl.executeCryptoService(inputCrypto);
-		assertNotNull(validation);
-		assertNotNull(validation.getData());
-		assertNotNull(validation.getData().getDocument());
-	}
-
-	@Test
-	public void executeCryptoServiceWithRestClientException() {
-		LOGGER.info("RBVDR301Test - Executing executeCryptoServiceWithRestClientException...");
-
-		when(internalApiConnector.postForObject(anyString(), anyObject(), any())).
-				thenThrow(new RestClientException(MESSAGE_EXCEPTION));
-		CryptoASO validation = rbvdr301Impl.executeCryptoService(inputCrypto);
-		assertNull(validation);
-	}
 
 	@Test
 	public void executeSimulationModificationRimacService_OK(){
