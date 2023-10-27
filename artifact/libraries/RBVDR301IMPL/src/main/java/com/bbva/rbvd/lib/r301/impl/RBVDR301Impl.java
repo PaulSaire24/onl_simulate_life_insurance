@@ -6,7 +6,6 @@ import com.bbva.ksmk.dto.caas.OutputDTO;
 import com.bbva.pbtq.dto.validatedocument.response.host.pewu.PEWUResponse;
 import com.bbva.pisd.dto.insurance.amazon.SignatureAWS;
 
-import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
@@ -126,29 +125,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		return JsonHelper.getInstance().serialization(o);
 	}
 
-	public CustomerListASO executeCallListCustomerResponse(String customerId) {
-		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse START *****");
-		Map<String, Object> pathParams = new HashMap<>();
-		pathParams.put("customerId", customerId);
-
-		CustomerListASO responseList= null;
-
-		try {
-			responseList = this.internalApiConnector.getForObject(PISDProperties.ID_API_CUSTOMER_INFORMATION.getValue(), CustomerListASO.class, pathParams);
-			LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Custumer body: {}",responseList);
-			if (responseList != null) {
-				LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Response body: {}",
-						getRequestJson(responseList.getData().get(0)));
-			}
-
-		} catch(RestClientException e) {
-			LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse ***** Exception: {}", e.getMessage());
-			this.addAdvice(PISDErrors.ERROR_CALL_TO_THIRD_PARTY.getAdviceCode());
-		}
-
-		LOGGER.info("***** RBVDR301Impl - executeCallListCustomerResponse END *****");
-		return responseList;
-	}
 
 	@Override
 	public CustomerBO executeGetCustomer(String customerId){
@@ -192,27 +168,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 		LOGGER.info("***** RBVDR301Impl - executeGifolelifeService END *****");
 		return httpStatus;
-	}
-	//Ejecuta el servicio Cryto (entrada: cryptoASO)
-	public CryptoASO executeCryptoService(CryptoASO cryptoASO) {
-		LOGGER.info("***** RBVDR301Impl - executeCryptoService START *****");
-		LOGGER.info("***** RBVDR301Impl - executeCryptoService ***** Param: {}", cryptoASO.getStream());
-
-		CryptoASO output = null;
-
-		HttpEntity<CryptoASO> entity = new HttpEntity<>(cryptoASO, createHttpHeaders());
-
-		try {
-			output = this.internalApiConnector.postForObject(PISDProperties.ID_API_CRYPTO.getValue(), entity,
-					CryptoASO.class);
-		} catch(RestClientException e) {
-			LOGGER.debug("***** RBVDR301Impl - executeCryptoService ***** Exception: {}", e.getMessage());
-			PISDValidation.build(PISDErrors.ERROR_CONNECTION_CRYPTO_ASO_SERVICE);
-		}
-
-		LOGGER.info("***** RBVDR301Impl - executeCryptoService ***** Response: {}", output);
-		LOGGER.info("***** RBVDR301Impl - executeCryptoService END *****");
-		return output;
 	}
 
 	public String executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
