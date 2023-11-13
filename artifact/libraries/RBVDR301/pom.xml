@@ -27,9 +27,9 @@
 			<version>0.23.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.bbva.rbvd.dto.insrncsale</groupId>
-			<artifactId>RBVDC201</artifactId>
-			<version>0.17.0</version>
+			<groupId>com.bbva.rbvd.dto.insuranceroyal</groupId>
+			<artifactId>RBVDC204</artifactId>
+			<version>0.3.1</version>
 		</dependency>
 	</dependencies>
 	<build>
