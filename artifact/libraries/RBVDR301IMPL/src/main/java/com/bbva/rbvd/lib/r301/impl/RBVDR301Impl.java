@@ -12,10 +12,11 @@ import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
 import com.bbva.pisd.dto.insurance.bo.customer.CustomerBO;
 import com.bbva.pisd.dto.insurance.utils.PISDErrors;
 import com.bbva.pisd.dto.insurance.utils.PISDProperties;
-import com.bbva.pisd.dto.insurance.utils.PISDValidation;
+import com.bbva.apx.exception.business.BusinessException;
 
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
+import com.bbva.rbvd.dto.insuranceroyal.utils.InsuranceRoyalErrors;
 
 import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerBOBean;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
@@ -207,8 +208,8 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		try {
 			output = this.internalApiConnector.getForObject(PISDProperties.ID_API_TIER.getValue(), TierASO.class, pathParams);
 		} catch(RestClientException e) {
-			LOGGER.debug("***** RBVDR301Impl - executeGetTierService ***** Exception: {}", e.getMessage());
-			PISDValidation.build(PISDErrors.ERROR_CONNECTION_TIER_ASO_SERVICE);
+			LOGGER.info("***** RBVDR301Impl - executeGetTierService ***** Exception: {}", e.getMessage());
+			throw new BusinessException(InsuranceRoyalErrors.ERROR_CONNECTION_TIER_ASO_SERVICE.getAdviceCode(), true, InsuranceRoyalErrors.ERROR_CONNECTION_TIER_ASO_SERVICE.getMessage());
 		}
 
 		LOGGER.info("***** RBVDR301Impl - executeGetTierService ***** Response: {}", output);
