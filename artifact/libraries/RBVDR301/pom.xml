@@ -27,9 +27,9 @@
 			<version>0.23.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.bbva.rbvd.dto.insrncsale</groupId>
-			<artifactId>RBVDC201</artifactId>
-			<version>0.17.0</version>
+			<groupId>com.bbva.rbvd.dto.insuranceroyal</groupId>
+			<artifactId>RBVDC204</artifactId>
+			<version>0.3.2</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -44,7 +44,6 @@
 						<Bundle-SymbolicName>${project.artifactId}-${project.version}</Bundle-SymbolicName>
 						<Bundle-Category>library</Bundle-Category>
 						<Import-Package>
-							com.bbva.rbvd.dto.lifeinsrc.*;version="${osgi.version.manifest}",
 							com.bbva.elara.*;version="${osgi.version.manifest}",
 							*;version="${osgi.version.manifest}"
 						</Import-Package>
