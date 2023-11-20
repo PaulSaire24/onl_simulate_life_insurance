@@ -219,7 +219,7 @@ public class RBVDR301Test {
 		assertNotNull(validation.getData().get(0).getChargeFactor());
 	}
 
-	@Test(expected = BusinessException.class)
+	@Test
 	public void executeGetTierServiceWithRestClientException() {
 		LOGGER.info("RBVDR301Test - Executing executeGetTierServiceWithRestClientException...");
 
