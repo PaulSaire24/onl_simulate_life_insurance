@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 public interface IContractDAO {
 
-    BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId , String customerId);
+    BigDecimal getInsuranceAmountDAO(BigDecimal insuranceProductId , String customerId , String documentNumber);
 
 }
