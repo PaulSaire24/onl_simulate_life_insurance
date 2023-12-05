@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_simulate_life_insurance</artifactId>
-		<version>0.10.1</version>
+		<version>0.11.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR302IMPL</artifactId>
 	<name>RBVDR302IMPL</name>
-	<version>0.10.1</version>
+	<version>0.11.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<description>Library to execute business logic - onl_simulate_life_insurance</description>
 	<properties>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd</groupId>
 			<artifactId>RBVDR302</artifactId>
-			<version>0.10.1</version>
+			<version>0.11.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bbva.elara</groupId>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd</groupId>
 			<artifactId>RBVDR301</artifactId>
-			<version>0.10.1</version>
+			<version>0.11.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bbva.pisd</groupId>
