@@ -18,6 +18,7 @@ public class ContractDAOImplTest {
     private PISDR350 pisdR350;
     private BigDecimal insuranceProductId;
     private String customerId;
+    private String documentNumber;
 
     @Before
     public void setUp() throws Exception {
@@ -28,6 +29,8 @@ public class ContractDAOImplTest {
 
         customerId = "cliente001";
 
+        documentNumber = "70221978";
+
         contractDAOImpl = new ContractDAOImpl(pisdR350);
     }
 
@@ -37,7 +40,7 @@ public class ContractDAOImplTest {
         when(this.pisdR350.executeGetListASingleRow(RBVDProperties.QUERY_GET_INSURANCE_AMOUNT.getValue(), new HashMap<>())).
                 thenReturn(null);
 
-        contractDAOImpl.getInsuranceAmountDAO(insuranceProductId, customerId);
+        contractDAOImpl.getInsuranceAmountDAO(insuranceProductId, customerId,documentNumber);
     }
 
 }

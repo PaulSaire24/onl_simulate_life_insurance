@@ -10,7 +10,6 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDErrors;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDValidation;
-import com.bbva.rbvd.lib.r302.transfer.PayloadConfig;
 import com.bbva.rbvd.lib.r302.transform.bean.InsuranceProductModalityBean;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
