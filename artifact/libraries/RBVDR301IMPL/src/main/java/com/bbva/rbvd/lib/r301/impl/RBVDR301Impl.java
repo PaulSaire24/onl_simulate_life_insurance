@@ -28,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestClientException;
+import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants;
 
 import javax.ws.rs.HttpMethod;
 import java.nio.charset.StandardCharsets;
@@ -40,17 +41,6 @@ import java.util.Base64;
 
 import static java.util.Collections.singletonMap;
 
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.APP_NAME;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.OAUTH_TOKEN;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.CRE_EXTRA_PARAMS;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.INPUT_TEXT_SECURITY;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Crypto.B64URL;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.AUTHORIZATION;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.APPLICATION;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.JSON;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.AMZ_DATE;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.API_KEY;
-import static com.bbva.rbvd.dto.lifeinsrc.utils.RBVDConstants.Headers.TRACE_ID;
 
 public class RBVDR301Impl extends RBVDR301Abstract {
 
@@ -172,13 +162,13 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	public String executeGetCustomerIdEncrypted(CryptoASO cryptoASO){
 		LOGGER.info("***** RBVDR301Impl - executeGetCustomerIdEncrypted START *****");
-		String appName = this.applicationConfigurationService.getProperty(APP_NAME);
-		String password =  OAUTH_TOKEN;
-		String credExtraParams = this.applicationConfigurationService.getProperty(CRE_EXTRA_PARAMS);
-		String inputContext = this.applicationConfigurationService.getProperty(INPUT_TEXT_SECURITY);  //provided by security
+		String appName = this.applicationConfigurationService.getProperty(RBVDConstants.Crypto.APP_NAME);
+		String password =  RBVDConstants.Crypto.OAUTH_TOKEN;
+		String credExtraParams = this.applicationConfigurationService.getProperty(RBVDConstants.Crypto.CRE_EXTRA_PARAMS);
+		String inputContext = this.applicationConfigurationService.getProperty(RBVDConstants.Crypto.INPUT_TEXT_SECURITY);  //provided by security
 		List<InputDTO> listDecodedCredential = new ArrayList<>();
 
-		listDecodedCredential.add(new InputDTO(Base64.getEncoder().encodeToString(cryptoASO.getStream().getBytes()), B64URL));
+		listDecodedCredential.add(new InputDTO(Base64.getEncoder().encodeToString(cryptoASO.getStream().getBytes()), RBVDConstants.Crypto.B64URL));
 
 		List<OutputDTO> listEncodedCredentials = ksmkR002.execute(listDecodedCredential, "", inputContext, new CredentialsDTO(appName, password, credExtraParams));
 		if (Objects.nonNull(listEncodedCredentials) && !CollectionUtils.isEmpty(listEncodedCredentials)) {
@@ -218,19 +208,19 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	//Crea las cabeceras Http
 	private HttpHeaders createHttpHeaders() {
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType(APPLICATION,JSON, StandardCharsets.UTF_8);
+		MediaType mediaType = new MediaType(RBVDConstants.Headers.APPLICATION,RBVDConstants.Headers.JSON, StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
 		return headers;
 	}
 	//Crea las cabeceras AWS de Http
 	private HttpHeaders createHttpHeadersAWS(SignatureAWS signature) {
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType(APPLICATION, JSON, StandardCharsets.UTF_8);
+		MediaType mediaType = new MediaType(RBVDConstants.Headers.APPLICATION, RBVDConstants.Headers.JSON, StandardCharsets.UTF_8);
 		headers.setContentType(mediaType);
-		headers.set(AUTHORIZATION, signature.getAuthorization());
-		headers.set(AMZ_DATE, signature.getxAmzDate());
-		headers.set(API_KEY, signature.getxApiKey());
-		headers.set(TRACE_ID, signature.getTraceId());
+		headers.set(RBVDConstants.Headers.AUTHORIZATION, signature.getAuthorization());
+		headers.set(RBVDConstants.Headers.AMZ_DATE, signature.getxAmzDate());
+		headers.set(RBVDConstants.Headers.API_KEY, signature.getxApiKey());
+		headers.set(RBVDConstants.Headers.TRACE_ID, signature.getTraceId());
 		return headers;
 	}
 }

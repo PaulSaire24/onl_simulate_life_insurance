@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r302.util;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 
 public class ConstantsUtil {
@@ -52,11 +53,27 @@ public class ConstantsUtil {
         public static final String ENABLE_GIFOLE_LIFE_ASO = "ENABLE_GIFOLE_LIFE_ASO";
     }
 
+    public enum Role {
+        CONTRANTOR("CONTRANTOR",1,"PARTICIPANT_ROLE_ID"),
+        INSURED("INSURED",2,"PARTICIPANT_ROLE_ID");
+        private final String name;
+        private final int id;
+        private final String key;
 
-    public static final class Role {
-        private Role() {}
-        public static final int CONTRACTOR_ID =1;
-        public static final int INSURED_ID =2;
+        Role(String name, int id, String key) {
+            this.name = name;
+            this.id = id;
+            this.key = key;
+        }
+        public String getName() {
+            return name;
+        }
+        public int getId() {
+            return id;
+        }
+        public String getKey() {
+            return key;
+        }
     }
 
     public static final class CoverageTypeConstant{

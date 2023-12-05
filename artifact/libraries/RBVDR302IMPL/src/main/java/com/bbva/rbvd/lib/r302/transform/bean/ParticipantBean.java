@@ -23,7 +23,7 @@ public class ParticipantBean {
     private ParticipantBean() {}
     public static ParticipantDAO getInformationParticipant (PayloadStore payloadStore){
         ParticipantDAO participantDAO = new ParticipantDAO();
-        participantDAO.setParticipantRoleId(BigDecimal.valueOf(ConstantsUtil.Role.INSURED_ID));
+        participantDAO.setParticipantRoleId(BigDecimal.valueOf(ConstantsUtil.Role.INSURED.getId()));
         List<ParticipantDTO> participants = payloadStore.getResponse().getParticipants();
         HolderDTO holder = payloadStore.getResponse().getHolder();
         if(!CollectionUtils.isEmpty(participants)){
