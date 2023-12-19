@@ -36,7 +36,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		lifeSimulationDTO.setAap((String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.AAP));
 		lifeSimulationDTO.setEndorsed(this.getIsendorsed());
 
-
+		//se usa el patron decoracion modificada, diagrama de clase en la ruta:onl_simulate_life_insurance\doc\diagramaClases-Simulation.png
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
 		if(nonNull(response)) {
