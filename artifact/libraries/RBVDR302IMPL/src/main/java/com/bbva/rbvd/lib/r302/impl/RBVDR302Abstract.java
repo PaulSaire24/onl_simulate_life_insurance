@@ -3,6 +3,7 @@ package com.bbva.rbvd.lib.r302.impl;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.library.AbstractLibrary;
 import com.bbva.pisd.lib.r350.PISDR350;
+import com.bbva.pisd.lib.r403.PISDR403;
 import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
 import com.bbva.rbvd.lib.r302.RBVDR302;
@@ -17,7 +18,10 @@ public abstract class RBVDR302Abstract extends AbstractLibrary implements RBVDR3
 	protected RBVDR301 rbvdR301;
 
 	protected PISDR350 pisdR350;
+
 	protected RBVDR044 rbvdR044;
+
+	protected PISDR403 pisdR403;
 
 
 	/**
@@ -46,6 +50,13 @@ public abstract class RBVDR302Abstract extends AbstractLibrary implements RBVDR3
 	*/
 	public void setRbvdR044(RBVDR044 rbvdR044) {
 		this.rbvdR044 = rbvdR044;
+	}
+
+	/**
+	* @param pisdR403 the this.pisdR403 to set
+	*/
+	public void setPisdR403(PISDR403 pisdR403) {
+		this.pisdR403 = pisdR403;
 	}
 
 }

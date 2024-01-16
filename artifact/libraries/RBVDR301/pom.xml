@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.bbva.rbvd.dto.insuranceroyal</groupId>
 			<artifactId>RBVDC204</artifactId>
-			<version>0.3.2</version>
+			<version>0.4.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

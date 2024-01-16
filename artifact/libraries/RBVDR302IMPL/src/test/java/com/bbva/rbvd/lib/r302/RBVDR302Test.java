@@ -13,10 +13,11 @@ import com.bbva.pisd.dto.insurance.mock.MockDTO;
 
 import com.bbva.pisd.lib.r350.PISDR350;
 
+import com.bbva.pisd.lib.r403.PISDR403;
+import com.bbva.rbvd.dto.insuranceroyal.error.ErrorResponseDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
@@ -81,6 +82,9 @@ public class RBVDR302Test {
 
 	@Mock
 	private RBVDR301 rbvdr301;
+
+	@Mock
+	private PISDR403 pisdr403;
 
 
 	private MockData mockData;
@@ -175,6 +179,12 @@ public class RBVDR302Test {
 		this.requestInput.setTerm(new TermDTO());
 		this.requestInput.getTerm().setNumber(45);
 
+		List<ErrorResponseDTO> errorResponseList = new ArrayList<>();
+		ErrorResponseDTO errorResponse = new ErrorResponseDTO();
+		errorResponse.setMessage("El campo producto es requerido");
+		errorResponse.setCode("BBVA00123457");
+		errorResponseList.add(errorResponse);
+
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
@@ -206,6 +216,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+		when(this.pisdr403.executeFindError(anyObject())).thenReturn(errorResponseList);
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -220,6 +231,12 @@ public class RBVDR302Test {
 		this.requestInput.getProduct().setId("840");
 		this.requestInput.setTerm(new TermDTO());
 		this.requestInput.getTerm().setNumber(45);
+
+		List<ErrorResponseDTO> errorResponseList = new ArrayList<>();
+		ErrorResponseDTO errorResponse = new ErrorResponseDTO();
+		errorResponse.setMessage("El campo producto es requerido");
+		errorResponse.setCode("BBVA00123457");
+		errorResponseList.add(errorResponse);
 
 		LOGGER.info("RBVDR302Test - Executing executeGetGenerateEasyYesTest...");
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
@@ -251,6 +268,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+		when(this.pisdr403.executeFindError(anyObject())).thenReturn(errorResponseList);
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -304,6 +322,12 @@ public class RBVDR302Test {
 		participantDTO.setGender(new GenderDTO());
 		participantDTO.getGender().setId("FEMALE");
 
+		List<ErrorResponseDTO> errorResponseList = new ArrayList<>();
+		ErrorResponseDTO errorResponse = new ErrorResponseDTO();
+		errorResponse.setMessage("El campo producto es requerido");
+		errorResponse.setCode("BBVA00123457");
+		errorResponseList.add(errorResponse);
+
 		participantDTO.setParticipantType(new ParticipantTypeDTO());
 		participantDTO.getParticipantType().setId("455");
 		participantDTO.setLastName("HGHHH");
@@ -349,7 +373,6 @@ public class RBVDR302Test {
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		//when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
@@ -358,6 +381,7 @@ public class RBVDR302Test {
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+		when(this.pisdr403.executeFindError(anyObject())).thenReturn(errorResponseList);
 
 		List<InsurancePlanDTO> insurancePlanList = new ArrayList<>();
 		InsurancePlanDTO insurancePlan = new InsurancePlanDTO();
@@ -394,6 +418,12 @@ public class RBVDR302Test {
 		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
+		List<ErrorResponseDTO> errorResponseList = new ArrayList<>();
+		ErrorResponseDTO errorResponse = new ErrorResponseDTO();
+		errorResponse.setMessage("El campo producto es requerido");
+		errorResponse.setCode("BBVA00123457");
+		errorResponseList.add(errorResponse);
+
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
@@ -422,10 +452,10 @@ public class RBVDR302Test {
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		//when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+		when(this.pisdr403.executeFindError(anyObject())).thenReturn(errorResponseList);
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
 
@@ -456,7 +486,12 @@ public class RBVDR302Test {
 		participantDTO.setSecondLastName("gh");
 		participantDTO.setIdentityDocument(identityDocumentDTO);
 
-		InsuranceProductDTO product = new InsuranceProductDTO();
+		List<ErrorResponseDTO> errorResponseList = new ArrayList<>();
+		ErrorResponseDTO errorResponse = new ErrorResponseDTO();
+		errorResponse.setMessage("El campo producto es requerido");
+		errorResponse.setCode("BBVA00123457");
+		errorResponseList.add(errorResponse);
+
 		List<InsurancePlanDTO> plansList = new ArrayList<>();
 		InsurancePlanDTO plans = new InsurancePlanDTO();
 		List<InstallmentsDTO> installmentsDTOList = new ArrayList<>();
@@ -469,7 +504,7 @@ public class RBVDR302Test {
 		plans.setInstallmentPlans(installmentsDTOList);
 		plansList.add(plans);
 
-		/*product.setPlans(plansList);*/
+
 		this.requestInput.getProduct().setPlans(plansList);
 
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
@@ -505,10 +540,10 @@ public class RBVDR302Test {
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		//when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
+		when(this.pisdr403.executeFindError(anyObject())).thenReturn(errorResponseList);
 
 
 		LifeSimulationDTO response = this.rbvdR302.executeGetSimulation(requestInput);
