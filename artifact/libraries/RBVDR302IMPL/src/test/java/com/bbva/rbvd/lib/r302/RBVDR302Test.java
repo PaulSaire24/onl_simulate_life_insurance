@@ -18,7 +18,6 @@ import com.bbva.rbvd.dto.insuranceroyal.error.ErrorResponseDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.DocumentTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.IdentityDocumentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.TermDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
@@ -64,7 +63,6 @@ import java.util.Collections;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyMap;
@@ -376,7 +374,6 @@ public class RBVDR302Test {
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		//when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
@@ -456,7 +453,6 @@ public class RBVDR302Test {
 				.thenReturn(responseQuerySumCumulus);
 		when(this.rbvdr301.executeGetCustomerIdEncrypted(anyObject())).thenReturn("45qyxsw7");
 		when(this.rbvdr301.executeGetTierService(anyObject())).thenReturn(tier);
-		//when(this.rbvdr301.executeCallListCustomerResponse(anyString())).thenReturn(getCustomerListASO());
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
