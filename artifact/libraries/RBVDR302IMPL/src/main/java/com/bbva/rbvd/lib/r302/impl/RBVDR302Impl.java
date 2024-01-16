@@ -30,6 +30,8 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 		if(true){
 
+			LOGGER.info("***** RBVDR302Impl - executeFindError START ******");
+
 			ErrorRequestDTO errorRequest = new ErrorRequestDTO();
 			List<DetailsErrorDTO> listDetailsError = new ArrayList<>();
 			DetailsErrorDTO detailsError = new DetailsErrorDTO();
@@ -46,6 +48,8 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			List<ErrorResponseDTO> errorResponse = this.pisdR403.executeFindError(errorRequest);
 			LOGGER.info("***** RBVDR302Impl - executeFindError ***** {}", errorResponse);
+
+			LOGGER.info("***** RBVDR302Impl - executeFindError END ******");
 
 			this.addAdviceWithDescription(errorResponse.get(0).getCode(), errorResponse.get(0).getMessage());
 
