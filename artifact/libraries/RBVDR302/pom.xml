@@ -26,6 +26,11 @@
 			<artifactId>PISDC011</artifactId>
 			<version>0.23.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bbva.rbvd.dto.insuranceroyal</groupId>
+			<artifactId>RBVDC204</artifactId>
+			<version>0.4.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

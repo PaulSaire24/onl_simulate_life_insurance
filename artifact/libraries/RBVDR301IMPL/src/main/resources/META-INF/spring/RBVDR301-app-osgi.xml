@@ -4,5 +4,4 @@
 	<osgi:reference id="pisdR014" interface="com.bbva.pisd.lib.r014.PISDR014"/>
 	<osgi:reference id="pbtqR002" interface="com.bbva.pbtq.lib.r002.PBTQR002"/>
 	<osgi:reference id="ksmkR002" interface="com.bbva.ksmk.lib.r002.KSMKR002"/>
-	<osgi:reference id="pisdR403" interface="com.bbva.pisd.lib.r403.PISDR403"/>
 </beans>

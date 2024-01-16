@@ -7,9 +7,8 @@ import com.bbva.elara.utility.api.connector.APIConnectorBuilder;
 import com.bbva.ksmk.lib.r002.KSMKR002;
 import com.bbva.pbtq.lib.r002.PBTQR002;
 import com.bbva.pisd.lib.r014.PISDR014;
-import com.bbva.pisd.lib.r403.PISDR403;
 import com.bbva.rbvd.lib.r301.RBVDR301;
-
+import com.bbva.rbvd.mock.MockService;
 
 /**
  * This class automatically defines the libraries and utilities that it will use.
@@ -30,7 +29,7 @@ public abstract class RBVDR301Abstract extends AbstractLibrary implements RBVDR3
 
 	protected KSMKR002 ksmkR002;
 
-	protected PISDR403 pisdR403;
+	protected MockService mockService;
 
 
 	/**
@@ -82,11 +81,11 @@ public abstract class RBVDR301Abstract extends AbstractLibrary implements RBVDR3
 		this.ksmkR002 = ksmkR002;
 	}
 
-	/**
-	* @param pisdR403 the this.pisdR403 to set
-	*/
-	public void setPisdR403(PISDR403 pisdR403) {
-		this.pisdR403 = pisdR403;
+	public MockService getMockService() {
+		return mockService;
 	}
 
+	public void setMockService(MockService mockService) {
+		this.mockService = mockService;
+	}
 }

@@ -10,7 +10,4 @@
 	<bean id="ksmkR002" class="org.mockito.Mockito" factory-method="mock">
 		<constructor-arg value="com.bbva.ksmk.lib.r002.KSMKR002"/>
 	</bean>
-	<bean id="pisdR403" class="org.mockito.Mockito" factory-method="mock">
-		<constructor-arg value="com.bbva.pisd.lib.r403.PISDR403"/>
-	</bean>
 </beans>

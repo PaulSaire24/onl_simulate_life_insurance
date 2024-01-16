@@ -39,7 +39,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 		//se usa el patron decoracion modificada, diagrama de clase en la ruta:onl_simulate_life_insurance\doc\diagramaClases-Simulation.png
 		LifeSimulationDTO response = rbvdR302.executeGetSimulation(lifeSimulationDTO);
 
-		if(nonNull(response)) {
+		if(nonNull(response) && this.getAdviceList().size()==0) {
 			this.setProduct(response.getProduct());
 			this.setInsuredamount(response.getInsuredAmount());
 			this.setHolder(response.getHolder());
