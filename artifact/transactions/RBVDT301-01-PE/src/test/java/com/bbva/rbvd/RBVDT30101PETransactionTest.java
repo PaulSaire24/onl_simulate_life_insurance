@@ -127,7 +127,7 @@ public class RBVDT30101PETransactionTest {
 		when(rbvdr302.executeGetSimulation(anyObject())).thenReturn(null);
 		this.transaction.execute();
 
-		assertEquals(Severity.ENR, this.transaction.getSeverity());
+		assertEquals(Severity.EWR, this.transaction.getSeverity());
 	}
 
 	// Add Parameter to Transaction

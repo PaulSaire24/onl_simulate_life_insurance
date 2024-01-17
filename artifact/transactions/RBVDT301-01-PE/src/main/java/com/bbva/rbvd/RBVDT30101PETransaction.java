@@ -52,7 +52,7 @@ public class RBVDT30101PETransaction extends AbstractRBVDT30101PETransaction {
 			this.setIsendorsed(response.isEndorsed());
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		} else {
-			this.setSeverity(Severity.ENR);
+			this.setSeverity(Severity.EWR);
 		}
 
 	}
