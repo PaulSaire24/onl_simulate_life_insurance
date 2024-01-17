@@ -28,7 +28,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation START *****");
 		LOGGER.info("***** RBVDR302Impl - executeGetSimulation ***** {}", input);
 
-		if("S".equals(ConstantsUtil.Condition.YES_S)){
+
 
 			LOGGER.info("***** RBVDR302Impl - executeFindError START ******");
 
@@ -53,7 +53,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 
 			this.addAdviceWithDescription(errorResponse.get(0).getCode(), errorResponse.get(0).getMessage());
 
-		}
+
 
 
 		LifeSimulationDTO response = new LifeSimulationDTO();
