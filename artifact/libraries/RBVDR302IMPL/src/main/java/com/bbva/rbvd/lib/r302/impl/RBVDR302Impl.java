@@ -51,17 +51,21 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			ErrorRequestDTO errorRequest = new ErrorRequestDTO();
 			List<DetailsErrorDTO> listDetailsError = new ArrayList<>();
 			DetailsErrorDTO detailsError = new DetailsErrorDTO();
-			detailsError.setCode("COT0002001");
-			detailsError.setValue("El campo producto es requerido");
+			detailsError.setCode("PER005005");
+			detailsError.setValue("El campo nroDocumento de persona en su elemento 1 debe contener 11 caracteres");
 			DetailsErrorDTO detailsError1 = new DetailsErrorDTO();
-			detailsError1.setCode("COT0002002");
-			detailsError1.setValue("El campo valor de datosParticulares en su elemento 1 debe contener como máximo 7 caracteres");
+			detailsError1.setCode("PER005011");
+			detailsError1.setValue("El campo nroDocumento de persona en su elemento 1 con valor \\\"@\\\" no coincide para el patrón: 0-9");
+			DetailsErrorDTO detailsError2 = new DetailsErrorDTO();
+			detailsError2.setCode("PER005003");
+			detailsError2.setValue("El campo nroDocumento de persona en su elemento 1 debe contener al menos 5 caracteres");
 			listDetailsError.add(detailsError);
 			listDetailsError.add(detailsError1);
+			listDetailsError.add(detailsError2);
 			errorRequest.setDetails(listDetailsError);
 			errorRequest.setTypeErrorScope("RIMAC");
 			errorRequest.setHttpCode(400L);
-
+			errorRequest.setCode("CP09");
 			List<ErrorResponseDTO> errorResponse = this.pisdR403.executeFindError(errorRequest);
 			LOGGER.info("***** RBVDR302Impl - executeFindError ***** {}", errorResponse);
 
