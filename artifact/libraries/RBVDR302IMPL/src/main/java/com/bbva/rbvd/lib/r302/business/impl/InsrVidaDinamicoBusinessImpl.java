@@ -1,10 +1,7 @@
 package com.bbva.rbvd.lib.r302.business.impl;
 
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
-import com.bbva.rbvd.dto.lifeinsrc.commons.CoverageDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.RefundsDTO;
-import com.bbva.rbvd.dto.lifeinsrc.commons.UnitDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.*;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.CoberturaBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.commons.FinanciamientoBO;
 import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.AseguradoBO;
@@ -170,7 +167,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         }
         return insurance;
     }
-    private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService, PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
+    private static LifeSimulationDTO prepareResponse(ApplicationConfigurationService applicationConfigurationService,
+                                             PayloadConfig payloadConfig, InsuranceLifeSimulationBO responseRimac) {
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse START *****");
 
         LifeSimulationDTO response;
@@ -187,8 +185,21 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
+        updateInsuredAmountFromRimacTotalCumulus(responseRimac, response);
+
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
+    }
+
+    private static void updateInsuredAmountFromRimacTotalCumulus(InsuranceLifeSimulationBO responseRimac, LifeSimulationDTO response) {
+        BigDecimal cumuloTotal = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
+        if(cumuloTotal != null ){
+            InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
+            insuredAmountDTO.setAmount(cumuloTotal);
+            insuredAmountDTO.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+
+            response.setInsuredAmount(insuredAmountDTO);
+        }
     }
 
     private static List<CoberturaBO> getAdditionalCoverages(LifeSimulationDTO input){

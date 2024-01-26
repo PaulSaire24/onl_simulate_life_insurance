@@ -189,7 +189,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         requestInput.setListRefunds(listRefunds);
 
         InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
-        insuredAmountDTO.setAmount(new BigDecimal(2000));
+        insuredAmountDTO.setAmount(new BigDecimal(45678));
         insuredAmountDTO.setCurrency("PEN");
         requestInput.setInsuredAmount(insuredAmountDTO);
 
@@ -200,6 +200,8 @@ public class InsrVidaDinamicoBusinessImplTest{
 
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMinima(new BigDecimal(1000));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setSumaAseguradaMaxima(new BigDecimal(2000));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(new BigDecimal(87000));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setMoneda("PEN");
 
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
@@ -207,10 +209,28 @@ public class InsrVidaDinamicoBusinessImplTest{
         PayloadStore validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
 
         Assert.assertNotNull(validation);
-
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits());
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMinimumAmount());
         Assert.assertNotNull(validation.getResponse().getInsuranceLimits().getMaximumAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount().getAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount().getCurrency());
+        Assert.assertEquals(new BigDecimal(87000),validation.getResponse().getInsuredAmount().getAmount());
+
+
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(null);
+        when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
+        requestInput.getInsuredAmount().setAmount(new BigDecimal(90211));
+        payloadConfig.setInput(requestInput);
+
+        validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
+
+        Assert.assertNotNull(validation);
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount().getAmount());
+        Assert.assertNotNull(validation.getResponse().getInsuredAmount().getCurrency());
+        Assert.assertEquals(new BigDecimal(90211),validation.getResponse().getInsuredAmount().getAmount());
+
     }
 
     @Test(expected = BusinessException.class)
