@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>elara-project</artifactId>
 		<groupId>com.bbva.elara</groupId>
-		<version>7.10.0</version>
+		<version>7.11.8</version>
 	</parent>
 	<artifactId>onl_simulate_life_insurance</artifactId>
 	<groupId>com.bbva.rbvd</groupId>
@@ -13,7 +13,7 @@
 	<name>onl_simulate_life_insurance</name>
 	<description>Deployment unit onl_simulate_life_insurance of uuaa rbvd</description>
 	<properties>
-		<apx.core.online.version>7.10.0</apx.core.online.version>
+		<apx.core.online.version>7.11.8</apx.core.online.version>
 		<outputDirectoryDTOs>../../../target/dtos</outputDirectoryDTOs>
 		<outputDirectoryLibraries>../../../target/libraries</outputDirectoryLibraries>
 		<outputDirectoryTransactions>../../../target/transactions</outputDirectoryTransactions>
