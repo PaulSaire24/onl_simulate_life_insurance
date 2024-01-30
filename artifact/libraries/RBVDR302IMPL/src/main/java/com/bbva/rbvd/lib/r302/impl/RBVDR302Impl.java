@@ -35,7 +35,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 					.withPreSimulation( SimulationParameter.Builder.an().withPisdR350(this.pisdR350).withRbvdR301(this.rbvdR301).withApplicationConfigurationService(this.applicationConfigurationService).build())
 					.withPostSimulation(new SimulationStore(this.pisdR350))
 					.build();
-						LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
+			LOGGER.info("***** RBVDR302Impl - SimulationEasyYes ***** {}", simulation);
 			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 
 		} else if (ConstantsUtil.Product.DYNAMIC_LIFE.equals(input.getProduct().getId())) {
@@ -70,8 +70,10 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			LOGGER.info("***** RBVDR302Impl - executeFindError ***** {}", errorResponse);
 
 			LOGGER.info("***** RBVDR302Impl - executeFindError END ******");
+			for (ErrorResponseDTO err:errorResponse) {
+				this.addAdviceWithDescription(err.getCode(), err.getMessage());
+			}
 
-			this.addAdviceWithDescription(errorResponse.get(0).getCode(), errorResponse.get(0).getMessage());
 			response = simulation.start(input, this.rbvdR301, this.applicationConfigurationService);
 		}
 
