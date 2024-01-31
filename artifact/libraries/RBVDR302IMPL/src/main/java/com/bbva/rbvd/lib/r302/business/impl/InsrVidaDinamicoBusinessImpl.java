@@ -189,20 +189,23 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
-        updateInsuredAmountFromRimacTotalCumulus(responseRimac, response);
+        updateInsuredAmountFromRimacTotalAmount(responseRimac, response,payloadConfig.getSumCumulus());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
     }
 
-    private static void updateInsuredAmountFromRimacTotalCumulus(InsuranceLifeSimulationBO responseRimac, LifeSimulationDTO response) {
-        BigDecimal cumuloTotal = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
-        if(cumuloTotal != null ){
-            InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
-            insuredAmountDTO.setAmount(cumuloTotal);
-            insuredAmountDTO.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+    private static void updateInsuredAmountFromRimacTotalAmount(InsuranceLifeSimulationBO responseRimac,
+                                            LifeSimulationDTO response,BigDecimal cumulusFromDB) {
+        if(cumulusFromDB.compareTo(BigDecimal.ZERO) == 0){
+            BigDecimal cumuloTotal = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
+            if(cumuloTotal != null ){
+                InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
+                insuredAmountDTO.setAmount(cumuloTotal);
+                insuredAmountDTO.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
 
-            response.setInsuredAmount(insuredAmountDTO);
+                response.setInsuredAmount(insuredAmountDTO);
+            }
         }
     }
 

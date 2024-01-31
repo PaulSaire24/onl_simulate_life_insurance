@@ -206,6 +206,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         when(applicationConfigurationService.getProperty("IS_MOCK_MODIFY_QUOTATION_DYNAMIC")).thenReturn("N");
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
         payloadConfig.setInput(requestInput);
+        payloadConfig.setSumCumulus(BigDecimal.ZERO);
         PayloadStore validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
 
         Assert.assertNotNull(validation);
@@ -221,6 +222,7 @@ public class InsrVidaDinamicoBusinessImplTest{
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(null);
         when(rbvdR301.executeSimulationModificationRimacService(anyObject(), anyString(), anyString())).thenReturn(responseRimac);
         requestInput.getInsuredAmount().setAmount(new BigDecimal(90211));
+        payloadConfig.setSumCumulus(new BigDecimal(51092));
         payloadConfig.setInput(requestInput);
 
         validation = insrVidaDinamicoBusiness.doDynamicLife(payloadConfig);
