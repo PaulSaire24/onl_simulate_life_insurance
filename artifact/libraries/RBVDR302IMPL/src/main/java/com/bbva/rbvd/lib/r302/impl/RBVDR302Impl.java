@@ -52,7 +52,7 @@ public class RBVDR302Impl extends RBVDR302Abstract {
 			List<DetailsErrorDTO> listDetailsError = new ArrayList<>();
 			DetailsErrorDTO detailsError = new DetailsErrorDTO();
 			detailsError.setCode("PER005005");
-			detailsError.setValue("El campo nroDocumento de persona en su elemento 1 debe contener 11 caracteres");
+			detailsError.setValue("El campo nroDocumento de persona en su elemento 1 debe contener 8 caracteres");
 			DetailsErrorDTO detailsError1 = new DetailsErrorDTO();
 			detailsError1.setCode("PER005011");
 			detailsError1.setValue("El campo nroDocumento de persona en su elemento 1 con valor \\\"@\\\" no coincide para el patrón: 0-9");
