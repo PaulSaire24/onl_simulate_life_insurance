@@ -199,14 +199,17 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
                                                              LifeSimulationDTO response, BigDecimal cumulusFromDB) {
 
         BigDecimal rimacCumulus = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
-        String currency = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda();
 
-        InsuredAmountDTO insuredAmount = new InsuredAmountDTO();
+        if(rimacCumulus != null){
+            String currency = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda();
 
-        insuredAmount.setAmount(rimacCumulus.subtract(cumulusFromDB));
-        insuredAmount.setCurrency(currency);
+            InsuredAmountDTO insuredAmount = new InsuredAmountDTO();
 
-        response.setInsuredAmount(insuredAmount);
+            insuredAmount.setAmount(rimacCumulus.subtract(cumulusFromDB));
+            insuredAmount.setCurrency(currency);
+
+            response.setInsuredAmount(insuredAmount);
+        }
 
     }
 
