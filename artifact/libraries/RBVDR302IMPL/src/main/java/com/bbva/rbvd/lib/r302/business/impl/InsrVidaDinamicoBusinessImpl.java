@@ -103,7 +103,7 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
 
     @Override
     public PayloadStore doDynamicLife(PayloadConfig payloadConfig) {
-        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {0} ", payloadConfig);
+        LOGGER.info("***** InsrVidaDinamicoBusinessImpl - doDynamicLife |  payloadConfig: {} ", payloadConfig);
         LifeSimulationDTO response;
         InsuranceLifeSimulationBO responseRimac = null;
         validatePlanWithRefundPercentage(payloadConfig.getInput());
@@ -189,24 +189,25 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
         modifyRefundAmount(responseRimac,response);
         response.setInsuranceLimits(getInsuranceLimits(responseRimac));
 
-        updateInsuredAmountFromRimacTotalAmount(responseRimac, response,payloadConfig.getSumCumulus());
+        constructInsuredAmountByRimacCumulusAndCumulusDB(responseRimac, response,payloadConfig.getSumCumulus());
 
         LOGGER.info("***** InsrVidaDinamicoBusinessImpl - prepareResponse response {} *****",response);
         return response;
     }
 
-    private static void updateInsuredAmountFromRimacTotalAmount(InsuranceLifeSimulationBO responseRimac,
-                                            LifeSimulationDTO response,BigDecimal cumulusFromDB) {
-        if(cumulusFromDB.compareTo(BigDecimal.ZERO) == 0){
-            BigDecimal cumuloTotal = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
-            if(cumuloTotal != null ){
-                InsuredAmountDTO insuredAmountDTO = new InsuredAmountDTO();
-                insuredAmountDTO.setAmount(cumuloTotal);
-                insuredAmountDTO.setCurrency(responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda());
+    private static void constructInsuredAmountByRimacCumulusAndCumulusDB(InsuranceLifeSimulationBO responseRimac,
+                                                             LifeSimulationDTO response, BigDecimal cumulusFromDB) {
 
-                response.setInsuredAmount(insuredAmountDTO);
-            }
-        }
+        BigDecimal rimacCumulus = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getCumuloTotal();
+        String currency = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda();
+
+        InsuredAmountDTO insuredAmount = new InsuredAmountDTO();
+
+        insuredAmount.setAmount(rimacCumulus.subtract(cumulusFromDB));
+        insuredAmount.setCurrency(currency);
+
+        response.setInsuredAmount(insuredAmount);
+
     }
 
     private static List<CoberturaBO> getAdditionalCoverages(LifeSimulationDTO input){

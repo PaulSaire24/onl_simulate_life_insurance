@@ -354,6 +354,7 @@ public class RBVDR302Test {
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
 		responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
 		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
+		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(new BigDecimal(39444));
 
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
@@ -397,6 +398,7 @@ public class RBVDR302Test {
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(new BigDecimal(485853));
 		when(applicationConfigurationService.getProperty(anyString())).thenReturn("L");
 
 		Map<String,Object> responseQueryGetProductInformation2 = new HashMap<>();
@@ -475,6 +477,7 @@ public class RBVDR302Test {
 		this.requestInput.setParticipants(Collections.singletonList(participantDTO));
 
 		responseRimac.getPayload().setProducto("VIDADINAMICO");
+		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setCumuloTotal(new BigDecimal(8756221));
 		if(!CollectionUtils.isEmpty(requestInput.getProduct().getPlans()) && !CollectionUtils.isEmpty(requestInput.getProduct().getPlans().get(0).getInstallmentPlans())){
 			when(applicationConfigurationService.getProperty(anyString())).thenReturn("15");
 		}else{
