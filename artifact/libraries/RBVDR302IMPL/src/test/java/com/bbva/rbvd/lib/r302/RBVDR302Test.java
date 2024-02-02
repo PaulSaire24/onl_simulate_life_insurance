@@ -355,6 +355,7 @@ public class RBVDR302Test {
 		responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
 		responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
 
+
 		when(this.rbvdr301.executeSimulationRimacService(anyObject(), anyString())).thenReturn(responseRimac);
 		when(this.rbvdr301.executeSimulationModificationRimacService(anyObject(),anyString(),anyString())).thenReturn(responseRimac);
 		when(this.pisdR350.executeInsertSingleRow(anyString(), anyMap())).thenReturn(1);
