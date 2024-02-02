@@ -204,7 +204,8 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             String currency = responseRimac.getPayload().getCotizaciones().get(0).getPlan().getMoneda();
 
             InsuredAmountDTO insuredAmount = new InsuredAmountDTO();
-
+            //Rimac envía cumuloTotal sumando cumulo actual + cumulo coberturas
+            //Se resta el cumuloTotal que envia Rimac con el cúmulo actual del asegurado
             insuredAmount.setAmount(rimacCumulus.subtract(cumulusFromDB));
             insuredAmount.setCurrency(currency);
 
