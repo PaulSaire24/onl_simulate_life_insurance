@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class SimulationVidaDinamico extends SimulationDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimulationVidaDinamico.class);
 
-	private RBVDR044 rbvdr044;
+	private final RBVDR044 rbvdr044;
 
 	public SimulationVidaDinamico(PreSimulation preSimulation, PostSimulation postSimulation, RBVDR044 rbvdr044) {
 		super(preSimulation, postSimulation);

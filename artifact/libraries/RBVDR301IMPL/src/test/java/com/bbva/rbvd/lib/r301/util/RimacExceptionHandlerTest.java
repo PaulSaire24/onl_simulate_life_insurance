@@ -20,7 +20,7 @@ public class RimacExceptionHandlerTest {
     @Test(expected = BusinessException.class)
     public void handler_HttpClientErrorException() {
         LOGGER.info("RimacExceptionHandlerTest - Executing handler_HttpClientErrorException");
-        String responseBody = "{\"error\":{\"code\":\"VEHDAT004\",\"message\":\"LOS DATOS INGRESADOS SON INVALIDOS\\.\",\"httpStatus\":400}}";
+        String responseBody = "{\"error\":{\"code\":\"VIDA001\",\"message\":\"Error al Validar Datos.\",\"details\":[\"El cúmulo del client eha superado el límite máximo para su cotización.\"],\"httpStatus\":400}}";
         HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "", responseBody.getBytes(), StandardCharsets.UTF_8);
         this.rimacExceptionHandler.handler(clientErrorException);
     }

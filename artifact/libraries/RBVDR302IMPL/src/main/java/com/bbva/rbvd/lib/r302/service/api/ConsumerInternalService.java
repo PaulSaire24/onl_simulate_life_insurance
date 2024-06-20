@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r302.service.api;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.crypto.CryptoASO;
 import com.bbva.pisd.dto.insurance.aso.tier.TierASO;
@@ -27,6 +28,11 @@ public class ConsumerInternalService {
 
     public CustomerListASO callListCustomerResponse(String customerId){
         CustomerBO customer = this.rbvdR301.executeGetCustomer(customerId);
+
+        if(customer == null){
+            throw new BusinessException("RBVD01020049",false,"Hubo un error al obtener detalles del cliente.");
+        }
+
         CustomerListASO customerList = new CustomerListASO();
         customerList.setData(Collections.singletonList(customer));
         return customerList;

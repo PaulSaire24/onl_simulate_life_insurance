@@ -27,12 +27,13 @@ public class RimacExceptionHandler {
         String responseBody = exception.getResponseBodyAsString();
         LOGGER.info("HttpClientErrorException - Response body: {}", responseBody);
         ErrorRimacBO rimacError = this.getErrorObject(responseBody);
+        LOGGER.info("HttpClientErrorException - rimacError details: {}", rimacError.getError().getDetails());
         this.throwingBusinessException(rimacError);
     }
 
     private void throwingBusinessException(ErrorRimacBO rimacError) {
         BusinessException businessException = InsuranceRoyalValidation.build(InsuranceRoyalErrors.ERROR_FROM_RIMAC);
-        businessException.setMessage(rimacError.getError().getHttpStatus() + " - " + rimacError.getError().getMessage());
+        businessException.setMessage(rimacError.getError().getHttpStatus() + " - " + rimacError.getError().getMessage() + " - " + rimacError.getError().getDetails().get(0));
         throw businessException;
     }
 
