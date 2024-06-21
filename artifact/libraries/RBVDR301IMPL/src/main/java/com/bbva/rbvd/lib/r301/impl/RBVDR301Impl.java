@@ -72,8 +72,8 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
 			exceptionHandler.handler(ex);
 		}catch(TimeoutException ex){
-			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			this.addAdviceWithDescription("RBVD01020044", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeoutException: {}", ex.getMessage());
+			this.addAdviceWithDescription("RBVD010200444", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 		}
 		return response;
 
@@ -113,7 +113,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return null;
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			this.addAdviceWithDescription("RBVD01020044", "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			this.addAdviceWithDescription("RBVD010200445", "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 			return null;
 		}
 
@@ -132,8 +132,8 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 		try{
 			result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
 		}catch(TimeoutException ex){
-			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			this.addAdviceWithDescription("RBVD01020044", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeException: {}", ex.getMessage());
+			this.addAdviceWithDescription("RBVD010200446", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 		}
 
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer  ***** Response Host: {}", result);
