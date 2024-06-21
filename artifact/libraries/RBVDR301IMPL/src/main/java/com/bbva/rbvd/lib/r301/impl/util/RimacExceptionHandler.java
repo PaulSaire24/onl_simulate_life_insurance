@@ -33,9 +33,27 @@ public class RimacExceptionHandler {
 
     private void throwingBusinessException(ErrorRimacBO rimacError) {
         BusinessException businessException = InsuranceRoyalValidation.build(InsuranceRoyalErrors.ERROR_FROM_RIMAC);
-        businessException.setMessage(rimacError.getError().getHttpStatus() + " - " + rimacError.getError().getMessage() + " - " + rimacError.getError().getDetails().get(0));
+
+        StringBuilder details = new StringBuilder();
+        for (String detail : rimacError.getError().getDetails()) {
+            if (details.length() > 0) {
+                details.append(" | ");
+            }
+            details.append(detail);
+        }
+
+        // E1 ERROR DE DATOS, E2 ERROR FUNCIONAL
+        if(details.length() > 0){
+            businessException.setAdviceCode("BBVAE1"+ "008411");
+            businessException.setMessage(rimacError.getError().getMessage().concat(" : ").concat(details.toString()));
+        }else{
+            businessException.setAdviceCode("BBVAE2"+ "008411");
+            businessException.setMessage(rimacError.getError().getMessage());
+        }
+
         throw businessException;
     }
+
 
     private ErrorRimacBO getErrorObject(String responseBody) {
         return JsonHelper.getInstance().deserialization(responseBody, ErrorRimacBO.class);
