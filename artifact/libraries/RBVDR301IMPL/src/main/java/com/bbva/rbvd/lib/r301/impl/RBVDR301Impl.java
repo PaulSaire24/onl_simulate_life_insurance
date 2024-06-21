@@ -18,9 +18,9 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.insuranceroyal.utils.InsuranceRoyalErrors;
 
+import com.bbva.rbvd.lib.r301.impl.business.ExceptionBusiness;
 import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerBOBean;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
-import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -69,7 +69,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			LOGGER.info("***** RBVDR301Impl - executeSimulationRimacService ***** Response: {}", getRequestJson(response));
 		} catch(RestClientException ex) {
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {} *****", ex.getMessage());
-			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
+			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
 			exceptionHandler.handler(ex);
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
@@ -108,7 +108,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return response;
 		} catch (RestClientException ex) {
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Exception: {}", ex.getMessage());
-			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
+			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
 			exceptionHandler.handler(ex);
 			return null;
 		}catch(TimeoutException ex){
