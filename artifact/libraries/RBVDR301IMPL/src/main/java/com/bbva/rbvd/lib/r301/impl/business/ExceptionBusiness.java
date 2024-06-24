@@ -62,11 +62,10 @@ public class ExceptionBusiness {
         }
 
 
-
     }
 
     public static String decodeMessage(String message) {
-        byte[] bytes = message.getBytes(StandardCharsets.ISO_8859_1);
+        byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
