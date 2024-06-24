@@ -16,4 +16,15 @@ public class Constans {
         public static final String MALE = "MALE";
         public static final String FEMALE = "FEMALE";
     }
+
+
+    public static final class Error{
+        private Error() {
+        }
+        public static final String BBVAE1 = "BBVAE1";
+        public static final String BBVAE2 = "BBVAE2";
+        public static final String COD_008411 = "008411";
+
+    }
 }
+

@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r301.impl;
 
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.ksmk.dto.caas.CredentialsDTO;
 import com.bbva.ksmk.dto.caas.InputDTO;
 import com.bbva.ksmk.dto.caas.OutputDTO;
@@ -17,9 +18,9 @@ import com.bbva.rbvd.dto.lifeinsrc.rimac.simulation.InsuranceLifeSimulationBO;
 import com.bbva.rbvd.dto.lifeinsrc.utils.RBVDProperties;
 import com.bbva.rbvd.dto.insuranceroyal.utils.InsuranceRoyalErrors;
 
+import com.bbva.rbvd.lib.r301.impl.business.ExceptionBusiness;
 import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerBOBean;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
-import com.bbva.rbvd.lib.r301.impl.util.RimacExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -67,9 +68,12 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			response = this.externalApiConnector.postForObject(RBVDProperties.SIMULATION_LIFE_RIMAC.getValue(), entity, InsuranceLifeSimulationBO.class);
 			LOGGER.info("***** RBVDR301Impl - executeSimulationRimacService ***** Response: {}", getRequestJson(response));
 		} catch(RestClientException ex) {
-			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {} *****", ex.getMessage());
+			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
 			exceptionHandler.handler(ex);
+		}catch(TimeoutException ex){
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeoutException: {}", ex.getMessage());
+			this.addAdviceWithDescription("RBVD010200444", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 		}
 		return response;
 
@@ -104,8 +108,12 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return response;
 		} catch (RestClientException ex) {
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationModificationRimacService ***** Exception: {}", ex.getMessage());
-			RimacExceptionHandler exceptionHandler = new RimacExceptionHandler();
+			ExceptionBusiness exceptionHandler = new ExceptionBusiness();
 			exceptionHandler.handler(ex);
+			return null;
+		}catch(TimeoutException ex){
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
+			this.addAdviceWithDescription("RBVD010200445", "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 			return null;
 		}
 
@@ -119,10 +127,18 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 	@Override
 	public CustomerBO executeGetCustomer(String customerId){
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer Start *****");
-		PEWUResponse result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
+		PEWUResponse result = new PEWUResponse();
+
+		try{
+			result = this.pbtqR002.executeSearchInHostByCustomerId(customerId);
+		}catch(TimeoutException ex){
+			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeException: {}", ex.getMessage());
+			this.addAdviceWithDescription("RBVD010200446", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+		}
+
 		LOGGER.info("***** RBVDR301Impl - executeGetListCustomer  ***** Response Host: {}", result);
 
-		if( Objects.isNull(result.getHostAdviceCode()) || result.getHostAdviceCode().isEmpty()){
+		if(Objects.isNull(result.getHostAdviceCode()) || result.getHostAdviceCode().isEmpty()){
 			CustomerBOBean customerListAsoBean = new CustomerBOBean(this.applicationConfigurationService);
 			return customerListAsoBean.mapperCustomer(result);
 		}

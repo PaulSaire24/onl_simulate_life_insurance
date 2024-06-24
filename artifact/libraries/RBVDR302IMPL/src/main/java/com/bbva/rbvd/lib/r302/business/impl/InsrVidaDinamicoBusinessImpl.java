@@ -127,7 +127,6 @@ public class InsrVidaDinamicoBusinessImpl implements IInsrDynamicLifeBusiness {
             response.getHolder().getIdentityDocument().getDocumentType().setId(payloadConfig.getProperties().getDocumentTypeIdAsText());
         }
 
-
         return PayloadStore.Builder.an()
                 .creationUser(payloadConfig.getInput().getCreationUser())
                 .userAudit(payloadConfig.getInput().getCreationUser())

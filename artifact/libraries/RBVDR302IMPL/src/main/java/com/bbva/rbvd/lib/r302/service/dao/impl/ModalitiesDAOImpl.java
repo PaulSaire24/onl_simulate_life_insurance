@@ -21,7 +21,7 @@ public class ModalitiesDAOImpl implements IModalitiesDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModalitiesDAOImpl.class);
 
-    private PISDR350 pisdr350;
+    private final PISDR350 pisdr350;
     public ModalitiesDAOImpl(PISDR350 pisdr350){ this.pisdr350 = pisdr350;}
     @Override
     public List<InsuranceProductModalityDAO> getModalitiesInfo(String plansPT, BigDecimal insuranceProductId, String saleChannel) {
@@ -37,7 +37,6 @@ public class ModalitiesDAOImpl implements IModalitiesDAO {
         }
 
 
-        return ValidationUtil.
-                validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
+        return ValidationUtil.validateQueryInsuranceProductModality(responseQueryModalitiesInformation);
     }
 }
