@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r301;
 
 import com.bbva.apx.exception.business.BusinessException;
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
@@ -44,6 +45,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
@@ -162,6 +164,16 @@ public class RBVDR301Test {
 	}
 
 	@Test
+	public void executeSimulationRimacService_TimeoutException()throws IOException {
+		LOGGER.info("RBVDR301Test - Executing executeSimulationRimacService_TimeoutException...");
+
+		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
+				thenThrow(new TimeoutException("BBVAE2008411", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde."));
+
+		this.rbvdr301Impl.executeSimulationRimacService(new InsuranceLifeSimulationBO(), "traceId");
+	}
+
+	@Test
 	public void executeGifolelifeService_OK(){
 
 		LOGGER.info("RBVDR301Test - Executing executeGifolelifeService_OK...");
@@ -252,6 +264,17 @@ public class RBVDR301Test {
 		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(),(Class<InsuranceLifeSimulationBO>) any(),anyMap()))
 				.thenThrow(new HttpServerErrorException(HttpStatus.BAD_REQUEST,""));
 				//thenThrow(new RestClientException(MESSAGE_EXCEPTION));
+
+		this.rbvdr301Impl.executeSimulationModificationRimacService(
+				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");
+	}
+
+	@Test
+	public void executeSimulationModificationRimacService_TimeoutException() throws IOException{
+		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_TimeoutException...");
+
+		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(),(Class<InsuranceLifeSimulationBO>) any(),anyMap())).
+				thenThrow(new TimeoutException("BBVAE2008411", "Lo sentimos, el servicio de gestionar documento de rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde."));
 
 		this.rbvdr301Impl.executeSimulationModificationRimacService(
 				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");
