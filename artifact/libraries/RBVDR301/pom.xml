@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.bbva.rbvd</groupId>
 		<artifactId>LIBRARIES-onl_simulate_life_insurance</artifactId>
-		<version>0.10.5</version>
+		<version>0.10.6</version>
 	</parent>
 	<groupId>com.bbva.rbvd</groupId>
 	<artifactId>RBVDR301</artifactId>
 	<name>RBVDR301</name>
-	<version>0.10.5</version>
+	<version>0.10.6</version>
 	<packaging>bundle</packaging>
 	<description>Library to execute business logic - onl_simulate_life_insurance</description>
 	<properties>
