@@ -47,6 +47,10 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR301Impl.class);
 
+	private static final String BBVAE1 = "BBVAE1";
+	private static final String BBVAE2 = "BBVAE2";
+	private static final String COD_008411 = "008411";
+
 
 	//ejecuta la simulación del servicio Rímac
 	@Override
@@ -73,7 +77,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			exceptionHandler.handler(ex);
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeoutException: {}", ex.getMessage());
-			this.addAdviceWithDescription("RBVD010200444", "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			this.addAdviceWithDescription(BBVAE2 + COD_008411, "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 		}
 		return response;
 
@@ -113,7 +117,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return null;
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			this.addAdviceWithDescription("RBVD010200445", "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			this.addAdviceWithDescription(BBVAE2 + COD_008411, "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
 			return null;
 		}
 
