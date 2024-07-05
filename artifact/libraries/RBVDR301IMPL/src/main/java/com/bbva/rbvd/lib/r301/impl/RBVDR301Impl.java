@@ -75,7 +75,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			exceptionHandler.handler(ex);
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeoutException: {}", ex.getMessage());
-			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
+			throw new BusinessException(Constans.Error.BBVAE2 + Constans.Error.COD_008411, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 		return response;
 
@@ -115,7 +115,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return null;
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
+			throw new BusinessException(Constans.Error.BBVAE2 + Constans.Error.COD_008411, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 
 	}
