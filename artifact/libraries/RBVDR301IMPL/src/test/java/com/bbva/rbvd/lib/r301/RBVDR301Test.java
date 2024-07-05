@@ -163,8 +163,8 @@ public class RBVDR301Test {
 		this.rbvdr301Impl.executeSimulationRimacService(new InsuranceLifeSimulationBO(), "traceId");
 	}
 
-	@Test
-	public void executeSimulationRimacService_TimeoutException()throws IOException {
+	@Test(expected = BusinessException.class)
+	public void executeSimulationRimacService_TimeoutException(){
 		LOGGER.info("RBVDR301Test - Executing executeSimulationRimacService_TimeoutException...");
 
 		when(this.externalApiConnector.postForObject(anyString(), anyObject(), any())).
@@ -269,8 +269,8 @@ public class RBVDR301Test {
 				new InsuranceLifeSimulationBO(),"1kgd0-493er9-94eer01-93uuhgfgdf45cd", "traceId");
 	}
 
-	@Test
-	public void executeSimulationModificationRimacService_TimeoutException() throws IOException{
+	@Test(expected = BusinessException.class)
+	public void executeSimulationModificationRimacService_TimeoutException() {
 		LOGGER.info("RBVDR301Test - Executing executeSimulationModificationRimacService_TimeoutException...");
 
 		when(this.externalApiConnector.exchange(anyString(), anyObject(), anyObject(),(Class<InsuranceLifeSimulationBO>) any(),anyMap())).

@@ -1,5 +1,6 @@
 package com.bbva.rbvd.lib.r301.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.ksmk.dto.caas.CredentialsDTO;
 import com.bbva.ksmk.dto.caas.InputDTO;
@@ -20,6 +21,7 @@ import com.bbva.rbvd.dto.insuranceroyal.utils.InsuranceRoyalErrors;
 
 import com.bbva.rbvd.lib.r301.impl.business.ExceptionBusiness;
 import com.bbva.rbvd.lib.r301.impl.transform.bean.CustomerBOBean;
+import com.bbva.rbvd.lib.r301.impl.util.Constans;
 import com.bbva.rbvd.lib.r301.impl.util.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +49,6 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR301Impl.class);
 
-	private static final String BBVAE1 = "BBVAE1";
-	private static final String BBVAE2 = "BBVAE2";
-	private static final String COD_008411 = "008411";
-
 
 	//ejecuta la simulación del servicio Rímac
 	@Override
@@ -77,7 +75,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			exceptionHandler.handler(ex);
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** TimeoutException: {}", ex.getMessage());
-			this.addAdviceWithDescription(BBVAE2 + COD_008411, "Lo sentimos, el servicio de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
+			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 		return response;
 
@@ -117,8 +115,7 @@ public class RBVDR301Impl extends RBVDR301Abstract {
 			return null;
 		}catch(TimeoutException ex){
 			LOGGER.debug("***** RBVDR301Impl - executeSimulationRimacService ***** Exception: {}", ex.getMessage());
-			this.addAdviceWithDescription(BBVAE2 + COD_008411, "Lo sentimos, el servicio de modificación de simulación de Rimac está tardando más de lo esperado. Por favor, inténtelo de nuevo más tarde.");
-			return null;
+			throw new BusinessException(Constans.Error.BBVAE2, false, "Lo sentimos, el servicio de Rimac está tardando más de lo esperado. Por favor,  intentelo nuevamente en unos minutos.");
 		}
 
 	}
