@@ -60,8 +60,6 @@ public class ExceptionBusiness {
             businessException.setAdviceCode(Constans.Error.BBVAE2 + Constans.Error.COD_008411);
             businessException.setMessage(rimacError.getError().getMessage());
         }
-
-
     }
 
     public static String decodeMessage(String message) {
