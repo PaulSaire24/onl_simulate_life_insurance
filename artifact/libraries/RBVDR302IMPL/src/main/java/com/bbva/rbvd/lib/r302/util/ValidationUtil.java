@@ -40,6 +40,18 @@ public class ValidationUtil {
         return !CollectionUtils.isEmpty(input.getParticipants());
     }
 
+    public static boolean allValuesNotNullOrEmpty(List<Object> values) {
+        for (Object value : values) {
+            if (value == null) {
+                return false;
+            }
+
+            if (value instanceof String && ((String) value).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public String validateSN(String name) {
         if(Objects.isNull(name) || "null".equals(name) || " ".equals(name)){

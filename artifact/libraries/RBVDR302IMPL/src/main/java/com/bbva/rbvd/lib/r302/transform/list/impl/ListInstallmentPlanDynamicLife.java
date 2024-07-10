@@ -19,11 +19,14 @@ import com.bbva.rbvd.dto.lifeinsrc.simulation.CoverageTypeDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.InsuranceLimitsDTO;
 import com.bbva.rbvd.lib.r302.transform.list.IListInstallmentPlan;
 import com.bbva.rbvd.lib.r302.util.ConstantsUtil;
+import com.bbva.rbvd.lib.r302.util.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -119,16 +122,22 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
     }
 
     private static TotalInstallmentDTO getTotalInstallmentDTO(PlanBO rimacPlan) {
-        TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
+        BigDecimal amount = rimacPlan.getPrecioNormal();
+        String currency = rimacPlan.getMoneda();
+        if(ValidationUtil.allValuesNotNullOrEmpty(Arrays.asList(amount,currency))){
+            TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
 
-        PeriodDTO periodAnual = new PeriodDTO();
-        totalInstallmentPlan.setAmount(rimacPlan.getPrimaBruta());
-        periodAnual.setId(ConstantsUtil.Period.ANNUAL.getId());
-        periodAnual.setName(ConstantsUtil.Period.ANNUAL.getName());
-        totalInstallmentPlan.setPeriod(periodAnual);
-        totalInstallmentPlan.setCurrency(rimacPlan.getMoneda());
+            PeriodDTO periodAnual = new PeriodDTO();
+            totalInstallmentPlan.setAmount(amount);
+            periodAnual.setId(ConstantsUtil.Period.ANNUAL.getId());
+            periodAnual.setName(ConstantsUtil.Period.ANNUAL.getName());
+            totalInstallmentPlan.setPeriod(periodAnual);
+            totalInstallmentPlan.setCurrency(currency);
 
-        return totalInstallmentPlan;
+            return totalInstallmentPlan;
+        }
+
+        return null;
     }
 
     private InstallmentsDTO getInstallmentPlan(FinanciamientoBO financing) {

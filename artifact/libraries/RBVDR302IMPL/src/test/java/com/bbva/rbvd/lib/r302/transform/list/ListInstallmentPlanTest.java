@@ -172,6 +172,7 @@ public class ListInstallmentPlanTest {
         responseRimac.getPayload().setProducto("VIDADINAMICO");
         responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPrecioNormal(new BigDecimal("839.2"));
         productModalities = mockData.getInsuranceProductModalitiesDAO();
 
         iListInstallmentPlan = new ListInstallmentPlanDynamicLife(applicationConfigurationService);
