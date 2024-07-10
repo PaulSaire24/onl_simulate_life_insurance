@@ -24,6 +24,7 @@ import com.bbva.rbvd.dto.connectionapi.aso.common.ProductModalityASO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InstallmentsDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsurancePlanDTO;
 import com.bbva.rbvd.dto.lifeinsrc.commons.InsuranceProductDTO;
+import com.bbva.rbvd.dto.lifeinsrc.commons.TotalInstallmentDTO;
 import com.bbva.rbvd.dto.lifeinsrc.simulation.LifeSimulationDTO;
 import com.bbva.rbvd.lib.r044.RBVDR044;
 import com.bbva.rbvd.lib.r301.RBVDR301;
@@ -284,11 +285,6 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         period.setName(installmentPlanDto.get(0).getPeriod().getName());
         installmentPlan.setPeriod(period);
 
-
-        GenericAmountASO totalPremiumAmount = new GenericAmountASO();
-        totalPremiumAmount.setAmount(planDTO.getTotalInstallment().getAmount());
-        totalPremiumAmount.setCurrency(planDTO.getTotalInstallment().getCurrency());
-
         ValidationUtil validationUtil = new ValidationUtil();
 
         com.bbva.rbvd.dto.connectionapi.aso.common.HolderASO holder =
@@ -354,7 +350,7 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setExternalSimulationid(response.getExternalSimulationId());
         gifoleInsuranceRequest.setProduct(product);
         gifoleInsuranceRequest.setInstallmentPlan(installmentPlan);
-        gifoleInsuranceRequest.setTotalPremiumAmount(totalPremiumAmount);
+        gifoleInsuranceRequest.setTotalPremiumAmount(getTotalPremiumAmount(planDTO.getTotalInstallment()));
         gifoleInsuranceRequest.setHolder(holder);
         gifoleInsuranceRequest.setOperationType(ConstantsUtil.INSURANCE_SIMULATION_VALUE);
         gifoleInsuranceRequest.setChannel(response.getAap());
@@ -364,6 +360,15 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
         gifoleInsuranceRequest.setGood(good);
 
         return gifoleInsuranceRequest;
+    }
+
+    private GenericAmountASO getTotalPremiumAmount(TotalInstallmentDTO totalInstallmentDTO){
+        if(totalInstallmentDTO != null){
+            GenericAmountASO totalPremiumAmount = new GenericAmountASO();
+            totalPremiumAmount.setAmount(totalInstallmentDTO.getAmount());
+            totalPremiumAmount.setCurrency(totalInstallmentDTO.getCurrency());
+        }
+        return null;
     }
 
     public com.bbva.rbvd.dto.connectionapi.aso.common.ContactDetailASO getContactDetail(String contactValue, String contactType) {
