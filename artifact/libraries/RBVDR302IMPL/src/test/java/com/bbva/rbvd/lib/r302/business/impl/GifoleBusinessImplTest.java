@@ -1,5 +1,7 @@
 package com.bbva.rbvd.lib.r302.business.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
@@ -38,6 +40,9 @@ public class GifoleBusinessImplTest  {
     private RBVDR301 rbvdR301;
 
     private RBVDR044 rbvdr044;
+
+    private static final String MESSAGE_TIMEOUT_GIFOLE = "Actualmente estamos experimentando demoras al contactar con Gifole. Por favor,  intentelo nuevamente en unos minutos.";
+
 
     @Before
     public void setUp() throws Exception {
@@ -84,6 +89,20 @@ public class GifoleBusinessImplTest  {
         when(applicationConfigurationService.getProperty(anyString())).thenReturn("true");
 
         when(rbvdr044.executeGifoleRegistration(anyObject())).thenReturn(1);
+
+        requestCustomerListASO = mockDTO.getCustomerDataResponse();
+
+        gifoleBusiness.callGifoleDynamicService(responseOut, requestCustomerListASO, rbvdr044);
+
+        Mockito.verify(rbvdr044, Mockito.atLeastOnce()).executeGifoleRegistration(anyObject());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void callGifoleDynamicService_TimeoutException() throws IOException {
+
+        when(applicationConfigurationService.getProperty(anyString())).thenReturn("true");
+
+        when(rbvdr044.executeGifoleRegistration(anyObject())).thenThrow(new TimeoutException("BBVAE2008411", MESSAGE_TIMEOUT_GIFOLE));;
 
         requestCustomerListASO = mockDTO.getCustomerDataResponse();
 
