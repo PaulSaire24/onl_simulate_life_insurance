@@ -122,7 +122,7 @@ public class ListInstallmentPlanDynamicLife implements IListInstallmentPlan {
     }
 
     private static TotalInstallmentDTO getTotalInstallmentDTO(PlanBO rimacPlan) {
-        BigDecimal amount = rimacPlan.getPrecioNormal();
+        BigDecimal amount = rimacPlan.getPrecioNormal() == null ? rimacPlan.getPrimaBruta() : rimacPlan.getPrecioNormal();
         String currency = rimacPlan.getMoneda();
         if(ValidationUtil.allValuesNotNullOrEmpty(Arrays.asList(amount,currency))){
             TotalInstallmentDTO totalInstallmentPlan = new TotalInstallmentDTO();
