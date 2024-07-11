@@ -172,13 +172,13 @@ public class ListInstallmentPlanTest {
         responseRimac.getPayload().setProducto("VIDADINAMICO");
         responseRimac.getPayload().getCotizaciones().get(0).setIndicadorBloqueo(Long.parseLong("0"));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
-        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPrecioNormal(new BigDecimal("839.2"));
         productModalities = mockData.getInsuranceProductModalitiesDAO();
 
         iListInstallmentPlan = new ListInstallmentPlanDynamicLife(applicationConfigurationService);
         List<InsurancePlanDTO> plans = iListInstallmentPlan.getPlansNamesAndRecommendedValuesAndInstallmentsPlans(productModalities,responseRimac,new ArrayList<>());
 
         Assert.assertNotNull(plans);
+        Assert.assertNotNull(plans.get(0).getTotalInstallment());
 
         //Coberturas adicionales
 
@@ -234,6 +234,7 @@ public class ListInstallmentPlanTest {
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPlan(Long.parseLong("533726"));
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().add(generateFinancingQuarterly());
         responseRimac.getPayload().getCotizaciones().get(0).getPlan().getFinanciamientos().add(generateFinancingBiMonthly());
+        responseRimac.getPayload().getCotizaciones().get(0).getPlan().setPrecioNormal(new BigDecimal("744.21"));
         productModalities = mockData.getInsuranceProductModalitiesDAO();
 
         iListInstallmentPlan = new ListInstallmentPlanDynamicLife(applicationConfigurationService);
@@ -246,6 +247,7 @@ public class ListInstallmentPlanTest {
         Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(2));
         Assert.assertNotNull(plans.get(0).getInstallmentPlans().get(3));
         Assert.assertEquals(4,plans.get(0).getInstallmentPlans().size());
+        Assert.assertNotNull(plans.get(0).getTotalInstallment());
     }
 
 }
