@@ -1,6 +1,8 @@
 package com.bbva.rbvd.lib.r302.business.impl;
 
+import com.bbva.apx.exception.business.BusinessException;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
+import com.bbva.apx.exception.io.network.TimeoutException;
 import com.bbva.pisd.dto.insurance.aso.CustomerListASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.GifoleInsuranceRequestASO;
 import com.bbva.pisd.dto.insurance.aso.gifole.InstallmentPlanASO;
@@ -50,6 +52,10 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
 
     private ApplicationConfigurationService applicationConfigurationService;
     private RBVDR301 rbvdR301;
+    public static final String BBVAE2 = "BBVAE2";
+    public static final String COD_008411 = "008411";
+    private static final String MESSAGE_TIMEOUT_GIFOLE = "Actualmente estamos experimentando demoras al contactar con Gifole. Por favor,  intentelo nuevamente en unos minutos.";
+
 
     public GifoleBusinessImpl(RBVDR301 rbvdR301, ApplicationConfigurationService applicationConfigurationService) {
         this.applicationConfigurationService = applicationConfigurationService;
@@ -219,9 +225,15 @@ public class GifoleBusinessImpl implements IGifoleBusiness {
                     this.createGifoleAsoDynamic(inputLife, inputListCustomers);
             LOGGER.info("***** GifoleBusinessImpl - callGifoleDynamicService: {}", gifoleInsuranceRequest);
 
-            Integer httpStatusGifole = rbvdr044.executeGifoleRegistration(gifoleInsuranceRequest);
+            try {
+                Integer httpStatusGifole = rbvdr044.executeGifoleRegistration(gifoleInsuranceRequest);
+                LOGGER.info("***** GifoleBusinessImpl ***** Gifole Response Status: {}", httpStatusGifole);
+            }catch(TimeoutException ex){
+                LOGGER.debug("***** GifoleBusinessImpl ***** TimeoutException: {}", ex.getMessage());
+                throw new BusinessException(BBVAE2 + COD_008411, false, MESSAGE_TIMEOUT_GIFOLE);
 
-            LOGGER.info("***** GifoleBusinessImpl ***** Gifole Response Status: {}", httpStatusGifole);
+            }
+
         }
     }
 

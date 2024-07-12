@@ -24,6 +24,9 @@ public class Constans {
         public static final String BBVAE1 = "BBVAE1";
         public static final String BBVAE2 = "BBVAE2";
         public static final String COD_008411 = "008411";
+        public static final String MESSAGE_TIMEOUT_RIMAC = "Actualmente estamos experimentando demoras al contactar con el servicio de Rimac. Por favor,  intentelo nuevamente en unos minutos.";
+        public static final String MESSAGE_TIMEOUT_HOST = "Actualmente estamos experimentando demoras al contactar con el Interbackend Host. Por favor,  intentelo nuevamente en unos minutos.";
+
 
     }
 }
